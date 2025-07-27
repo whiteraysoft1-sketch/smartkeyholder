@@ -1,0 +1,68 @@
+# Security Rules - Protect sensitive files
+<Files .env>
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files composer.json>
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files composer.lock>
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files artisan>
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files package.json>
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files package-lock.json>
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Protect configuration and sensitive directories
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Block access to storage directory
+    RewriteRule ^storage/.* - [F,L]
+    
+    # Block access to bootstrap/cache
+    RewriteRule ^bootstrap/cache/.* - [F,L]
+    
+    # Block access to config directory
+    RewriteRule ^config/.* - [F,L]
+    
+    # Block access to database directory
+    RewriteRule ^database/.* - [F,L]
+    
+    # Block access to vendor directory
+    RewriteRule ^vendor/.* - [F,L]
+    
+    # Block access to app directory
+    RewriteRule ^app/.* - [F,L]
+    
+    # Block access to resources directory
+    RewriteRule ^resources/.* - [F,L]
+    
+    # Block access to routes directory
+    RewriteRule ^routes/.* - [F,L]
+    
+    # Block access to tests directory
+    RewriteRule ^tests/.* - [F,L]
+</IfModule>
+
+# Disable directory browsing
+Options -Indexes
+
+# Disable server signature
+ServerSignature Off 

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Tag - Digital Profile & Smart Tag</title>
+    
+    <!-- Enhanced PWA Meta Tags for Universal Support -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Smart Tag">
+    <meta name="application-name" content="Smart Tag">
+    
+    <!-- Theme Colors for Light/Dark Mode -->
+    <meta name="theme-color" content="#4F46E5" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#3730A3" media="(prefers-color-scheme: dark)">
+    <meta name="msapplication-navbutton-color" content="#4F46E5">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Comprehensive Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="/images/pwa-icon-180.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/pwa-icon-57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/pwa-icon-60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/pwa-icon-72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/pwa-icon-76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/pwa-icon-114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/pwa-icon-120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/pwa-icon-144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/pwa-icon-152.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="/images/pwa-icon-167.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/pwa-icon-180.png">
+    
+    <!-- Microsoft Tiles -->
+    <meta name="msapplication-TileImage" content="/images/pwa-icon-144.png">
+    <meta name="msapplication-TileColor" content="#4F46E5">
+    <meta name="msapplication-square70x70logo" content="/images/pwa-icon-70.png">
+    <meta name="msapplication-square150x150logo" content="/images/pwa-icon-150.png">
+    <meta name="msapplication-wide310x150logo" content="/images/pwa-icon-310x150.png">
+    <meta name="msapplication-square310x310logo" content="/images/pwa-icon-310.png">
+    
+    <!-- Samsung Internet -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Standard Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/pwa-icon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/pwa-icon-16.png">
+    <link rel="shortcut icon" href="/images/pwa-icon-32.png">
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 500px;
+        }
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        .button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        .install-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        #pwa-install-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #10B981, #059669);
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+        #pwa-install-btn:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+        #pwa-install-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        #pwa-install-btn:hover:before {
+            left: 100%;
+        }
+        .pwa-instructions {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-left: 4px solid #10B981;
+        }
+        .hidden {
+            display: none;
+        }
+        .device-icon {
+            font-size: 1.2em;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">📱</div>
+        <h1 class="title">Smart Tag</h1>
+        <p class="subtitle">Digital Profile & Smart Tag Platform</p>
+        
+        <a href="/dashboard" class="button">Go to Dashboard</a>
+        <a href="/login" class="button">Login</a>
+        
+        <div class="install-section">
+            <button id="pwa-install-btn" class="button">
+                <span class="device-icon" id="install-icon">📱</span>
+                <span id="install-text">Install App</span>
+            </button>
+            <div id="pwa-manual-instructions" class="pwa-instructions hidden">
+                <div id="pwa-instructions-content">
+                    <p><strong id="pwa-instructions-title">Install Smart Tag App</strong></p>
+                    <p id="pwa-instructions-text"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced Universal PWA Install Support
+        console.log('Universal PWA install initialized');
+
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('[PWA] Service Worker registered successfully:', registration.scope);
+                    })
+                    .catch(function(error) {
+                        console.error('[PWA] Service Worker registration failed:', error);
+                    });
+            });
+        }
+
+        // Universal PWA Install Logic
+        let deferredPrompt;
+        const installBtn = document.getElementById('pwa-install-btn');
+        const installIcon = document.getElementById('install-icon');
+        const installText = document.getElementById('install-text');
+        const manualInstructions = document.getElementById('pwa-manual-instructions');
+        const instructionsTitle = document.getElementById('pwa-instructions-title');
+        const instructionsText = document.getElementById('pwa-instructions-text');
+
+        // Device and Browser Detection
+        function getDeviceInfo() {
+            const ua = navigator.userAgent;
+            const isIOS = /iPad|iPhone|iPod/.test(ua);
+            const isAndroid = /Android/.test(ua);
+            const isWindows = /Windows/.test(ua);
+            const isMac = /Mac/.test(ua);
+            
+            const isChrome = /Chrome/.test(ua) && !/Edg/.test(ua);
+            const isEdge = /Edg/.test(ua);
+            const isSafari = /Safari/.test(ua) && !/Chrome/.test(ua);
+            const isFirefox = /Firefox/.test(ua);
+            const isSamsung = /SamsungBrowser/.test(ua);
+            const isOpera = /OPR/.test(ua);
+            
+            return {
+                isIOS, isAndroid, isWindows, isMac,
+                isChrome, isEdge, isSafari, isFirefox, isSamsung, isOpera,
+                isMobile: isIOS || isAndroid,
+                isDesktop: isWindows || isMac
+            };
+        }
+
+        function isStandalone() {
+            return window.matchMedia('(display-mode: standalone)').matches || 
+                   window.navigator.standalone === true;
+        }
+
+        function setupInstallButton() {
+            const device = getDeviceInfo();
+            let deviceName = 'Device';
+            let browserName = 'Browser';
+            let icon = '📱';
+            let buttonText = 'Install App';
+
+            // Determine device
+            if (device.isIOS) deviceName = 'iPhone/iPad';
+            else if (device.isAndroid) deviceName = 'Android';
+            else if (device.isWindows) deviceName = 'Windows';
+            else if (device.isMac) deviceName = 'Mac';
+
+            // Determine browser
+            if (device.isChrome) browserName = 'Chrome';
+            else if (device.isEdge) browserName = 'Edge';
+            else if (device.isSafari) browserName = 'Safari';
+            else if (device.isFirefox) browserName = 'Firefox';
+            else if (device.isSamsung) browserName = 'Samsung Internet';
+            else if (device.isOpera) browserName = 'Opera';
+
+            // Set appropriate icon and text
+            if (device.isMobile) {
+                icon = device.isIOS ? '🍎' : '🤖';
+                buttonText = device.isIOS && device.isSafari ? 'Add to Home Screen' : 'Install App';
+            } else {
+                icon = '💻';
+                buttonText = 'Install App';
+            }
+
+            installIcon.textContent = icon;
+            installText.textContent = buttonText;
+
+            console.log(`Universal PWA install initialized for: ${deviceName} - ${browserName}`);
+            return device;
+        }
+
+        function showManualInstructions(device) {
+            let title = 'Install Smart Tag App';
+            let instructions = '';
+
+            if (device.isIOS && device.isSafari) {
+                title = '📱 Add to Home Screen';
+                instructions = `
+                    1. Tap the <strong>Share</strong> button (square with arrow) at the bottom<br>
+                    2. Scroll down and tap <strong>"Add to Home Screen"</strong><br>
+                    3. Tap <strong>"Add"</strong> to confirm<br>
+                    4. Find the Smart Tag app on your home screen
+                `;
+            } else if (device.isIOS && device.isChrome) {
+                title = '📱 Install from Chrome';
+                instructions = `
+                    1. Tap the <strong>three dots menu</strong> (⋮) in the top right<br>
+                    2. Tap <strong>"Add to Home Screen"</strong><br>
+                    3. Tap <strong>"Add"</strong> to confirm<br>
+                    4. Find the Smart Tag app on your home screen
+                `;
+            } else if (device.isAndroid && device.isFirefox) {
+                title = '🤖 Install from Firefox';
+                instructions = `
+                    1. Tap the <strong>three dots menu</strong> (⋮) in the top right<br>
+                    2. Tap <strong>"Install"</strong> or <strong>"Add to Home Screen"</strong><br>
+                    3. Tap <strong>"Add"</strong> to confirm<br>
+                    4. Find the Smart Tag app on your home screen
+                `;
+            } else if (device.isDesktop && device.isFirefox) {
+                title = '💻 Install from Firefox';
+                instructions = `
+                    1. Click the <strong>three lines menu</strong> (☰) in the top right<br>
+                    2. Look for <strong>"Install Smart Tag"</strong> option<br>
+                    3. Or bookmark this page for quick access<br>
+                    4. You can also create a desktop shortcut
+                `;
+            } else if (device.isDesktop) {
+                title = '💻 Install Desktop App';
+                instructions = `
+                    1. Look for the <strong>install icon</strong> in your browser's address bar<br>
+                    2. Or check the browser menu for <strong>"Install Smart Tag"</strong><br>
+                    3. Click <strong>"Install"</strong> to add to your desktop<br>
+                    4. Launch from your desktop or start menu
+                `;
+            } else {
+                title = '📱 Install App';
+                instructions = `
+                    1. Look for an <strong>install option</strong> in your browser menu<br>
+                    2. Or check for an <strong>install icon</strong> in the address bar<br>
+                    3. Follow your browser's installation prompts<br>
+                    4. Add Smart Tag to your home screen or desktop
+                `;
+            }
+
+            instructionsTitle.textContent = title;
+            instructionsText.innerHTML = instructions;
+            manualInstructions.classList.remove('hidden');
+        }
+
+        // Initialize PWA Install
+        function initializePWAInstall() {
+            const device = setupInstallButton();
+
+            // Don't show anything if already installed
+            if (isStandalone()) {
+                installBtn.style.display = 'none';
+                console.log('[PWA] App already installed - hiding install button');
+                return;
+            }
+
+            // Always show install button (as per guidelines)
+            installBtn.style.display = 'inline-block';
+
+            // Show manual instructions by default
+            showManualInstructions(device);
+        }
+
+        // Handle native install prompt (Chrome, Edge, Samsung Internet)
+        window.addEventListener('beforeinstallprompt', function(e) {
+            console.log('[PWA] Install prompt available');
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Hide manual instructions when native prompt is available
+            manualInstructions.classList.add('hidden');
+            console.log('[PWA] Native install prompt ready');
+        });
+
+        // Install button click handler
+        installBtn.addEventListener('click', async function() {
+            const device = getDeviceInfo();
+            
+            if (deferredPrompt) {
+                // Native install prompt available
+                console.log('[PWA] Showing native install prompt');
+                try {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    console.log(`[PWA] Install outcome: ${outcome}`);
+                    
+                    if (outcome === 'accepted') {
+                        installBtn.style.display = 'none';
+                        manualInstructions.classList.add('hidden');
+                    }
+                } catch (error) {
+                    console.error('[PWA] Install prompt error:', error);
+                }
+                deferredPrompt = null;
+            } else {
+                // Show manual instructions
+                console.log('[PWA] Showing manual install instructions');
+                if (manualInstructions.classList.contains('hidden')) {
+                    showManualInstructions(device);
+                } else {
+                    manualInstructions.classList.add('hidden');
+                }
+            }
+        });
+
+        // Handle successful installation
+        window.addEventListener('appinstalled', function() {
+            console.log('[PWA] App installed successfully');
+            installBtn.style.display = 'none';
+            manualInstructions.classList.add('hidden');
+        });
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePWAInstall);
+        } else {
+            initializePWAInstall();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" fill="#2563eb" rx="64"/>
+  <g fill="white">
+    <circle cx="256" cy="180" r="60"/>
+    <path d="M256 260c-60 0-120 30-120 90v42h240v-42c0-60-60-90-120-90z"/>
+    <rect x="200" y="320" width="112" height="8" rx="4"/>
+    <rect x="220" y="340" width="72" height="8" rx="4"/>
+  </g>
+  <text x="256" y="450" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">Smart Tag</text>
+</svg>

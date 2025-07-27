@@ -1,0 +1,18 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-Dmq1HyXG.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/css/liquid-glass.css": {
+    "file": "assets/liquid-glass-BRH2rp0x.css",
+    "src": "resources/css/liquid-glass.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-CKZAehhy.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  }
+}

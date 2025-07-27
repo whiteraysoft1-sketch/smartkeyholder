@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transport & Logistics vCard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <style>
+        .logistics-gradient {
+            background: linear-gradient(135deg, #2563eb 0%, #38bdf8 60%, #fbbf24 100%);
+            background-size: cover;
+            background-position: center;
+        }
+        .logistics-card {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 2rem;
+            box-shadow: 0 10px 32px 0 rgba(37,99,235,0.10);
+        }
+        .service-badge {
+            background: linear-gradient(90deg, #2563eb 0%, #fbbf24 100%);
+            color: #fff;
+            border-radius: 1rem;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+        }
+        .divider {
+            border-bottom: 1px solid #e5e7eb;
+            margin: 1.5rem 0 1rem 0;
+        }
+    </style>
+</head>
+<body class="logistics-gradient min-h-screen flex items-center justify-center p-2 sm:p-4">
+    <div class="w-full max-w-md mx-auto">
+        <div class="logistics-card overflow-hidden">
+            @if($profile->background_image)
+            <!-- Header with Background Image -->
+            <div class="relative w-full h-48 bg-cover bg-center" style="background-image: url('{{ $profile->background_image_url }}');">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/20"></div>
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-600/40 via-yellow-400/30 to-blue-700/40"></div>
+                
+                <!-- Profile Image Overlapping -->
+                <div class="absolute -bottom-12 left-1/2 transform -translate-x-1/2">
+                    <img src="{{ $profile->full_profile_image_url ?? 'https://ui-avatars.com/api/?name=' . urlencode($user->name ?? 'TL') . '&background=2563eb&color=fff&size=128' }}" class="w-24 h-24 sm:w-28 sm:h-28 rounded-full border-4 border-white shadow-lg object-cover" alt="Profile Photo">
+                </div>
+                
+            </div>
+            <!-- Spacer and Profile Info -->
+            <div class="pt-16 pb-4 px-4 sm:px-6 text-center">
+                <div class="text-xl sm:text-2xl font-bold tracking-tight text-gray-800 mb-1">{{ $profile->display_name ?? $user->name ?? 'Transport & Logistics' }}</div>
+                <div class="text-blue-700 text-base font-medium mb-1">{{ $profile->profession ?? 'Transport & Logistics' }}</div>
+                <!-- Call and Email Action Buttons -->
+                <div class="flex items-center justify-center space-x-4 mb-4">
+                    @if($profile->phone)
+                    <a href="tel:{{ $profile->phone }}" 
+                       class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        <i class="fas fa-phone mr-2"></i>
+                        Call
+                    </a>
+                    @endif
+                    
+                    @if($profile->email ?? $user->email)
+                    <a href="mailto:{{ $profile->email ?? $user->email }}" 
+                       class="flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        <i class="fas fa-envelope mr-2"></i>
+                        Email
+                    </a>
+                    @endif
+                </div>
+                
+                @if($profile->location ?? null)
+                <div class="text-gray-600 text-xs flex items-center justify-center gap-1"><i class="fas fa-map-marker-alt text-blue-600"></i> {{ $profile->location }}</div>
+                @endif
+            </div>
+            @else
+            <!-- Header without Background Image -->
+            <div class="flex flex-col items-center pt-7 pb-4 px-4 sm:px-6 bg-gradient-to-br from-blue-600/90 to-yellow-400/80">
+                <img src="{{ $profile->full_profile_image_url ?? 'https://ui-avatars.com/api/?name=' . urlencode($user->name ?? 'TL') . '&background=2563eb&color=fff&size=128' }}" class="w-24 h-24 sm:w-28 sm:h-28 rounded-full border-4 border-white shadow-lg object-cover" alt="Profile Photo">
+                <div class="mt-3 text-white text-xl sm:text-2xl font-bold tracking-tight drop-shadow-lg text-center">{{ $profile->display_name ?? $user->name ?? 'Transport & Logistics' }}</div>
+                <div class="text-blue-100 text-base font-medium mt-1 text-center">{{ $profile->profession ?? 'Transport & Logistics' }}</div>
+                @if($profile->location ?? null)
+                <div class="text-blue-200 text-xs mt-1 flex items-center gap-1"><i class="fas fa-map-marker-alt"></i> {{ $profile->location }}</div>
+                @endif
+            </div>
+            @endif
+            <div class="px-4 sm:px-6 py-4">
+                <div class="text-base text-blue-900/90 font-semibold mb-2 flex items-center gap-2"><i class="fas fa-truck-moving text-blue-500"></i> About Us</div>
+                <div class="text-blue-800/80 text-sm mb-4">{{ $profile->bio ?? 'Reliable and efficient transport & logistics solutions for your business.' }}</div>
+                <div class="divider"></div>
+                <!-- Services Offered Section -->
+                <div class="mb-4">
+                    <div class="text-base text-blue-900/90 font-semibold mb-2 flex items-center gap-2"><i class="fas fa-shipping-fast text-yellow-500"></i> Services Offered</div>
+                    <div class="flex flex-wrap gap-2">
+                        @if($profile->services ?? null)
+                            @foreach(explode(',', $profile->services) as $service)
+                                <span class="service-badge"><i class="fas fa-check-circle"></i> {{ trim($service) }}</span>
+                            @endforeach
+                        @else
+                            <span class="service-badge"><i class="fas fa-truck"></i> Freight Transport</span>
+                            <span class="service-badge"><i class="fas fa-ship"></i> Shipping</span>
+                            <span class="service-badge"><i class="fas fa-warehouse"></i> Warehousing</span>
+                            <span class="service-badge"><i class="fas fa-route"></i> Route Planning</span>
+                        @endif
+                    </div>
+                </div>
+                <div class="divider"></div>
+                @if($socialLinks->count() > 0)
+                <div class="flex gap-2 sm:gap-3 justify-center mb-4 flex-wrap">
+                    @foreach($socialLinks as $link)
+                        <a href="{{ $link->url }}" target="_blank" class="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-white/80 hover:bg-blue-100/80 shadow text-blue-700 text-lg transition" title="{{ ucfirst($link->platform) }}">
+                            @switch($link->platform)
+                                @case('linkedin')<i class="fab fa-linkedin-in"></i>@break
+                                @case('twitter')<i class="fab fa-twitter"></i>@break
+                                @case('github')<i class="fab fa-github"></i>@break
+                                @case('instagram')<i class="fab fa-instagram"></i>@break
+                                @case('facebook')<i class="fab fa-facebook-f"></i>@break
+                                @case('youtube')<i class="fab fa-youtube"></i>@break
+                                @case('tiktok')<i class="fab fa-tiktok"></i>@break
+                                @case('whatsapp')<i class="fab fa-whatsapp"></i>@break
+                                @default<i class="fas fa-link"></i>
+                            @endswitch
+                        </a>
+                    @endforeach
+                </div>
+                @endif
+                <div class="grid grid-cols-1 gap-2 mb-4">
+                    @if($profile->phone ?? null)
+                    <div class="flex items-center gap-2 text-blue-900/80 text-sm"><i class="fas fa-phone"></i> <a href="tel:{{ $profile->phone }}" class="hover:underline">{{ $profile->phone }}</a></div>
+                    @endif
+                    @if($user->email)
+                    <div class="flex items-center gap-2 text-blue-900/80 text-sm"><i class="fas fa-envelope"></i> <a href="mailto:{{ $user->email }}" class="hover:underline">{{ $user->email }}</a></div>
+                    @endif
+                    @if($profile->website ?? null)
+                    <div class="flex items-center gap-2 text-blue-900/80 text-sm"><i class="fas fa-globe"></i> <a href="{{ $profile->website }}" target="_blank" class="hover:underline">{{ str_replace(['http://', 'https://'], '', $profile->website) }}</a></div>
+                    @endif
+                </div>
+                @if($galleryItems->count() > 0)
+                <div class="mb-4">
+                    <div class="text-base text-blue-900/90 font-semibold mb-2 flex items-center gap-2"><i class="fas fa-images text-yellow-500"></i> Gallery</div>
+                    <div class="grid grid-cols-2 gap-2">
+                        @foreach($galleryItems as $item)
+                        <div class="rounded-xl overflow-hidden shadow cursor-pointer group relative" onclick="openGalleryModal('{{ $item->full_image_url }}', '{{ $item->title }}', '{{ $item->description }}')">
+                            <img src="{{ $item->full_image_url }}" alt="{{ $item->title }}" class="w-full h-20 sm:h-24 object-cover group-hover:scale-105 transition">
+                            @if($item->title)
+                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-blue-900/80 to-transparent text-white text-xs px-2 py-1">{{ $item->title }}</div>
+                            @endif
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+                <div class="flex flex-col gap-2 mt-4">
+                    <button class="w-full py-2 rounded-xl bg-gradient-to-r from-blue-600 to-yellow-500 text-white font-semibold shadow hover:from-blue-700 hover:to-yellow-600 transition text-base flex items-center justify-center gap-2" onclick="saveContact()"><i class="fas fa-address-card"></i> Save Contact</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="galleryModal" class="hidden fixed top-0 left-0 w-full h-full bg-black/90 z-50 flex items-center justify-center p-2 sm:p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full max-h-full overflow-auto relative">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 id="galleryModalTitle" class="text-lg font-bold text-blue-900"></h3>
+                <button onclick="closeGalleryModal()" class="text-2xl text-blue-700 hover:text-blue-900">&times;</button>
+            </div>
+            <img id="galleryModalImage" src="" alt="" class="w-full object-contain rounded-b-2xl" style="max-height:60vh;">
+            <div class="p-4 text-blue-800 text-sm" id="galleryModalDescription"></div>
+        </div>
+    </div>
+    <script>
+        function saveContact() {
+            const name = "{{ $profile->display_name ?? $user->name ?? 'Transport & Logistics' }}";
+            const title = "{{ $profile->profession ?? 'Transport & Logistics' }}";
+            const email = "{{ $user->email ?? '' }}";
+            const phone = "{{ $profile->phone ?? '' }}";
+            const website = "{{ $profile->website ?? '' }}";
+            const location = "{{ $profile->location ?? '' }}";
+            const bio = `{{ $profile->bio ?? '' }}`;
+            const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTITLE:${title}\nEMAIL:${email}\nTEL:${phone}\nURL:${website}\nADR:;;${location};;;;\nNOTE:${bio}\nEND:VCARD`;
+            const blob = new Blob([vcard], { type: 'text/vcard' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${name.replace(/\s+/g, '_')}_contact.vcf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+        function openGalleryModal(imageUrl, title, description) {
+            document.getElementById('galleryModalImage').src = imageUrl;
+            document.getElementById('galleryModalTitle').textContent = title || 'Gallery Image';
+            document.getElementById('galleryModalDescription').textContent = description || '';
+            document.getElementById('galleryModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeGalleryModal() {
+            document.getElementById('galleryModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+        document.getElementById('galleryModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeGalleryModal();
+            }
+        });
+    </script>
+</body>
+</html>
+
