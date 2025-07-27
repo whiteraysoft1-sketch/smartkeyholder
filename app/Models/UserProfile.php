@@ -87,7 +87,11 @@ class UserProfile extends Model
     public function getProfileImageUrlAttribute()
     {
         if ($this->profile_image) {
-            return Storage::disk('public')->url($this->profile_image);
+            $path = $this->profile_image;
+            if (strpos($path, 'profile_images/') !== 0) {
+                $path = 'profile_images/' . ltrim($path, '/');
+            }
+            return Storage::disk('public')->url($path);
         }
         return null;
     }
@@ -95,7 +99,11 @@ class UserProfile extends Model
     public function getFullProfileImageUrlAttribute()
     {
         if ($this->profile_image) {
-            return Storage::disk('public')->url($this->profile_image);
+            $path = $this->profile_image;
+            if (strpos($path, 'profile_images/') !== 0) {
+                $path = 'profile_images/' . ltrim($path, '/');
+            }
+            return Storage::disk('public')->url($path);
         }
         return asset('images/default-avatar.png');
     }
@@ -108,7 +116,11 @@ class UserProfile extends Model
     public function getBackgroundImageUrlAttribute()
     {
         if ($this->background_image) {
-            return Storage::disk('public')->url($this->background_image);
+            $path = $this->background_image;
+            if (strpos($path, 'background_images/') !== 0) {
+                $path = 'background_images/' . ltrim($path, '/');
+            }
+            return Storage::disk('public')->url($path);
         }
         return null;
     }
@@ -116,7 +128,11 @@ class UserProfile extends Model
     public function getFullBackgroundImageUrlAttribute()
     {
         if ($this->background_image) {
-            return Storage::disk('public')->url($this->background_image);
+            $path = $this->background_image;
+            if (strpos($path, 'background_images/') !== 0) {
+                $path = 'background_images/' . ltrim($path, '/');
+            }
+            return Storage::disk('public')->url($path);
         }
         return null;
     }

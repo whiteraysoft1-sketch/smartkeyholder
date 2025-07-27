@@ -43,7 +43,11 @@ class GalleryItem extends Model
         
         // Then try to generate from image_path
         if ($this->image_path) {
-            return Storage::disk('public')->url($this->image_path);
+            $path = $this->image_path;
+            if (strpos($path, 'gallery/') !== 0) {
+                $path = 'gallery/' . ltrim($path, '/');
+            }
+            return Storage::disk('public')->url($path);
         }
         
         // Return a default placeholder if nothing is available
@@ -54,7 +58,11 @@ class GalleryItem extends Model
     {
         // If image_url is not set, generate it from image_path
         if (!$value && $this->image_path) {
-            return Storage::disk('public')->url($this->image_path);
+            $path = $this->image_path;
+            if (strpos($path, 'gallery/') !== 0) {
+                $path = 'gallery/' . ltrim($path, '/');
+            }
+            return Storage::disk('public')->url($path);
         }
         
         return $value;
