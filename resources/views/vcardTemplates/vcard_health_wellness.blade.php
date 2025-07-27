@@ -411,19 +411,39 @@
                     <i class="fas fa-share-alt text-blue-600 mr-2"></i>
                     Connect With Us
                 </h3>
-                <div class="flex gap-3 justify-center">
+                <div class="space-y-3">
                     @foreach($socialLinks as $link)
-                        <a href="{{ $link->url }}" target="_blank" class="social-icon w-12 h-12 flex items-center justify-center rounded-full text-white text-lg" title="{{ ucfirst($link->platform) }}">
-                            @switch($link->platform)
-                                @case('facebook')<i class="fab fa-facebook-f"></i>@break
-                                @case('instagram')<i class="fab fa-instagram"></i>@break
-                                @case('twitter')<i class="fab fa-twitter"></i>@break
-                                @case('linkedin')<i class="fab fa-linkedin-in"></i>@break
-                                @case('youtube')<i class="fab fa-youtube"></i>@break
-                                @case('whatsapp')<i class="fab fa-whatsapp"></i>@break
-                                @case('telegram')<i class="fab fa-telegram-plane"></i>@break
-                                @default<i class="fas fa-link"></i>@break
-                            @endswitch
+                        <a href="{{ $link->url }}" target="_blank" class="social-link-card contact-item rounded-xl p-4 flex items-center fade-in hover:scale-105 transition-all duration-300">
+                            <div class="w-12 h-12 rounded-full flex items-center justify-center text-white mr-4 shadow-lg
+                                @switch($link->platform)
+                                    @case('linkedin') bg-gradient-to-r from-blue-600 to-blue-700 @break
+                                    @case('twitter') bg-gradient-to-r from-sky-400 to-sky-500 @break
+                                    @case('github') bg-gradient-to-r from-gray-700 to-gray-800 @break
+                                    @case('instagram') bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 @break
+                                    @case('facebook') bg-gradient-to-r from-blue-600 to-blue-700 @break
+                                    @case('youtube') bg-gradient-to-r from-red-600 to-red-700 @break
+                                    @case('whatsapp') bg-gradient-to-r from-green-500 to-green-600 @break
+                                    @case('telegram') bg-gradient-to-r from-blue-500 to-blue-600 @break
+                                    @default bg-gradient-to-r from-gray-500 to-gray-600 @break
+                                @endswitch">
+                                @switch($link->platform)
+                                    @case('facebook')<i class="fab fa-facebook-f text-lg"></i>@break
+                                    @case('instagram')<i class="fab fa-instagram text-lg"></i>@break
+                                    @case('twitter')<i class="fab fa-twitter text-lg"></i>@break
+                                    @case('linkedin')<i class="fab fa-linkedin-in text-lg"></i>@break
+                                    @case('youtube')<i class="fab fa-youtube text-lg"></i>@break
+                                    @case('whatsapp')<i class="fab fa-whatsapp text-lg"></i>@break
+                                    @case('telegram')<i class="fab fa-telegram-plane text-lg"></i>@break
+                                    @default<i class="fas fa-link text-lg"></i>@break
+                                @endswitch
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-bold text-gray-800 capitalize">{{ $link->platform }}</div>
+                                <div class="text-sm text-gray-600">Follow us on {{ ucfirst($link->platform) }}</div>
+                            </div>
+                            <div class="text-gray-400">
+                                <i class="fas fa-external-link-alt text-sm"></i>
+                            </div>
                         </a>
                     @endforeach
                 </div>
