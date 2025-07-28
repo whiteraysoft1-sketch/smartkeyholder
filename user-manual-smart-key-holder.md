@@ -5,9 +5,9 @@
 ## How It Works
 
 ### 1. Scan the QR Code
-- Use any smartphone camera to scan the QR on your tag.
-- **If unclaimed:** You’ll be prompted to set up your account.
-- **If already claimed:** You’ll see the owner’s public profile.
+- Use any smartphone camera to scan the QR on your key holder.
+- **If unclaimed:** You’ll be prompted to set up your digital profile.
+- **If already claimed:** You’ll see the owner’s public profile (vCard).
 
 ### 2. Claim Your Tag
 Create your profile by entering:
@@ -29,13 +29,14 @@ Create your profile by entering:
 - 👤 Personal profile with name, photo, and bio
 - 🔗 Clickable social media links
 - 🖼️ Gallery or portfolio of services
-- 📞 Contact and messaging options
+- 📞 Contact and messaging options (phone, email, website)
 - 🌐 Public, scannable from any device
+- 📲 Installable as a Progressive Web App (PWA) for offline access
 
 ---
 
 ## 💡 Pro Tips
-- 📱 Add your page to your phone's home screen for quick access and easy edits
+- 📱 Add your page to your phone's home screen for quick access and easy edits (look for the "Add to Home Screen" or "Install App" prompt)
 - 📸 Use clear, professional images and a short, catchy bio
 - 🛠️ Update your gallery regularly to show off your latest work or services
 
@@ -45,7 +46,7 @@ Create your profile by entering:
 - Your QR is permanently assigned to your account
 - Your data is securely stored and encrypted
 - You control what’s public or private
-- Lost your tag? Just log in and deactivate it
+- Lost your tag? Log in and deactivate it to protect your info
 
 ---
 
