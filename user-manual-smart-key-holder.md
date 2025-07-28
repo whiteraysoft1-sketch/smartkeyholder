@@ -34,6 +34,13 @@ Create your profile by entering:
 
 ---
 
+## 💡 Pro Tips
+- 📱 Add your page to your phone's home screen for quick access and easy edits
+- 📸 Use clear, professional images and a short, catchy bio
+- 🛠️ Update your gallery regularly to show off your latest work or services
+
+---
+
 ## 🛡️ Security & Privacy
 - Your QR is permanently assigned to your account
 - Your data is securely stored and encrypted
