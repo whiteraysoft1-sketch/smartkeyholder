@@ -58,6 +58,11 @@ class UserProfile extends Model
         'pwa_dir',
     ];
 
+    protected $attributes = [
+        'currency_symbol' => '$',
+        'currency' => 'USD',
+    ];
+
     protected function casts(): array
     {
         return [
@@ -217,6 +222,36 @@ class UserProfile extends Model
             'GHS' => ['symbol' => '₵', 'name' => 'Ghanaian Cedi'],
             'UGX' => ['symbol' => 'USh', 'name' => 'Ugandan Shilling'],
         ];
+    }
+
+    /**
+     * Update currency and automatically set the corresponding currency symbol
+     */
+    public function updateCurrency($currencyCode)
+    {
+        $currencies = self::getCurrencyOptions();
+        
+        if (isset($currencies[$currencyCode])) {
+            $this->currency = $currencyCode;
+            $this->currency_symbol = $currencies[$currencyCode]['symbol'];
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     * Mutator to automatically set currency symbol when currency is set
+     */
+    public function setCurrencyAttribute($value)
+    {
+        $this->attributes['currency'] = $value;
+        
+        // Automatically set currency symbol
+        $currencies = self::getCurrencyOptions();
+        if (isset($currencies[$value])) {
+            $this->attributes['currency_symbol'] = $currencies[$value]['symbol'];
+        }
     }
 
     public static function getPwaDisplayModeOptions()

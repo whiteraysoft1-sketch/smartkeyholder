@@ -105,11 +105,11 @@
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700">Price ({{ $profile->currency_symbol }})</label>
+                                        <label class="block text-sm font-medium text-gray-700">Price ({{ $profile->currency_symbol ?? '$' }})</label>
                                         <input type="number" name="price" step="0.01" min="0" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700">Original Price ({{ $profile->currency_symbol }})</label>
+                                        <label class="block text-sm font-medium text-gray-700">Original Price ({{ $profile->currency_symbol ?? '$' }})</label>
                                         <input type="number" name="original_price" step="0.01" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                                     </div>
                                 </div>

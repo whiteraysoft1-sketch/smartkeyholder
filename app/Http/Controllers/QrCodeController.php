@@ -81,7 +81,7 @@ class QrCodeController extends Controller
             abort(404, 'QR Code not found or already claimed');
         }
 
-        return view('qr.claim', compact('qrCode'));
+        return view('qr.claim_simple', compact('qrCode'));
     }
 
     /**

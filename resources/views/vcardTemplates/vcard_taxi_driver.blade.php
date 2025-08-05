@@ -230,6 +230,7 @@
                     <i class="fas fa-share-alt text-yellow-600 mr-2"></i>
                     Connect with Me
                 </h3>
+
                 <div class="space-y-3">
                     @foreach($socialLinks as $link)
                         <a href="{{ $link->url }}" target="_blank" class="social-link-card contact-item rounded-xl p-4 flex items-center fade-in hover:scale-105 transition-all duration-300">

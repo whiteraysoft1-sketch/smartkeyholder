@@ -60,6 +60,8 @@ class DashboardController extends Controller
             'bio' => 'nullable|string|max:1000',
             'contact' => 'nullable|string|max:255',
             'currency' => 'nullable|string|max:8',
+            'pwa_enabled' => 'nullable|boolean',
+            'pwa_app_name' => 'nullable|string|max:255',
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'background_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // 5MB max for background
         ]);
@@ -81,7 +83,15 @@ class DashboardController extends Controller
         if ($request->filled('profession')) $profile->profession = $request->profession;
         if ($request->filled('bio')) $profile->bio = $request->bio;
         if ($request->filled('contact')) $profile->contact = $request->contact;
-        if ($request->filled('currency')) $profile->currency = $request->currency;
+        if ($request->filled('currency')) {
+            $profile->currency = $request->currency;
+        }
+        
+        // Handle PWA settings
+        $profile->pwa_enabled = $request->boolean('pwa_enabled');
+        if ($request->filled('pwa_app_name')) {
+            $profile->pwa_app_name = $request->pwa_app_name;
+        }
         
         if ($request->hasFile('profile_image')) {
             // Delete old image if exists
@@ -235,7 +245,11 @@ class DashboardController extends Controller
         $profile->minimum_order = $request->minimum_order;
         $profile->delivery_available = $request->boolean('delivery_available');
         $profile->pickup_available = $request->boolean('pickup_available');
-        $profile->currency = $request->currency;
+        
+        // Update currency and automatically set currency symbol
+        if ($request->filled('currency')) {
+            $profile->currency = $request->currency;
+        }
         $profile->save();
         return redirect()->back()->with('success', 'Store settings updated.');
     }
@@ -498,6 +512,8 @@ class DashboardController extends Controller
             ['file' => 'vcard_taxi_driver', 'name' => 'Taxi Driver'],
             ['file' => 'vcard_modern_business', 'name' => 'Modern Business'],
             ['file' => 'vcard_creative_portfolio', 'name' => 'Creative Portfolio'],
+            ['file' => 'vcard_printing_design_branding', 'name' => 'Printing, Design & Branding'],
+            ['file' => 'vcard_real_estate', 'name' => 'Real Estate & Property Management'],
         ];
         return view('dashboard.vcard-templates', compact('user', 'profile', 'templates'));
     }
@@ -530,6 +546,8 @@ class DashboardController extends Controller
             'vcard_taxi_driver',
             'vcard_modern_business',
             'vcard_creative_portfolio',
+            'vcard_printing_design_branding',
+            'vcard_real_estate',
         ];
         if (!in_array($template, $availableTemplates)) {
             abort(404, 'Template not found');
