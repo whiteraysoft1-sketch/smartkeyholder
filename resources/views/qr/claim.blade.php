@@ -1031,6 +1031,14 @@
             if (hiddenField) {
                 hiddenField.value = value;
             }
+            
+            // Special handling for password_confirmation field
+            if (stepData.field === 'password_confirmation') {
+                const passwordConfirmationField = document.getElementById('hiddenPasswordConfirmation');
+                if (passwordConfirmationField) {
+                    passwordConfirmationField.value = value;
+                }
+            }
 
             // For password fields, show asterisks instead of the actual password in the chat
             let displayValue = value;
@@ -1134,6 +1142,27 @@
                 alert("Password and confirmation don't match. Please start over.");
                 return;
             }
+
+            // Ensure all hidden form fields are populated
+            console.log('Conversation data:', conversationData);
+            
+            // Double-check all hidden fields are set
+            document.getElementById('hiddenName').value = conversationData.name || '';
+            document.getElementById('hiddenEmail').value = conversationData.email || '';
+            document.getElementById('hiddenPassword').value = conversationData.password || '';
+            document.getElementById('hiddenPasswordConfirmation').value = conversationData.password_confirmation || '';
+            document.getElementById('hiddenProfession').value = conversationData.profession || '';
+            document.getElementById('hiddenPhone').value = conversationData.phone || '';
+            document.getElementById('hiddenWebsite').value = conversationData.website || '';
+            document.getElementById('hiddenLocation').value = conversationData.location || '';
+            document.getElementById('hiddenBio').value = conversationData.bio || '';
+
+            // Debug: Log all form field values
+            console.log('Form field values:');
+            console.log('Name:', document.getElementById('hiddenName').value);
+            console.log('Email:', document.getElementById('hiddenEmail').value);
+            console.log('Password:', document.getElementById('hiddenPassword').value ? '***' : 'EMPTY');
+            console.log('Password Confirmation:', document.getElementById('hiddenPasswordConfirmation').value ? '***' : 'EMPTY');
 
             // Get the submit button and change its text to show loading state
             const submitButton = document.querySelector('.liquid-btn.success');
