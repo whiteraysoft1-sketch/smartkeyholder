@@ -135,7 +135,6 @@
                             Identity
                         </span>
                         <br>
-                        <span class="text-4xl">🔥 Auto-Deploy Active!</span>
                         Awaits
                     </h1>
                     <p class="text-xl lg:text-2xl mb-8 text-white/90 leading-relaxed">
