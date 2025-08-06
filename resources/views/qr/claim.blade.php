@@ -22,77 +22,12 @@
         .gradient-bg {
             position: relative;
             min-height: 100vh;
-            overflow: hidden;
-            background: 
-                radial-gradient(ellipse at top left, #0a0a0a 0%, #000000 40%),
-                radial-gradient(ellipse at top right, #111111 0%, #000000 40%),
-                radial-gradient(ellipse at bottom left, #0d0d0d 0%, #000000 40%),
-                radial-gradient(ellipse at bottom right, #080808 0%, #000000 40%),
-                radial-gradient(ellipse at center, #050505 0%, #000000 60%),
-                linear-gradient(135deg, #000000 0%, #0a0a0a 25%, #111111 50%, #0a0a0a 75%, #000000 100%);
+            background: #000000;
         }
 
-        .gradient-bg::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background:
-                radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.15) 0%, transparent 20%),
-                radial-gradient(circle at 85% 20%, rgba(139, 92, 246, 0.12) 0%, transparent 25%),
-                radial-gradient(circle at 40% 70%, rgba(236, 72, 153, 0.08) 0%, transparent 30%),
-                radial-gradient(circle at 80% 80%, rgba(34, 197, 94, 0.06) 0%, transparent 20%),
-                radial-gradient(circle at 20% 90%, rgba(251, 191, 36, 0.04) 0%, transparent 25%),
-                radial-gradient(circle at 60% 30%, rgba(168, 85, 247, 0.05) 0%, transparent 20%),
-                radial-gradient(circle at 30% 60%, rgba(14, 165, 233, 0.07) 0%, transparent 25%);
-            z-index: 1;
-            animation: backgroundShift 20s ease-in-out infinite;
-        }
 
-        .gradient-bg::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.008) 50%, transparent 60%),
-                linear-gradient(-45deg, transparent 40%, rgba(59, 130, 246, 0.015) 50%, transparent 60%),
-                linear-gradient(90deg, transparent 30%, rgba(139, 92, 246, 0.01) 50%, transparent 70%);
-            z-index: 2;
-            animation: shimmer 20s linear infinite;
-        }
 
-        @keyframes backgroundShift {
-            0%, 100% {
-                transform: scale(1) rotate(0deg);
-                opacity: 1;
-            }
-            25% {
-                transform: scale(1.1) rotate(1deg);
-                opacity: 0.8;
-            }
-            50% {
-                transform: scale(1.05) rotate(-0.5deg);
-                opacity: 0.9;
-            }
-            75% {
-                transform: scale(1.08) rotate(0.8deg);
-                opacity: 0.85;
-            }
-        }
 
-        @keyframes shimmer {
-            0% {
-                transform: translateX(-100%) translateY(-100%);
-            }
-            100% {
-                transform: translateX(100%) translateY(100%);
-            }
-        }
 
         .chat-bubble {
             animation: slideInUp 0.6s ease-out;
@@ -117,25 +52,7 @@
             to { opacity: 1; transform: translateX(0); }
         }
 
-        .pattern-bg {
-            background-image:
-                radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 0.5px, transparent 0),
-                radial-gradient(circle at 8px 8px, rgba(59,130,246,0.02) 0.5px, transparent 0),
-                radial-gradient(circle at 15px 15px, rgba(139,92,246,0.015) 0.5px, transparent 0);
-            background-size: 40px 40px, 80px 80px, 120px 120px;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 3;
-            animation: patternMove 40s linear infinite;
-        }
 
-        @keyframes patternMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(30px, 30px); }
-        }
 
         .content-container {
             position: relative;
@@ -156,80 +73,7 @@
         .input-container { display: none; }
         .input-container.active { display: block; animation: slideInUp 0.6s ease-out; }
 
-        .floating-elements {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            pointer-events: none;
-            z-index: 4;
-        }
 
-        .floating-element {
-            position: absolute;
-            border-radius: 50%;
-            animation: float 8s ease-in-out infinite;
-            filter: blur(1px);
-        }
-
-        .floating-element:nth-child(1) {
-            background: radial-gradient(circle, rgba(59,130,246,0.2) 0%, rgba(59,130,246,0.05) 50%, transparent 100%);
-            animation-duration: 12s;
-        }
-
-        .floating-element:nth-child(2) {
-            background: radial-gradient(circle, rgba(139,92,246,0.15) 0%, rgba(139,92,246,0.04) 50%, transparent 100%);
-            animation-duration: 15s;
-        }
-
-        .floating-element:nth-child(3) {
-            background: radial-gradient(circle, rgba(236,72,153,0.12) 0%, rgba(236,72,153,0.03) 50%, transparent 100%);
-            animation-duration: 10s;
-        }
-
-        .floating-element:nth-child(4) {
-            background: radial-gradient(circle, rgba(34,197,94,0.1) 0%, rgba(34,197,94,0.025) 50%, transparent 100%);
-            animation-duration: 18s;
-        }
-
-        .floating-element:nth-child(5) {
-            background: radial-gradient(circle, rgba(251,191,36,0.08) 0%, rgba(251,191,36,0.02) 50%, transparent 100%);
-            animation-duration: 14s;
-        }
-
-        .floating-element:nth-child(6) {
-            background: radial-gradient(circle, rgba(168,85,247,0.1) 0%, rgba(168,85,247,0.025) 50%, transparent 100%);
-            animation-duration: 16s;
-        }
-
-        .floating-element:nth-child(7) {
-            background: radial-gradient(circle, rgba(14,165,233,0.09) 0%, rgba(14,165,233,0.02) 50%, transparent 100%);
-            animation-duration: 20s;
-        }
-
-        .floating-element:nth-child(8) {
-            background: radial-gradient(circle, rgba(99,102,241,0.07) 0%, rgba(99,102,241,0.018) 50%, transparent 100%);
-            animation-duration: 22s;
-        }
-
-        @keyframes float {
-            0%, 100% { 
-                transform: translateY(0px) translateX(0px) rotate(0deg) scale(1); 
-                opacity: 0.6;
-            }
-            25% { 
-                transform: translateY(-30px) translateX(20px) rotate(90deg) scale(1.1); 
-                opacity: 0.8;
-            }
-            50% { 
-                transform: translateY(-15px) translateX(-25px) rotate(180deg) scale(0.9); 
-                opacity: 1;
-            }
-            75% { 
-                transform: translateY(-40px) translateX(15px) rotate(270deg) scale(1.05); 
-                opacity: 0.7;
-            }
-        }
 
         .pulse-glow {
             animation: pulseGlow 3s ease-in-out infinite alternate;
@@ -284,145 +128,14 @@
             }
         }
 
-        /* Interactive background effects */
-        :root {
-            --mouse-x: 0.5;
-            --mouse-y: 0.5;
-        }
 
-        .gradient-bg::before {
-            background:
-                radial-gradient(circle at calc(var(--mouse-x) * 100%) calc(var(--mouse-y) * 100%), rgba(59, 130, 246, 0.12) 0%, transparent 25%),
-                radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.15) 0%, transparent 20%),
-                radial-gradient(circle at 85% 20%, rgba(139, 92, 246, 0.12) 0%, transparent 25%),
-                radial-gradient(circle at 40% 70%, rgba(236, 72, 153, 0.08) 0%, transparent 30%),
-                radial-gradient(circle at 80% 80%, rgba(34, 197, 94, 0.06) 0%, transparent 20%),
-                radial-gradient(circle at 20% 90%, rgba(251, 191, 36, 0.04) 0%, transparent 25%),
-                radial-gradient(circle at 60% 30%, rgba(168, 85, 247, 0.05) 0%, transparent 20%),
-                radial-gradient(circle at 30% 60%, rgba(14, 165, 233, 0.07) 0%, transparent 25%);
-        }
 
-        /* Enhanced mobile performance */
-        @media (max-width: 768px) {
-            .gradient-bg::before {
-                animation-duration: 30s; /* Slower animation on mobile */
-            }
-            
-            .floating-element {
-                animation-duration: 12s; /* Slower floating on mobile */
-            }
-            
-            .particle {
-                animation-duration: 25s; /* Slower particles on mobile */
-            }
-        }
 
-        /* Aurora Effect */
-        .aurora-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 1;
-            pointer-events: none;
-        }
 
-        .aurora {
-            position: absolute;
-            width: 200%;
-            height: 100%;
-            opacity: 0.3;
-            filter: blur(2px);
-            mix-blend-mode: screen;
-        }
 
-        .aurora-1 {
-            background: linear-gradient(45deg, 
-                transparent 0%, 
-                rgba(59, 130, 246, 0.08) 25%, 
-                rgba(139, 92, 246, 0.12) 50%, 
-                rgba(236, 72, 153, 0.06) 75%, 
-                transparent 100%);
-            animation: aurora1 30s ease-in-out infinite;
-            transform: rotate(-10deg);
-        }
-
-        .aurora-2 {
-            background: linear-gradient(-45deg, 
-                transparent 0%, 
-                rgba(34, 197, 94, 0.05) 30%, 
-                rgba(59, 130, 246, 0.08) 60%, 
-                rgba(168, 85, 247, 0.06) 90%, 
-                transparent 100%);
-            animation: aurora2 35s ease-in-out infinite reverse;
-            transform: rotate(15deg);
-        }
-
-        .aurora-3 {
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(251, 191, 36, 0.03) 20%, 
-                rgba(236, 72, 153, 0.05) 50%, 
-                rgba(139, 92, 246, 0.04) 80%, 
-                transparent 100%);
-            animation: aurora3 40s ease-in-out infinite;
-            transform: rotate(-5deg);
-        }
-
-        @keyframes aurora1 {
-            0%, 100% { 
-                transform: translateX(-50%) translateY(-10%) rotate(-10deg) scale(1); 
-                opacity: 0.2;
-            }
-            33% { 
-                transform: translateX(-30%) translateY(-5%) rotate(-8deg) scale(1.1); 
-                opacity: 0.4;
-            }
-            66% { 
-                transform: translateX(-70%) translateY(-15%) rotate(-12deg) scale(0.9); 
-                opacity: 0.3;
-            }
-        }
-
-        @keyframes aurora2 {
-            0%, 100% { 
-                transform: translateX(-60%) translateY(5%) rotate(15deg) scale(1); 
-                opacity: 0.15;
-            }
-            50% { 
-                transform: translateX(-40%) translateY(-8%) rotate(18deg) scale(1.2); 
-                opacity: 0.3;
-            }
-        }
-
-        @keyframes aurora3 {
-            0%, 100% { 
-                transform: translateX(-45%) translateY(-5%) rotate(-5deg) scale(1); 
-                opacity: 0.1;
-            }
-            25% { 
-                transform: translateX(-55%) translateY(3%) rotate(-3deg) scale(1.1); 
-                opacity: 0.2;
-            }
-            75% { 
-                transform: translateX(-35%) translateY(-12%) rotate(-7deg) scale(0.95); 
-                opacity: 0.15;
-            }
-        }
 
         /* Reduced motion for accessibility */
         @media (prefers-reduced-motion: reduce) {
-            .gradient-bg::before,
-            .gradient-bg::after,
-            .floating-element,
-            .particle,
-            .pattern-bg,
-            .aurora {
-                animation: none;
-            }
-            
             .pulse-glow {
                 animation: none;
             }
@@ -839,30 +552,7 @@
     </style>
 </head>
 <body class="gradient-bg">
-    <!-- Background Pattern -->
-    <div class="pattern-bg"></div>
 
-    <!-- Aurora Effect -->
-    <div class="aurora-container">
-        <div class="aurora aurora-1"></div>
-        <div class="aurora aurora-2"></div>
-        <div class="aurora aurora-3"></div>
-    </div>
-
-    <!-- Particle System -->
-    <div class="particles" id="particles"></div>
-
-    <!-- Floating Elements -->
-    <div class="floating-elements">
-        <div class="floating-element w-24 h-24 sm:w-32 sm:h-32" style="top: 10%; left: 8%; animation-delay: 0s;"></div>
-        <div class="floating-element w-32 h-32 sm:w-40 sm:h-40" style="top: 15%; right: 12%; animation-delay: 2s;"></div>
-        <div class="floating-element w-20 h-20 sm:w-24 sm:h-24" style="bottom: 25%; left: 15%; animation-delay: 4s;"></div>
-        <div class="floating-element w-28 h-28 sm:w-36 sm:h-36" style="bottom: 8%; right: 10%; animation-delay: 1s;"></div>
-        <div class="floating-element w-36 h-36 sm:w-44 sm:h-44" style="top: 45%; left: 20%; animation-delay: 3s;"></div>
-        <div class="floating-element w-40 h-40 sm:w-48 sm:h-48" style="bottom: 35%; right: 25%; animation-delay: 5s;"></div>
-        <div class="floating-element w-16 h-16 sm:w-20 sm:h-20" style="top: 70%; left: 70%; animation-delay: 6s;"></div>
-        <div class="floating-element w-22 h-22 sm:w-28 sm:h-28" style="top: 30%; right: 45%; animation-delay: 7s;"></div>
-    </div>
 
     <!-- Main Content -->
     <div class="content-container min-h-screen py-4 px-3 sm:py-8 sm:px-6">
@@ -1311,79 +1001,8 @@
             }
         }
 
-        // Particle System
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = window.innerWidth < 768 ? 15 : 25; // Fewer particles on mobile
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                
-                // Random starting position
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 20 + 's';
-                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
-                
-                // Random particle properties
-                const size = Math.random() * 3 + 1;
-                particle.style.width = size + 'px';
-                particle.style.height = size + 'px';
-                
-                // Random colors for particles - galaxy themed
-                const colors = [
-                    'rgba(59, 130, 246, 0.4)',
-                    'rgba(139, 92, 246, 0.35)',
-                    'rgba(236, 72, 153, 0.3)',
-                    'rgba(34, 197, 94, 0.25)',
-                    'rgba(251, 191, 36, 0.2)',
-                    'rgba(255, 255, 255, 0.3)',
-                    'rgba(14, 165, 233, 0.3)',
-                    'rgba(168, 85, 247, 0.25)'
-                ];
-                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-                
-                // Add subtle glow
-                particle.style.boxShadow = `0 0 ${size * 2}px ${particle.style.background}`;
-                
-                particlesContainer.appendChild(particle);
-            }
-        }
-
-        // Enhanced background interaction
-        function addBackgroundInteraction() {
-            let mouseX = 0;
-            let mouseY = 0;
-            
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX / window.innerWidth;
-                mouseY = e.clientY / window.innerHeight;
-                
-                // Update CSS custom properties for mouse-based effects
-                document.documentElement.style.setProperty('--mouse-x', mouseX);
-                document.documentElement.style.setProperty('--mouse-y', mouseY);
-            });
-            
-            // Touch interaction for mobile
-            document.addEventListener('touchmove', (e) => {
-                if (e.touches.length > 0) {
-                    mouseX = e.touches[0].clientX / window.innerWidth;
-                    mouseY = e.touches[0].clientY / window.innerHeight;
-                    
-                    document.documentElement.style.setProperty('--mouse-x', mouseX);
-                    document.documentElement.style.setProperty('--mouse-y', mouseY);
-                }
-            });
-        }
-
         // Initialize everything
         document.addEventListener('DOMContentLoaded', function() {
-            // Create particle system
-            createParticles();
-            
-            // Add background interaction
-            addBackgroundInteraction();
-            
             // Start the chat
             setTimeout(() => {
                 addChatMessage(conversation[0].question);
