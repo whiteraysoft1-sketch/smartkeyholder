@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ \App\Models\Setting::get('site_name', 'Whiteray Smart Tag') }} - {{ \App\Models\Setting::get('site_description', 'Digital Identity SaaS') }}</title>
+    <title>{{ \App\Models\Setting::get('site_name', 'Smart KeyHolder') }} - {{ \App\Models\Setting::get('site_description', 'Your Digital Identity Platform') }}</title>
     <meta name="keywords" content="Uganda news, Jobs in Uganda, URA, Uganda Revenue Authority, NSSF Uganda, Scholarships in Uganda, MTN Uganda, Airtel Uganda, Uganda cranes, UNRA, Uganda National Roads Authority, Uganda passport application, Uganda weather, Mobile money Uganda, Jiji Uganda, Marketplace Uganda, Buy and Sell Uganda, Classifieds Uganda, Online Shopping Uganda">
     @if(\App\Models\Setting::get('favicon'))
         <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . \App\Models\Setting::get('favicon')) }}">
