@@ -826,7 +826,12 @@
                 field: "password_confirmation",
                 type: "password",
                 placeholder: "Confirm your password",
-                validation: (value) => value === conversationData.password,
+                validation: (value) => {
+                    if (!value || value.length === 0) {
+                        return false;
+                    }
+                    return value === conversationData.password;
+                },
                 errorMessage: "Passwords don't match. Please try again.",
                 response: () => "Great! Passwords match perfectly. ✅"
             },
