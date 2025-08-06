@@ -621,62 +621,14 @@
         <!-- TikTok -->
         <svg class="social-icon" style="top: 60%; right: 25%; animation-delay: 5s;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"></path><path d="M15 8a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"></path><path d="M15 8v8a4 4 0 0 1-4 4"></path><line x1="9" y1="12" x2="15" y2="8"></line></svg>
 
-        <!-- Pinterest -->
-        <svg class="social-icon" style="bottom: 45%; left: 40%; animation-delay: 6s;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12h8"></path><path d="M12 8v8"></path><circle cx="12" cy="12" r="10"></circle></svg>
-
         <!-- WhatsApp -->
         <svg class="social-icon" style="top: 75%; right: 40%; animation-delay: 7s;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
 
         <!-- Telegram -->
         <svg class="social-icon" style="top: 35%; left: 55%; animation-delay: 8s;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"></path><path d="M22 2l-7 20-4-9-9-4 20-7z"></path></svg>
 
-        <!-- Snapchat -->
-        <svg class="social-icon" style="bottom: 60%; right: 55%; animation-delay: 9s;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.5 2 7 4 7 7v3c0 1.5-2 2-2 2s.5 1 2 1c0 1-1.5 3-3 3 0 0 3 1 6 1 0 0 0 2 2 2s2-2 2-2c3 0 6-1 6-1-1.5 0-3-2-3-3 1.5 0 2-1 2-1s-2-.5-2-2V7c0-3-1.5-5-5-5z"></path></svg>
-
         <!-- Discord -->
         <svg class="social-icon" style="top: 50%; left: 70%; animation-delay: 10s;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="1"></circle><circle cx="15" cy="12" r="1"></circle><path d="M7.5 7.5c3.5-1 5.5-1 9 0"></path><path d="M7 16.5c3.5 1 6.5 1 10 0"></path><path d="M15.5 17c0 1 1.5 3 2 3 1.5 0 2.833-1.667 3.5-3 .667-1.667.5-5.833-1.5-11.5-1.457-1.015-3-1.34-4.5-1.5l-1 2.5"></path><path d="M8.5 17c0 1-1.356 3-1.832 3-1.429 0-2.698-1.667-3.333-3-.635-1.667-.48-5.833 1.428-11.5C6.151 4.485 7.545 4.16 9 4l1 2.5"></path></svg>
-
-        <!-- Reddit -->
-        <svg class="social-icon" style="bottom: 70%; right: 70%; animation-delay: 11s;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M14.5 15c-.83 1-1.83 1.5-3 1.5-1.17 0-2.17-.5-3-1.5"></path><path d="M7 11c.33-.67 1-1 2-1"></path><path d="M17 11c-.33-.67-1-1-2-1"></path><path d="M12 14h.01"></path></svg>
-
-        <!-- Messenger -->
-        <svg class="social-icon" style="top: 85%; left: 30%; animation-delay: 12s;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 0-10 10c0 4.4 2.9 8.2 7 9.5V18h-2v-2h2v-2.9c0-1.7 1.3-3.1 3-3.1h2v2h-2c-.6 0-1 .4-1 1v3h3v2h-3v3.5c4.1-1.3 7-5.1 7-9.5a10 10 0 0 0-10-10z"></path></svg>
-
-        <!-- Tumblr -->
-        <svg class="social-icon" style="bottom: 85%; right: 30%; animation-delay: 13s;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 21h-4v-6H7V9h3V6h4v3h3v6h-3v6z"></path></svg>
-
-        <!-- WeChat -->
-        <svg class="social-icon" style="top: 20%; left: 85%; animation-delay: 14s;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"></path><path d="M9 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"></path><path d="M15 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"></path><path d="M9 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"></path><path d="M19 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"></path><path d="M12 16v-4"></path></svg>
-
-        <!-- QQ -->
-        <svg class="social-icon" style="bottom: 20%; left: 85%; animation-delay: 15s;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-4.4 0-8 3.6-8 8 0 2.1.8 4 2.2 5.4-.3 1.1-.9 2.1-1.7 2.9-.3.3-.4.7-.2 1.1.1.4.5.6.9.6 1.8 0 3.5-.7 4.8-1.9.6.1 1.3.2 2 .2 4.4 0 8-3.6 8-8s-3.6-8-8-8z"></path></svg>
-
-        <!-- Sina Weibo -->
-        <svg class="social-icon" style="top: 65%; left: 5%; animation-delay: 16s;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"></path><path d="M17.5 7.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11zm-11 0a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11z"></path></svg>
-
-        <!-- Google Business -->
-        <svg class="social-icon" style="bottom: 65%; right: 5%; animation-delay: 17s;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 12h8"></path><path d="M12 8v8"></path></svg>
-
-        <!-- Twitch -->
-        <svg class="social-icon" style="top: 5%; left: 45%; animation-delay: 18s;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2H3v16h5v4l4-4h5l4-4V2zm-10 9V7m5 4V7"></path></svg>
-
-        <!-- Skype -->
-        <svg class="social-icon" style="bottom: 5%; right: 45%; animation-delay: 19s;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12z"></path><path d="M8 12a4 4 0 0 1 8 0"></path><line x1="9" y1="10" x2="9.01" y2="10"></line><line x1="15" y1="10" x2="15.01" y2="10"></line></svg>
-
-        <!-- Medium -->
-        <svg class="social-icon" style="top: 30%; left: 3%; animation-delay: 20s;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3h16a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"></path><path d="M8 9h8"></path><path d="M8 13h8"></path><path d="M8 17h5"></path></svg>
-
-        <!-- Dribbble -->
-        <svg class="social-icon" style="bottom: 30%; right: 3%; animation-delay: 21s;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M19.13 5.09C15.22 9.14 10 10.44 2.25 10.94"></path><path d="M21.75 12.84c-6.62-1.41-12.14 1-16.38 6.32"></path><path d="M8.56 2.75c4.37 6 6 9.42 8 17.72"></path></svg>
-
-        <!-- Slack -->
-        <svg class="social-icon" style="bottom: 55%; left: 85%; animation-delay: 23s;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"></path><path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"></path><path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"></path><path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"></path><path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"></path><path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"></path><path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"></path><path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z"></path></svg>
-
-        <!-- Vimeo -->
-        <svg class="social-icon" style="top: 45%; right: 88%; animation-delay: 24s;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 2H5a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V5a3 3 0 0 0-3-3z"></path><path d="M10 9l5 3-5 3V9z"></path></svg>
-
-        <!-- Spotify -->
-        <svg class="social-icon" style="bottom: 40%; right: 88%; animation-delay: 25s;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 11.2A5.6 5.6 0 0 1 13.6 6"></path><path d="M6 13.4A7.8 7.8 0 0 1 13.8 6"></path><path d="M10 16.6A3.4 3.4 0 0 1 13.4 14"></path></svg>
     </div>
 
     <!-- Floating Elements -->
