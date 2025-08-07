@@ -68,12 +68,29 @@ jobs:
           # Set permissions for storage directories
           chmod -R 755 storage/app/public
           
-          # Copy public directory contents to web root if needed
-          # This handles cases where Hostinger serves from public_html root
-          if [ -d "public" ] && [ "$(pwd)" != "$(pwd)/public" ]; then
-            echo "Copying public directory contents to web root..."
-            cp -r public/* ./
-            cp public/.htaccess ./ 2>/dev/null || true
+          # Hostinger-specific setup: Copy Laravel public contents to web root
+          echo "Setting up Hostinger document root..."
+          
+          # Backup existing index files if they exist
+          if [ -f "index.html" ]; then
+            mv index.html index.html.backup
           fi
+          if [ -f "index.php" ] && [ ! -f "public/index.php" ]; then
+            mv index.php index.php.backup
+          fi
+          
+          # Copy all public directory contents to web root
+          cp -r public/* ./
+          cp public/.htaccess ./ 2>/dev/null || true
+          
+          # Use Hostinger-specific index.php
+          cp hostinger-index.php index.php
+          
+          # Ensure proper permissions for web files
+          chmod 644 index.php
+          chmod 644 .htaccess
+          
+          # Create a simple test file to verify deployment
+          echo "<?php echo 'Deployment successful at ' . date('Y-m-d H:i:s'); ?>" > deployment-test.php
           
           echo "✅ Deployment completed successfully!"
