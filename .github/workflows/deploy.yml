@@ -98,6 +98,16 @@ jobs:
           chmod 644 index.php
           chmod 644 .htaccess
           
+          # Force clear route cache again after copying files
+          php artisan route:clear
+          php artisan config:clear
+          
+          # Remove any cached route files that might interfere
+          rm -f bootstrap/cache/routes-*.php
+          
+          # Test the route configuration
+          php artisan route:list --path=/ || echo "Route listing failed"
+          
           # Create a simple test file to verify deployment
           echo "<?php echo 'Deployment successful at ' . date('Y-m-d H:i:s'); ?>" > deployment-test.php
           
