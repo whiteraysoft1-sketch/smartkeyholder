@@ -35,15 +35,24 @@ jobs:
           # Create storage symbolic link (critical for file uploads)
           php artisan storage:link
           
-          # Clear file caches only (no database operations)
+          # Force clear ALL caches and compiled files
           php artisan config:clear
           php artisan view:clear
           php artisan route:clear
+          php artisan cache:clear
+          php artisan optimize:clear
           
-          # Rebuild caches
+          # Remove compiled files manually if they exist
+          rm -f bootstrap/cache/config.php
+          rm -f bootstrap/cache/routes-v7.php
+          rm -f bootstrap/cache/services.php
+          rm -f bootstrap/cache/packages.php
+          
+          # Rebuild caches in correct order
           php artisan config:cache
           php artisan route:cache
           php artisan view:cache
+          php artisan optimize
           
           # Set proper permissions for storage and uploads
           chmod -R 755 storage bootstrap/cache

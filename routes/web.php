@@ -13,6 +13,16 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+// Debug route to test routing
+Route::get('/debug-route', function () {
+    return response()->json([
+        'message' => 'Routing is working!',
+        'timestamp' => now(),
+        'environment' => app()->environment(),
+        'laravel_version' => app()->version(),
+    ]);
+})->name('debug.route');
+
 // PWA routes (for dashboard and profiles)
 Route::get('/pwa/manifest/{uuid?}', [PwaController::class, 'manifest'])->name('pwa.manifest');
 Route::get('/pwa/sw/{uuid?}', [PwaController::class, 'serviceWorker'])->name('pwa.service-worker');
