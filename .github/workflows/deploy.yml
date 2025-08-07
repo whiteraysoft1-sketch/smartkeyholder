@@ -48,6 +48,11 @@ jobs:
           rm -f bootstrap/cache/services.php
           rm -f bootstrap/cache/packages.php
           
+          # Additional cache clearing for route issues
+          rm -rf storage/framework/cache/data/*
+          rm -rf storage/framework/views/*
+          rm -rf storage/framework/sessions/*
+          
           # Remove any existing index.php to prevent conflicts
           rm -f index.php
           
