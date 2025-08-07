@@ -59,4 +59,12 @@ jobs:
           # Set permissions for storage directories
           chmod -R 755 storage/app/public
           
+          # Copy public directory contents to web root if needed
+          # This handles cases where Hostinger serves from public_html root
+          if [ -d "public" ] && [ "$(pwd)" != "$(pwd)/public" ]; then
+            echo "Copying public directory contents to web root..."
+            cp -r public/* ./
+            cp public/.htaccess ./ 2>/dev/null || true
+          fi
+          
           echo "✅ Deployment completed successfully!"
