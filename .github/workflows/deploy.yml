@@ -48,6 +48,9 @@ jobs:
           rm -f bootstrap/cache/services.php
           rm -f bootstrap/cache/packages.php
           
+          # Remove any existing index.php to prevent conflicts
+          rm -f index.php
+          
           # Rebuild caches in correct order
           php artisan config:cache
           php artisan route:cache

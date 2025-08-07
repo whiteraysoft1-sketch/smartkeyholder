@@ -8,8 +8,8 @@ use App\Http\Controllers\PwaController;
 use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Route;
 
-// Public routes
-Route::get('/', function () {
+// Public routes - Root route with explicit methods
+Route::match(['GET', 'HEAD'], '/', function () {
     return view('welcome');
 })->name('home');
 
