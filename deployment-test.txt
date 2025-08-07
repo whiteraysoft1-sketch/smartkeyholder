@@ -1,0 +1,2 @@
+Deployment test - <?php echo date('Y-m-d H:i:s'); ?>
+This file was created to test the GitHub Actions deployment pipeline.
