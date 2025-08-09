@@ -18,7 +18,19 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user()->fresh(); // Get fresh user data
-        $profile = $user->profile; // This will get fresh profile data
+        
+        // Ensure user has a profile - create one if it doesn't exist
+        $profile = $user->profile;
+        if (!$profile) {
+            $profile = $user->profile()->create([
+                'user_id' => $user->id,
+                'is_public' => true,
+                'store_enabled' => false,
+                'currency' => 'USD',
+            ]);
+            $user->refresh(); // Refresh user to get the new profile relationship
+        }
+        
         $socialLinks = $user->socialLinks()->get();
         $galleryItems = $user->galleryItems()->orderBy('created_at', 'desc')->get();
         $subscription = $user->activeSubscription;
@@ -221,7 +233,14 @@ class DashboardController extends Controller
     // WhatsApp Store Settings
     public function updateStoreSettings(Request $request)
     {
-        $profile = Auth::user()->profile;
+        $user = Auth::user();
+        $profile = $user->profile ?? $user->profile()->create([
+            'user_id' => $user->id,
+            'is_public' => true,
+            'store_enabled' => false,
+            'currency' => 'USD',
+        ]);
+        
         $request->validate([
             'store_enabled' => 'nullable|boolean',
             'store_name' => 'nullable|string|max:255',
