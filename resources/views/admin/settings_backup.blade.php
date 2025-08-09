@@ -1310,7 +1310,7 @@
                                 </ul>
                             </div>
 
-                            <form method="POST" action="{{ route('admin.emails.send-expiry-warnings') }}" class="space-y-3">
+                            <form method="POST" action="/admin/emails/send-expiry-warnings" class="space-y-3">
                                 @csrf
                                 <div>
                                     <label for="warning_days" class="block text-sm font-medium text-gray-700">Warning Days (comma-separated)</label>
