@@ -1163,7 +1163,7 @@
                         resultDiv.classList.remove('hidden');
 
                         // Send test email via AJAX
-                        fetch('{{ route("admin.emails.test") }}', {
+                        fetch('/admin/emails/test', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -1217,7 +1217,7 @@
                         <div class="mb-6 p-4 bg-green-50 rounded-lg">
                             <h4 class="font-medium text-gray-900 mb-3">🧪 Test Email Configuration</h4>
                             <p class="text-sm text-gray-600 mb-4">Send a test email to verify your SMTP configuration is working correctly.</p>
-                            <form method="POST" action="{{ route('admin.emails.test') }}" class="flex flex-col sm:flex-row gap-3">
+                            <form method="POST" action="/admin/emails/test" class="flex flex-col sm:flex-row gap-3">
                                 @csrf
                                 <div class="flex-1">
                                     <input type="email" name="test_email" id="test_email" 
