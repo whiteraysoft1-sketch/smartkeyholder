@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Subscription;
 use App\Models\User;
 use App\Models\QrCode;
+use App\Services\EmailService;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 
@@ -993,6 +994,11 @@ class PaymentController extends Controller
                         'is_subscribed' => true,
                         'subscription_ends_at' => $subscription->ends_at,
                     ]);
+
+                    // Send payment receipt email
+                    $emailService = new EmailService();
+                    $isRenewal = $user->subscriptions()->where('status', 'active')->count() > 1;
+                    $emailService->sendPaymentReceiptEmail($user, $subscription, $isRenewal);
 
                     // Redirect to payment success page with subscription details
                     return view('payment.success', compact('subscription'));

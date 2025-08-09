@@ -203,6 +203,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::delete('/pricing-plans/{pricingPlan}', [AdminController::class, 'deletePricingPlan'])->name('pricing-plans.delete');
     Route::patch('/pricing-plans/{pricingPlan}/toggle', [AdminController::class, 'togglePricingPlan'])->name('pricing-plans.toggle');
     Route::post('/pricing-plans/order', [AdminController::class, 'updatePricingPlansOrder'])->name('pricing-plans.order');
+    
+    // Email management routes
+    Route::post('/emails/test', [AdminController::class, 'testEmail'])->name('emails.test');
+    Route::post('/emails/send-expiry-warnings', [AdminController::class, 'sendExpiryWarnings'])->name('emails.send-expiry-warnings');
 });
 
 require __DIR__.'/auth.php';

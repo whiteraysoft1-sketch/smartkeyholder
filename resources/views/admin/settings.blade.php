@@ -29,6 +29,9 @@
 <a href="#currency" class="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-700 hover:bg-blue-50 settings-nav-link" data-target="currency">
 <span class="inline-flex items-center"><svg class="w-4 h-4 mr-2 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v8m0 0a4 4 0 1 0 0-8v8z"/></svg>Currency</span>
 </a>
+<a href="#emails" class="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-700 hover:bg-blue-50 settings-nav-link" data-target="emails">
+<span class="inline-flex items-center"><svg class="w-4 h-4 mr-2 text-pink-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>Emails</span>
+</a>
 <a href="#system" class="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-700 hover:bg-blue-50 settings-nav-link" data-target="system">
 <span class="inline-flex items-center"><svg class="w-4 h-4 mr-2 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>System</span>
 </a>

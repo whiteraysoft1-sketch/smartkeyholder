@@ -60,6 +60,9 @@
                             <a href="#qr-purchase" class="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 settings-nav-link" data-target="qr-purchase">
                                 Purchase QR Codes
                             </a>
+                            <a href="#emails" class="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 settings-nav-link" data-target="emails">
+                                Email Management
+                            </a>
                             <a href="#system" class="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 settings-nav-link" data-target="system">
                                 System Upgrade
                             </a>
@@ -905,6 +908,264 @@
                 </form>
 
                 <!-- System Upgrade -->
+                <!-- Email Management Section -->
+                <div id="emails-section" class="settings-section bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6" style="display: none;">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold mb-4">Email Management</h3>
+                        <p class="text-sm text-gray-600 mb-6">Manage email functionality including welcome emails, expiry warnings, and payment receipts. Emails use the SMTP configuration from your .env file.</p>
+                        
+                        <!-- Email Configuration Status -->
+                        <div class="mb-6 p-4 bg-blue-50 rounded-lg">
+                            <h4 class="font-medium text-gray-900 mb-3">📧 Email Configuration Status</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-sm text-gray-700"><strong>MAIL_MAILER:</strong> {{ config('mail.default') }}</p>
+                                    <p class="text-sm text-gray-700"><strong>MAIL_HOST:</strong> {{ config('mail.mailers.smtp.host') }}</p>
+                                    <p class="text-sm text-gray-700"><strong>MAIL_PORT:</strong> {{ config('mail.mailers.smtp.port') }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-700"><strong>MAIL_FROM_ADDRESS:</strong> {{ config('mail.from.address') }}</p>
+                                    <p class="text-sm text-gray-700"><strong>MAIL_FROM_NAME:</strong> {{ config('mail.from.name') }}</p>
+                                    <p class="text-sm text-gray-700"><strong>MAIL_ENCRYPTION:</strong> {{ config('mail.mailers.smtp.encryption') ?? 'None' }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Test Email Configuration -->
+                        <div class="mb-6 p-4 bg-green-50 rounded-lg">
+                            <h4 class="font-medium text-gray-900 mb-3">🧪 Test Email Configuration</h4>
+                            <p class="text-sm text-gray-600 mb-4">Send a test email to verify your SMTP configuration is working correctly.</p>
+                            <form method="POST" action="{{ route('admin.emails.test') }}" class="flex flex-col sm:flex-row gap-3">
+                                @csrf
+                                <div class="flex-1">
+                                    <input type="email" name="test_email" id="test_email" 
+                                           placeholder="Enter email address to test"
+                                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                           required>
+                                </div>
+                                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded whitespace-nowrap">
+                                    Send Test Email
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Welcome Emails -->
+                        <div class="mb-6 p-4 bg-purple-50 rounded-lg">
+                            <h4 class="font-medium text-gray-900 mb-3">🎉 Welcome Emails</h4>
+                            <p class="text-sm text-gray-600 mb-4">Welcome emails are automatically sent when users claim QR codes. They include login credentials and getting started information.</p>
+                            <div class="bg-white p-3 rounded border">
+                                <h5 class="font-medium text-gray-800 mb-2">Email Features:</h5>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li class="flex items-center">
+                                        <svg class="w-3 h-3 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Login link (https://smart-keyholder.click/login)
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="w-3 h-3 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Username and password
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="w-3 h-3 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        QR code details and claim information
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="w-3 h-3 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Getting started guide and feature overview
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="w-3 h-3 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Trial information and upgrade options
+                                    </li>
+                                </ul>
+                                <div class="mt-3 text-xs text-gray-500">
+                                    <strong>Trigger:</strong> Automatically sent when a user successfully claims a QR code
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Expiry Warning Emails -->
+                        <div class="mb-6 p-4 bg-yellow-50 rounded-lg">
+                            <h4 class="font-medium text-gray-900 mb-3">⏰ Expiry Warning Emails</h4>
+                            <p class="text-sm text-gray-600 mb-4">Send warning emails to free trial users before their trial expires. These can be sent manually or scheduled automatically.</p>
+                            
+                            <div class="bg-white p-3 rounded border mb-4">
+                                <h5 class="font-medium text-gray-800 mb-2">Email Schedule:</h5>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li class="flex items-center">
+                                        <svg class="w-3 h-3 text-yellow-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        7 days before expiry
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="w-3 h-3 text-yellow-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        3 days before expiry
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="w-3 h-3 text-yellow-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        1 day before expiry
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="w-3 h-3 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        On expiry day
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <form method="POST" action="{{ route('admin.emails.send-expiry-warnings') }}" class="space-y-3">
+                                @csrf
+                                <div>
+                                    <label for="warning_days" class="block text-sm font-medium text-gray-700">Warning Days (comma-separated)</label>
+                                    <input type="text" name="warning_days" id="warning_days" 
+                                           value="7,3,1,0"
+                                           placeholder="7,3,1,0"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <p class="text-xs text-gray-500 mt-1">Days before expiry to send warnings (0 = expired users)</p>
+                                </div>
+                                <button type="submit" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+                                    Send Expiry Warning Emails Now
+                                </button>
+                            </form>
+
+                            <div class="mt-4 p-3 bg-gray-50 rounded">
+                                <h6 class="font-medium text-gray-800 mb-2">Automatic Scheduling:</h6>
+                                <p class="text-xs text-gray-600">
+                                    Expiry warning emails are automatically scheduled to run daily at 9:00 AM. 
+                                    To enable automatic sending, make sure your Laravel scheduler is running:
+                                </p>
+                                <code class="text-xs bg-gray-200 px-2 py-1 rounded mt-1 block">php artisan schedule:work</code>
+                            </div>
+                        </div>
+
+                        <!-- Payment Receipt Emails -->
+                        <div class="mb-6 p-4 bg-indigo-50 rounded-lg">
+                            <h4 class="font-medium text-gray-900 mb-3">💳 Payment Receipt Emails</h4>
+                            <p class="text-sm text-gray-600 mb-4">Receipt emails are automatically sent to users when they make payments or renew subscriptions.</p>
+                            <div class="bg-white p-3 rounded border">
+                                <h5 class="font-medium text-gray-800 mb-2">Email Features:</h5>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li class="flex items-center">
+                                        <svg class="w-3 h-3 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Payment receipt with transaction details
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="w-3 h-3 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Subscription details and duration
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="w-3 h-3 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Premium features overview
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="w-3 h-3 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Getting started with premium features
+                                    </li>
+                                    <li class="flex items-center">
+                                        <svg class="w-3 h-3 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Support and contact information
+                                    </li>
+                                </ul>
+                                <div class="mt-3 text-xs text-gray-500">
+                                    <strong>Trigger:</strong> Automatically sent when payment is successfully processed
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Email Templates -->
+                        <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-medium text-gray-900 mb-3">📝 Email Templates</h4>
+                            <p class="text-sm text-gray-600 mb-4">All email templates are professionally designed and mobile-responsive. They include your branding and can be customized.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="bg-white p-3 rounded border text-center">
+                                    <div class="text-2xl mb-2">🎉</div>
+                                    <h5 class="font-medium text-gray-800">Welcome Email</h5>
+                                    <p class="text-xs text-gray-600 mt-1">Sent on QR claim</p>
+                                </div>
+                                <div class="bg-white p-3 rounded border text-center">
+                                    <div class="text-2xl mb-2">⏰</div>
+                                    <h5 class="font-medium text-gray-800">Expiry Warning</h5>
+                                    <p class="text-xs text-gray-600 mt-1">Sent before trial expires</p>
+                                </div>
+                                <div class="bg-white p-3 rounded border text-center">
+                                    <div class="text-2xl mb-2">💳</div>
+                                    <h5 class="font-medium text-gray-800">Payment Receipt</h5>
+                                    <p class="text-xs text-gray-600 mt-1">Sent after payment</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Email Statistics -->
+                        <div class="mb-6 p-4 bg-red-50 rounded-lg">
+                            <h4 class="font-medium text-gray-900 mb-3">📊 Email Statistics</h4>
+                            <p class="text-sm text-gray-600 mb-4">Email sending statistics and logs are available in your Laravel logs. Check <code>storage/logs/laravel.log</code> for detailed email sending information.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="bg-white p-3 rounded border text-center">
+                                    <div class="text-lg font-bold text-green-600">✓</div>
+                                    <p class="text-sm text-gray-600">Successful Sends</p>
+                                    <p class="text-xs text-gray-500">Check logs for details</p>
+                                </div>
+                                <div class="bg-white p-3 rounded border text-center">
+                                    <div class="text-lg font-bold text-red-600">✗</div>
+                                    <p class="text-sm text-gray-600">Failed Sends</p>
+                                    <p class="text-xs text-gray-500">Check logs for errors</p>
+                                </div>
+                                <div class="bg-white p-3 rounded border text-center">
+                                    <div class="text-lg font-bold text-blue-600">📋</div>
+                                    <p class="text-sm text-gray-600">Queue Status</p>
+                                    <p class="text-xs text-gray-500">Emails are queued</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Command Line Tools -->
+                        <div class="mb-6 p-4 bg-orange-50 rounded-lg">
+                            <h4 class="font-medium text-gray-900 mb-3">🛠️ Command Line Tools</h4>
+                            <p class="text-sm text-gray-600 mb-4">Use these Artisan commands to manage emails from the command line:</p>
+                            <div class="space-y-2">
+                                <div class="bg-white p-2 rounded border">
+                                    <code class="text-sm">php artisan email:test your@email.com</code>
+                                    <p class="text-xs text-gray-500 mt-1">Send a test email to verify configuration</p>
+                                </div>
+                                <div class="bg-white p-2 rounded border">
+                                    <code class="text-sm">php artisan email:send-expiry-warnings</code>
+                                    <p class="text-xs text-gray-500 mt-1">Send expiry warnings manually</p>
+                                </div>
+                                <div class="bg-white p-2 rounded border">
+                                    <code class="text-sm">php artisan queue:work</code>
+                                    <p class="text-xs text-gray-500 mt-1">Process email queue (run continuously)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Upgrade Section -->
                 <div id="system-section" class="settings-section bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6" style="display: none;">
                     <div class="p-6">
                         <h3 class="text-lg font-semibold mb-4">System Upgrade</h3>

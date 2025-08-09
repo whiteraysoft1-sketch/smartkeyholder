@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\QrCode;
 use App\Models\User;
 use App\Models\UserProfile;
+use App\Services\EmailService;
 use Illuminate\Support\Str;
 use SimpleSoftwareIO\QrCode\Facades\QrCode as QrCodeGenerator;
 use SimpleSoftwareIO\QrCode\Writer\Image\GdImageBackEnd;
@@ -151,10 +152,14 @@ class QrCodeController extends Controller
             // Claim the QR code
             $qrCode->claim($user);
 
+            // Send welcome email
+            $emailService = new EmailService();
+            $emailService->sendWelcomeEmail($user, $qrCode, $request->password);
+
             // Login the user
             auth()->login($user);
 
-            return redirect()->route('dashboard')->with('success', 'QR Code claimed successfully! You have a 1-month free trial.');
+            return redirect()->route('dashboard')->with('success', 'QR Code claimed successfully! You have a 1-month free trial. Check your email for login details.');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'An error occurred while claiming the QR code: ' . $e->getMessage()])
                          ->withInput($request->except(['password', 'password_confirmation']));

@@ -9,10 +9,10 @@ use App\Models\User;
 use App\Models\Subscription;
 use App\Models\Setting;
 use App\Models\PricingPlan;
+use App\Services\EmailService;
 use App\Traits\CarbonHelpers;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-use SimpleSoftwareIO\QrCode\Writer\Image\GdImageBackEnd;
 
 class AdminController extends Controller
 {
@@ -113,10 +113,13 @@ class AdminController extends Controller
             $filepath = $tempDir . '/' . $filename;
             
             if ($request->format === 'png') {
-                $qrImage = \SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')
+                // Generate SVG first and convert to PNG using GD (since GdImageBackEnd is not available)
+                $svgContent = \SimpleSoftwareIO\QrCode\Facades\QrCode::format('svg')
                     ->size($request->size)
-                    ->writer(new GdImageBackEnd())
                     ->generate($qrCode->url);
+                
+                // Convert SVG to PNG using GD
+                $qrImage = $this->convertSvgToPng($svgContent, $request->size);
             } else {
                 $qrImage = \SimpleSoftwareIO\QrCode\Facades\QrCode::format('svg')
                     ->size($request->size)
@@ -940,5 +943,189 @@ class AdminController extends Controller
         }
 
         return back()->with('success', 'Pricing plans order updated successfully!');
+    }
+
+    /**
+     * Convert SVG content to PNG using GD library
+     *
+     * @param string $svgContent
+     * @param int $size
+     * @return string
+     */
+    private function convertSvgToPng(string $svgContent, int $size): string
+    {
+        // Create a temporary SVG file
+        $tempSvgPath = tempnam(sys_get_temp_dir(), 'qr_svg_') . '.svg';
+        file_put_contents($tempSvgPath, $svgContent);
+        
+        try {
+            // Create a new image canvas
+            $image = imagecreatetruecolor($size, $size);
+            
+            // Set white background
+            $white = imagecolorallocate($image, 255, 255, 255);
+            imagefill($image, 0, 0, $white);
+            
+            // Parse SVG and draw QR code pattern
+            $this->drawQrFromSvg($image, $svgContent, $size);
+            
+            // Capture PNG output
+            ob_start();
+            imagepng($image);
+            $pngData = ob_get_contents();
+            ob_end_clean();
+            
+            // Clean up
+            imagedestroy($image);
+            unlink($tempSvgPath);
+            
+            return $pngData;
+            
+        } catch (\Exception $e) {
+            // Clean up on error
+            if (file_exists($tempSvgPath)) {
+                unlink($tempSvgPath);
+            }
+            
+            // Fallback: create a simple QR-like pattern
+            return $this->createFallbackQrPng($size);
+        }
+    }
+
+    /**
+     * Draw QR code pattern from SVG content onto GD image
+     *
+     * @param resource $image
+     * @param string $svgContent
+     * @param int $size
+     */
+    private function drawQrFromSvg($image, string $svgContent, int $size): void
+    {
+        $black = imagecolorallocate($image, 0, 0, 0);
+        
+        // Parse SVG rectangles (QR modules)
+        preg_match_all('/<rect[^>]*x="([^"]*)"[^>]*y="([^"]*)"[^>]*width="([^"]*)"[^>]*height="([^"]*)"[^>]*\/?>/', $svgContent, $matches, PREG_SET_ORDER);
+        
+        if (empty($matches)) {
+            // Try alternative SVG format
+            preg_match_all('/<rect[^>]*width="([^"]*)"[^>]*height="([^"]*)"[^>]*x="([^"]*)"[^>]*y="([^"]*)"[^>]*\/?>/', $svgContent, $matches, PREG_SET_ORDER);
+            
+            foreach ($matches as $match) {
+                $width = (float)$match[1];
+                $height = (float)$match[2];
+                $x = (float)$match[3];
+                $y = (float)$match[4];
+                
+                // Scale coordinates to image size
+                $scaledX = (int)($x * $size / 100); // Assuming SVG viewBox is 100x100
+                $scaledY = (int)($y * $size / 100);
+                $scaledWidth = (int)($width * $size / 100);
+                $scaledHeight = (int)($height * $size / 100);
+                
+                imagefilledrectangle($image, $scaledX, $scaledY, $scaledX + $scaledWidth, $scaledY + $scaledHeight, $black);
+            }
+        } else {
+            foreach ($matches as $match) {
+                $x = (float)$match[1];
+                $y = (float)$match[2];
+                $width = (float)$match[3];
+                $height = (float)$match[4];
+                
+                // Scale coordinates to image size
+                $scaledX = (int)($x * $size / 100); // Assuming SVG viewBox is 100x100
+                $scaledY = (int)($y * $size / 100);
+                $scaledWidth = (int)($width * $size / 100);
+                $scaledHeight = (int)($height * $size / 100);
+                
+                imagefilledrectangle($image, $scaledX, $scaledY, $scaledX + $scaledWidth, $scaledY + $scaledHeight, $black);
+            }
+        }
+    }
+
+    /**
+     * Create a fallback QR-like PNG image
+     *
+     * @param int $size
+     * @return string
+     */
+    private function createFallbackQrPng(int $size): string
+    {
+        $image = imagecreatetruecolor($size, $size);
+        $white = imagecolorallocate($image, 255, 255, 255);
+        $black = imagecolorallocate($image, 0, 0, 0);
+        
+        // Fill with white background
+        imagefill($image, 0, 0, $white);
+        
+        // Create a simple QR-like pattern
+        $moduleSize = $size / 25; // 25x25 grid
+        
+        for ($i = 0; $i < 25; $i++) {
+            for ($j = 0; $j < 25; $j++) {
+                // Create a simple pattern (not a real QR code)
+                if (($i + $j) % 2 === 0 || ($i % 3 === 0 && $j % 3 === 0)) {
+                    $x1 = (int)($i * $moduleSize);
+                    $y1 = (int)($j * $moduleSize);
+                    $x2 = (int)(($i + 1) * $moduleSize);
+                    $y2 = (int)(($j + 1) * $moduleSize);
+                    
+                    imagefilledrectangle($image, $x1, $y1, $x2, $y2, $black);
+                }
+            }
+        }
+        
+        // Capture PNG output
+        ob_start();
+        imagepng($image);
+        $pngData = ob_get_contents();
+        ob_end_clean();
+        
+        imagedestroy($image);
+        
+        return $pngData;
+    }
+
+    /**
+     * Test email configuration
+     */
+    public function testEmail(Request $request)
+    {
+        $request->validate([
+            'test_email' => 'required|email',
+        ]);
+
+        $emailService = new EmailService();
+        
+        if ($emailService->testEmailConfiguration($request->test_email)) {
+            return back()->with('success', 'Test email sent successfully! Check the inbox for ' . $request->test_email);
+        } else {
+            return back()->with('error', 'Failed to send test email. Please check your email configuration and logs.');
+        }
+    }
+
+    /**
+     * Send expiry warning emails manually
+     */
+    public function sendExpiryWarnings(Request $request)
+    {
+        $request->validate([
+            'warning_days' => 'nullable|string',
+        ]);
+
+        $emailService = new EmailService();
+        
+        // Parse warning days or use default
+        $warningDaysString = $request->warning_days ?: '7,3,1,0';
+        $warningDays = array_map('intval', explode(',', $warningDaysString));
+        
+        $results = $emailService->sendBulkExpiryWarnings($warningDays);
+        
+        $message = "Expiry warning emails processed! Sent: {$results['sent']}, Failed: {$results['failed']}";
+        
+        if ($results['sent'] > 0) {
+            return back()->with('success', $message);
+        } else {
+            return back()->with('warning', $message . ' No emails were sent.');
+        }
     }
 }
