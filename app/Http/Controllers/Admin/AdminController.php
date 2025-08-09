@@ -432,6 +432,15 @@ class AdminController extends Controller
             'contact_email' => 'nullable|email|max:255',
             'contact_phone' => 'nullable|string|max:20',
             
+            // SMTP Settings
+            'smtp_host' => 'nullable|string|max:255',
+            'smtp_port' => 'nullable|integer|min:1|max:65535',
+            'smtp_username' => 'nullable|string|max:255',
+            'smtp_password' => 'nullable|string|max:255',
+            'smtp_encryption' => 'nullable|in:tls,ssl,',
+            'mail_from_address' => 'nullable|email|max:255',
+            'mail_from_name' => 'nullable|string|max:255',
+            
             // Payment Gateway Settings
             'flutterwave_public_key' => 'nullable|string|max:255',
             'flutterwave_secret_key' => 'nullable|string|max:255',
@@ -516,6 +525,23 @@ class AdminController extends Controller
         }
         if ($request->filled('contact_phone')) {
             Setting::set('contact_phone', $request->contact_phone, 'string', 'general', 'Contact phone number');
+        }
+
+        // SMTP Settings - Update .env file directly
+        if ($request->has('smtp_host') || $request->has('smtp_port') || $request->has('smtp_username') || 
+            $request->has('smtp_password') || $request->has('smtp_encryption') || 
+            $request->has('mail_from_address') || $request->has('mail_from_name')) {
+            
+            $this->updateEnvFile([
+                'MAIL_MAILER' => 'smtp',
+                'MAIL_HOST' => $request->smtp_host ?: config('mail.mailers.smtp.host'),
+                'MAIL_PORT' => $request->smtp_port ?: config('mail.mailers.smtp.port'),
+                'MAIL_USERNAME' => $request->smtp_username ?: config('mail.mailers.smtp.username'),
+                'MAIL_PASSWORD' => $request->smtp_password && $request->smtp_password !== '••••••••' ? $request->smtp_password : config('mail.mailers.smtp.password'),
+                'MAIL_ENCRYPTION' => $request->smtp_encryption !== null ? $request->smtp_encryption : config('mail.mailers.smtp.encryption'),
+                'MAIL_FROM_ADDRESS' => $request->mail_from_address ?: config('mail.from.address'),
+                'MAIL_FROM_NAME' => $request->mail_from_name ?: config('mail.from.name'),
+            ]);
         }
 
         // Flutterwave Settings
@@ -1127,5 +1153,61 @@ class AdminController extends Controller
         } else {
             return back()->with('warning', $message . ' No emails were sent.');
         }
+    }
+
+    /**
+     * Update .env file with new values
+     */
+    private function updateEnvFile(array $data)
+    {
+        $envPath = base_path('.env');
+        
+        if (!file_exists($envPath)) {
+            return false;
+        }
+
+        $envContent = file_get_contents($envPath);
+        
+        foreach ($data as $key => $value) {
+            // Escape special characters in value
+            $escapedValue = $this->escapeEnvValue($value);
+            
+            // Check if key exists in .env file
+            if (preg_match("/^{$key}=.*$/m", $envContent)) {
+                // Update existing key
+                $envContent = preg_replace("/^{$key}=.*$/m", "{$key}={$escapedValue}", $envContent);
+            } else {
+                // Add new key at the end
+                $envContent .= "\n{$key}={$escapedValue}";
+            }
+        }
+        
+        file_put_contents($envPath, $envContent);
+        
+        // Clear config cache to reload new values
+        try {
+            \Artisan::call('config:clear');
+        } catch (\Exception $e) {
+            // Ignore if artisan command fails
+        }
+        
+        return true;
+    }
+
+    /**
+     * Escape environment variable value
+     */
+    private function escapeEnvValue($value)
+    {
+        if (empty($value)) {
+            return '""';
+        }
+        
+        // If value contains spaces, quotes, or special characters, wrap in quotes
+        if (preg_match('/[\s"\'#]/', $value)) {
+            return '"' . str_replace('"', '\\"', $value) . '"';
+        }
+        
+        return $value;
     }
 }

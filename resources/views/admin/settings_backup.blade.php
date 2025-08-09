@@ -60,6 +60,9 @@
                             <a href="#qr-purchase" class="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 settings-nav-link" data-target="qr-purchase">
                                 Purchase QR Codes
                             </a>
+                            <a href="#smtp" class="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 settings-nav-link" data-target="smtp">
+                                SMTP Configuration
+                            </a>
                             <a href="#emails" class="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 settings-nav-link" data-target="emails">
                                 Email Management
                             </a>
@@ -908,6 +911,285 @@
                 </form>
 
                 <!-- System Upgrade -->
+                
+                <!-- SMTP Configuration Section -->
+                <form method="POST" action="{{ route('admin.settings.update') }}" id="smtp-form">
+                    @csrf
+                    <div id="smtp-section" class="settings-section bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6" style="display: none;">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold mb-4">SMTP Configuration</h3>
+                            <p class="text-sm text-gray-600 mb-6">Configure SMTP settings for sending emails. These settings control how the system sends welcome emails, expiry warnings, and payment receipts.</p>
+                            
+                            <!-- Current SMTP Status -->
+                            <div class="mb-6 p-4 bg-blue-50 rounded-lg">
+                                <h4 class="font-medium text-gray-900 mb-3">📧 Current SMTP Status</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="text-sm text-gray-700"><strong>MAIL_MAILER:</strong> {{ config('mail.default') }}</p>
+                                        <p class="text-sm text-gray-700"><strong>MAIL_HOST:</strong> {{ config('mail.mailers.smtp.host') ?: 'Not configured' }}</p>
+                                        <p class="text-sm text-gray-700"><strong>MAIL_PORT:</strong> {{ config('mail.mailers.smtp.port') ?: 'Not configured' }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-700"><strong>MAIL_FROM_ADDRESS:</strong> {{ config('mail.from.address') ?: 'Not configured' }}</p>
+                                        <p class="text-sm text-gray-700"><strong>MAIL_FROM_NAME:</strong> {{ config('mail.from.name') ?: 'Not configured' }}</p>
+                                        <p class="text-sm text-gray-700"><strong>MAIL_ENCRYPTION:</strong> {{ config('mail.mailers.smtp.encryption') ?: 'None' }}</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    @if(config('mail.mailers.smtp.host') && config('mail.from.address'))
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            ✓ SMTP Configured
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                            ⚠ SMTP Not Configured
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <!-- SMTP Configuration Form -->
+                            <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+                                <h4 class="font-medium text-gray-900 mb-3">⚙️ SMTP Settings</h4>
+                                <p class="text-sm text-gray-600 mb-4">Configure your SMTP server settings. These will update your .env file automatically.</p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <!-- SMTP Host -->
+                                    <div>
+                                        <label for="smtp_host" class="block text-sm font-medium text-gray-700">SMTP Host</label>
+                                        <input type="text" name="smtp_host" id="smtp_host" 
+                                               value="{{ config('mail.mailers.smtp.host') }}"
+                                               placeholder="smtp.gmail.com"
+                                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                        <p class="text-xs text-gray-500 mt-1">Your SMTP server hostname</p>
+                                    </div>
+
+                                    <!-- SMTP Port -->
+                                    <div>
+                                        <label for="smtp_port" class="block text-sm font-medium text-gray-700">SMTP Port</label>
+                                        <select name="smtp_port" id="smtp_port" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                            <option value="587" {{ config('mail.mailers.smtp.port') == '587' ? 'selected' : '' }}>587 (TLS)</option>
+                                            <option value="465" {{ config('mail.mailers.smtp.port') == '465' ? 'selected' : '' }}>465 (SSL)</option>
+                                            <option value="25" {{ config('mail.mailers.smtp.port') == '25' ? 'selected' : '' }}>25 (No encryption)</option>
+                                            <option value="2525" {{ config('mail.mailers.smtp.port') == '2525' ? 'selected' : '' }}>2525 (Alternative)</option>
+                                        </select>
+                                        <p class="text-xs text-gray-500 mt-1">Common SMTP ports</p>
+                                    </div>
+
+                                    <!-- SMTP Username -->
+                                    <div>
+                                        <label for="smtp_username" class="block text-sm font-medium text-gray-700">SMTP Username</label>
+                                        <input type="text" name="smtp_username" id="smtp_username" 
+                                               value="{{ config('mail.mailers.smtp.username') }}"
+                                               placeholder="your-email@domain.com"
+                                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                        <p class="text-xs text-gray-500 mt-1">Usually your email address</p>
+                                    </div>
+
+                                    <!-- SMTP Password -->
+                                    <div>
+                                        <label for="smtp_password" class="block text-sm font-medium text-gray-700">SMTP Password</label>
+                                        <input type="password" name="smtp_password" id="smtp_password" 
+                                               value="{{ config('mail.mailers.smtp.password') ? '••••••••' : '' }}"
+                                               placeholder="Enter SMTP password"
+                                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                        <p class="text-xs text-gray-500 mt-1">Your email password or app password</p>
+                                    </div>
+
+                                    <!-- SMTP Encryption -->
+                                    <div>
+                                        <label for="smtp_encryption" class="block text-sm font-medium text-gray-700">Encryption</label>
+                                        <select name="smtp_encryption" id="smtp_encryption" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                            <option value="tls" {{ config('mail.mailers.smtp.encryption') == 'tls' ? 'selected' : '' }}>TLS (Recommended)</option>
+                                            <option value="ssl" {{ config('mail.mailers.smtp.encryption') == 'ssl' ? 'selected' : '' }}>SSL</option>
+                                            <option value="" {{ !config('mail.mailers.smtp.encryption') ? 'selected' : '' }}>None</option>
+                                        </select>
+                                        <p class="text-xs text-gray-500 mt-1">Security protocol for SMTP</p>
+                                    </div>
+
+                                    <!-- From Address -->
+                                    <div>
+                                        <label for="mail_from_address" class="block text-sm font-medium text-gray-700">From Email Address</label>
+                                        <input type="email" name="mail_from_address" id="mail_from_address" 
+                                               value="{{ config('mail.from.address') }}"
+                                               placeholder="noreply@yourdomain.com"
+                                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                        <p class="text-xs text-gray-500 mt-1">Email address that appears as sender</p>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4">
+                                    <label for="mail_from_name" class="block text-sm font-medium text-gray-700">From Name</label>
+                                    <input type="text" name="mail_from_name" id="mail_from_name" 
+                                           value="{{ config('mail.from.name') }}"
+                                           placeholder="{{ config('app.name') }}"
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <p class="text-xs text-gray-500 mt-1">Name that appears as sender</p>
+                                </div>
+                            </div>
+
+                            <!-- Common SMTP Providers -->
+                            <div class="mb-6 p-4 bg-yellow-50 rounded-lg">
+                                <h4 class="font-medium text-gray-900 mb-3">📋 Common SMTP Providers</h4>
+                                <p class="text-sm text-gray-600 mb-4">Quick setup for popular email providers:</p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    <!-- Gmail -->
+                                    <div class="bg-white p-3 rounded border">
+                                        <h5 class="font-medium text-gray-800 mb-2">📧 Gmail</h5>
+                                        <div class="text-xs text-gray-600 space-y-1">
+                                            <p><strong>Host:</strong> smtp.gmail.com</p>
+                                            <p><strong>Port:</strong> 587</p>
+                                            <p><strong>Encryption:</strong> TLS</p>
+                                            <p><strong>Note:</strong> Use App Password</p>
+                                        </div>
+                                        <button type="button" onclick="setGmailConfig()" class="mt-2 w-full bg-blue-500 hover:bg-blue-700 text-white text-xs px-2 py-1 rounded">
+                                            Use Gmail Settings
+                                        </button>
+                                    </div>
+
+                                    <!-- Hostinger -->
+                                    <div class="bg-white p-3 rounded border">
+                                        <h5 class="font-medium text-gray-800 mb-2">🌐 Hostinger</h5>
+                                        <div class="text-xs text-gray-600 space-y-1">
+                                            <p><strong>Host:</strong> smtp.hostinger.com</p>
+                                            <p><strong>Port:</strong> 587</p>
+                                            <p><strong>Encryption:</strong> TLS</p>
+                                            <p><strong>Note:</strong> Use email password</p>
+                                        </div>
+                                        <button type="button" onclick="setHostingerConfig()" class="mt-2 w-full bg-purple-500 hover:bg-purple-700 text-white text-xs px-2 py-1 rounded">
+                                            Use Hostinger Settings
+                                        </button>
+                                    </div>
+
+                                    <!-- Outlook/Hotmail -->
+                                    <div class="bg-white p-3 rounded border">
+                                        <h5 class="font-medium text-gray-800 mb-2">📨 Outlook</h5>
+                                        <div class="text-xs text-gray-600 space-y-1">
+                                            <p><strong>Host:</strong> smtp-mail.outlook.com</p>
+                                            <p><strong>Port:</strong> 587</p>
+                                            <p><strong>Encryption:</strong> TLS</p>
+                                            <p><strong>Note:</strong> Use account password</p>
+                                        </div>
+                                        <button type="button" onclick="setOutlookConfig()" class="mt-2 w-full bg-blue-600 hover:bg-blue-800 text-white text-xs px-2 py-1 rounded">
+                                            Use Outlook Settings
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Test Email Section -->
+                            <div class="mb-6 p-4 bg-green-50 rounded-lg">
+                                <h4 class="font-medium text-gray-900 mb-3">🧪 Test SMTP Configuration</h4>
+                                <p class="text-sm text-gray-600 mb-4">Send a test email to verify your SMTP settings are working correctly.</p>
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <div class="flex-1">
+                                        <input type="email" name="test_email_address" id="test_email_address" 
+                                               placeholder="Enter email address to test"
+                                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    </div>
+                                    <button type="button" onclick="sendTestEmail()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded whitespace-nowrap">
+                                        Send Test Email
+                                    </button>
+                                </div>
+                                <div id="test-email-result" class="mt-3 hidden"></div>
+                            </div>
+
+                            <!-- Important Notes -->
+                            <div class="mb-6 p-4 bg-red-50 rounded-lg">
+                                <h4 class="font-medium text-gray-900 mb-3">⚠️ Important Notes</h4>
+                                <ul class="text-sm text-gray-700 space-y-2">
+                                    <li class="flex items-start">
+                                        <span class="text-red-500 mr-2">•</span>
+                                        <span><strong>Gmail Users:</strong> You must use an App Password, not your regular Gmail password. Enable 2FA and generate an App Password in your Google Account settings.</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-red-500 mr-2">•</span>
+                                        <span><strong>Security:</strong> These settings will be stored in your .env file. Make sure your server is secure.</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-red-500 mr-2">•</span>
+                                        <span><strong>Testing:</strong> Always test your configuration before relying on it for important emails.</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-red-500 mr-2">•</span>
+                                        <span><strong>Backup:</strong> Keep a backup of your working .env file before making changes.</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="mt-6 text-right">
+                                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded">Save SMTP Settings</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- JavaScript for SMTP Configuration -->
+                <script>
+                    function setGmailConfig() {
+                        document.getElementById('smtp_host').value = 'smtp.gmail.com';
+                        document.getElementById('smtp_port').value = '587';
+                        document.getElementById('smtp_encryption').value = 'tls';
+                        alert('Gmail SMTP settings applied! Don\'t forget to:\n1. Enable 2-Factor Authentication\n2. Generate an App Password\n3. Use the App Password in the password field');
+                    }
+
+                    function setHostingerConfig() {
+                        document.getElementById('smtp_host').value = 'smtp.hostinger.com';
+                        document.getElementById('smtp_port').value = '587';
+                        document.getElementById('smtp_encryption').value = 'tls';
+                        alert('Hostinger SMTP settings applied! Use your email account password.');
+                    }
+
+                    function setOutlookConfig() {
+                        document.getElementById('smtp_host').value = 'smtp-mail.outlook.com';
+                        document.getElementById('smtp_port').value = '587';
+                        document.getElementById('smtp_encryption').value = 'tls';
+                        alert('Outlook SMTP settings applied! Use your Microsoft account password.');
+                    }
+
+                    function sendTestEmail() {
+                        const testEmail = document.getElementById('test_email_address').value;
+                        const resultDiv = document.getElementById('test-email-result');
+                        
+                        if (!testEmail) {
+                            alert('Please enter an email address to test');
+                            return;
+                        }
+
+                        // Show loading state
+                        resultDiv.className = 'mt-3 p-3 bg-blue-100 border border-blue-300 rounded';
+                        resultDiv.innerHTML = '<p class="text-blue-700">🔄 Sending test email...</p>';
+                        resultDiv.classList.remove('hidden');
+
+                        // Send test email via AJAX
+                        fetch('{{ route("admin.emails.test") }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            body: JSON.stringify({
+                                test_email: testEmail
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                resultDiv.className = 'mt-3 p-3 bg-green-100 border border-green-300 rounded';
+                                resultDiv.innerHTML = '<p class="text-green-700">✅ Test email sent successfully! Check the inbox for ' + testEmail + '</p>';
+                            } else {
+                                resultDiv.className = 'mt-3 p-3 bg-red-100 border border-red-300 rounded';
+                                resultDiv.innerHTML = '<p class="text-red-700">❌ Failed to send test email: ' + (data.message || 'Unknown error') + '</p>';
+                            }
+                        })
+                        .catch(error => {
+                            resultDiv.className = 'mt-3 p-3 bg-red-100 border border-red-300 rounded';
+                            resultDiv.innerHTML = '<p class="text-red-700">❌ Error sending test email: ' + error.message + '</p>';
+                        });
+                    }
+                </script>
+
                 <!-- Email Management Section -->
                 <div id="emails-section" class="settings-section bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6" style="display: none;">
                     <div class="p-6">
