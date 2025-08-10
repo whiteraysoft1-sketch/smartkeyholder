@@ -533,6 +533,7 @@ class DashboardController extends Controller
             ['file' => 'vcard_creative_portfolio', 'name' => 'Creative Portfolio'],
             ['file' => 'vcard_printing_design_branding', 'name' => 'Printing, Design & Branding'],
             ['file' => 'vcard_real_estate', 'name' => 'Real Estate & Property Management'],
+            ['file' => 'vcard_phone_store', 'name' => 'Phone Store & Mobile Shop'],
         ];
         return view('dashboard.vcard-templates', compact('user', 'profile', 'templates'));
     }
@@ -567,6 +568,8 @@ class DashboardController extends Controller
             'vcard_creative_portfolio',
             'vcard_printing_design_branding',
             'vcard_real_estate',
+            'vcard_phone_store',
+            'vcard_universal_business',
         ];
         if (!in_array($template, $availableTemplates)) {
             abort(404, 'Template not found');
@@ -578,7 +581,7 @@ class DashboardController extends Controller
     public function selectVcardTemplate(Request $request)
     {
         $request->validate([
-            'template' => 'required|string|in:vcard_professional,vcard_retail,vcard_skilled_trades,vcard_health_wellness,vcard_education_training,vcard_transport_logistics,vcard_food_hospitality,vcard_corporate_industrial,vcard_car_dealer,vcard_agriculture,vcard_media_entertainment,vcard_ngos_community,vcard_massage,vcard_spa,vcard_taxi_driver,vcard_modern_business,vcard_creative_portfolio',
+            'template' => 'required|string|in:vcard_professional,vcard_retail,vcard_skilled_trades,vcard_health_wellness,vcard_education_training,vcard_transport_logistics,vcard_food_hospitality,vcard_corporate_industrial,vcard_car_dealer,vcard_agriculture,vcard_media_entertainment,vcard_ngos_community,vcard_massage,vcard_spa,vcard_taxi_driver,vcard_modern_business,vcard_creative_portfolio,vcard_printing_design_branding,vcard_real_estate,vcard_phone_store,vcard_universal_business',
         ]);
 
         $user = Auth::user();

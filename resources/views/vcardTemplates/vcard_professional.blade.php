@@ -485,14 +485,17 @@
             <div class="px-6 py-4">
                 <h3 class="font-semibold text-gray-800 mb-4 flex items-center">
                     <i class="fas fa-images text-blue-600 mr-2"></i>
-                    Professional Portfolio
+                    Our Work
                 </h3>
                 <div class="grid grid-cols-2 gap-3">
                     @foreach($galleryItems->take(4) as $item)
-                        <div class="relative group overflow-hidden rounded-lg fade-in cursor-pointer" onclick="openGalleryModal('{{ $item->full_image_url }}', '{{ $item->title }}', '{{ $item->description }}')">
+                        <div class="relative group overflow-hidden rounded-lg fade-in cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-lg" onclick="openFullImageModal('{{ $item->full_image_url }}', '{{ $item->title }}', '{{ $item->description }}')">
                             <img src="{{ $item->full_image_url }}" 
                                  alt="{{ $item->title }}" 
                                  class="w-full h-24 object-cover transition-transform duration-300 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                                <i class="fas fa-expand text-white text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></i>
+                            </div>
                             @if($item->title)
                                 <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
                                     <p class="text-white text-xs font-medium">{{ $item->title }}</p>
@@ -501,6 +504,14 @@
                         </div>
                     @endforeach
                 </div>
+                @if($galleryItems->count() > 4)
+                    <div class="mt-4 text-center">
+                        <button onclick="showAllImages()" class="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors">
+                            <i class="fas fa-plus-circle mr-1"></i>
+                            View All {{ $galleryItems->count() }} Images
+                        </button>
+                    </div>
+                @endif
             </div>
             @endif
             
@@ -557,7 +568,87 @@
         </div>
     </div>
     
+    <!-- Enhanced Full-Screen Image Modal -->
+    <div id="fullImageModal" class="hidden fixed top-0 left-0 w-full h-full bg-black/95 z-50 flex items-center justify-center p-4">
+        <div class="relative w-full h-full flex items-center justify-center">
+            <!-- Close Button -->
+            <button onclick="closeFullImageModal()" class="absolute top-4 right-4 z-10 bg-white/20 hover:bg-white/30 text-white rounded-full w-12 h-12 flex items-center justify-center text-xl transition-all duration-300 backdrop-blur-sm">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <!-- Navigation Buttons -->
+            <button id="prevImageBtn" onclick="showPreviousImage()" class="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 bg-white/20 hover:bg-white/30 text-white rounded-full w-12 h-12 flex items-center justify-center text-xl transition-all duration-300 backdrop-blur-sm">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            
+            <button id="nextImageBtn" onclick="showNextImage()" class="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 bg-white/20 hover:bg-white/30 text-white rounded-full w-12 h-12 flex items-center justify-center text-xl transition-all duration-300 backdrop-blur-sm">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            
+            <!-- Image Container -->
+            <div class="w-full h-full flex items-center justify-center">
+                <img id="fullModalImage" src="" alt="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl">
+            </div>
+            
+            <!-- Image Info -->
+            <div class="absolute bottom-4 left-4 right-4 bg-white/10 backdrop-blur-md rounded-xl p-4 text-white">
+                <h3 id="fullModalTitle" class="text-lg font-bold mb-2"></h3>
+                <p id="fullModalDescription" class="text-sm opacity-90"></p>
+                <div class="flex items-center justify-between mt-3">
+                    <span id="imageCounter" class="text-xs opacity-75"></span>
+                    <div class="flex space-x-2">
+                        <button onclick="downloadImage()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-xs transition-colors">
+                            <i class="fas fa-download mr-1"></i>
+                            Download
+                        </button>
+                        <button onclick="shareImage()" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-xs transition-colors">
+                            <i class="fas fa-share mr-1"></i>
+                            Share
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- All Images Modal -->
+    <div id="allImagesModal" class="hidden fixed top-0 left-0 w-full h-full bg-black/90 z-50 overflow-y-auto">
+        <div class="min-h-full flex items-start justify-center p-4">
+            <div class="bg-white rounded-2xl max-w-4xl w-full my-8 relative executive-shadow">
+                <div class="flex justify-between items-center p-6 border-b border-blue-200">
+                    <h3 class="text-xl font-bold text-blue-900">
+                        <i class="fas fa-images text-blue-600 mr-2"></i>
+                        Our Complete Portfolio
+                    </h3>
+                    <button onclick="closeAllImagesModal()" class="text-2xl text-blue-700 hover:text-blue-900 transition-colors">&times;</button>
+                </div>
+                <div class="p-6">
+                    <div id="allImagesGrid" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <!-- Images will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <script>
+        // Gallery data for navigation
+        let galleryImages = [];
+        let currentImageIndex = 0;
+        
+        // Initialize gallery data
+        @if($galleryItems->count() > 0)
+        galleryImages = [
+            @foreach($galleryItems as $index => $item)
+            {
+                url: '{{ $item->full_image_url }}',
+                title: '{{ $item->title ?? "Portfolio Image" }}',
+                description: '{{ $item->description ?? "" }}'
+            }{{ !$loop->last ? ',' : '' }}
+            @endforeach
+        ];
+        @endif
+        
         // vCard Download Function
         function saveContact() {
             const vCardData = `BEGIN:VCARD
@@ -582,24 +673,152 @@ END:VCARD`;
             window.URL.revokeObjectURL(url);
         }
         
-        // Gallery Modal Functions
-        function openGalleryModal(imageUrl, title, description) {
-            document.getElementById('galleryModalImage').src = imageUrl;
-            document.getElementById('galleryModalTitle').textContent = title || 'Portfolio Image';
-            document.getElementById('galleryModalDescription').textContent = description || '';
-            document.getElementById('galleryModal').classList.remove('hidden');
+        // Enhanced Full-Screen Image Modal Functions
+        function openFullImageModal(imageUrl, title, description) {
+            // Find the index of the clicked image
+            currentImageIndex = galleryImages.findIndex(img => img.url === imageUrl);
+            if (currentImageIndex === -1) currentImageIndex = 0;
+            
+            showImageInModal(currentImageIndex);
+            document.getElementById('fullImageModal').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
         
-        function closeGalleryModal() {
-            document.getElementById('galleryModal').classList.add('hidden');
+        function showImageInModal(index) {
+            if (index < 0 || index >= galleryImages.length) return;
+            
+            const image = galleryImages[index];
+            document.getElementById('fullModalImage').src = image.url;
+            document.getElementById('fullModalTitle').textContent = image.title;
+            document.getElementById('fullModalDescription').textContent = image.description;
+            document.getElementById('imageCounter').textContent = `${index + 1} of ${galleryImages.length}`;
+            
+            // Show/hide navigation buttons
+            document.getElementById('prevImageBtn').style.display = galleryImages.length > 1 ? 'flex' : 'none';
+            document.getElementById('nextImageBtn').style.display = galleryImages.length > 1 ? 'flex' : 'none';
+        }
+        
+        function closeFullImageModal() {
+            document.getElementById('fullImageModal').classList.add('hidden');
             document.body.style.overflow = 'auto';
         }
         
-        // Close modal when clicking outside
-        document.getElementById('galleryModal').addEventListener('click', function(e) {
+        function showPreviousImage() {
+            currentImageIndex = currentImageIndex > 0 ? currentImageIndex - 1 : galleryImages.length - 1;
+            showImageInModal(currentImageIndex);
+        }
+        
+        function showNextImage() {
+            currentImageIndex = currentImageIndex < galleryImages.length - 1 ? currentImageIndex + 1 : 0;
+            showImageInModal(currentImageIndex);
+        }
+        
+        function downloadImage() {
+            const image = galleryImages[currentImageIndex];
+            const link = document.createElement('a');
+            link.href = image.url;
+            link.download = `${image.title || 'portfolio-image'}.jpg`;
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        function shareImage() {
+            const image = galleryImages[currentImageIndex];
+            if (navigator.share) {
+                navigator.share({
+                    title: image.title || 'Portfolio Image',
+                    text: image.description || 'Check out this image from our portfolio',
+                    url: image.url
+                }).catch(console.error);
+            } else {
+                // Fallback: copy URL to clipboard
+                navigator.clipboard.writeText(image.url).then(() => {
+                    alert('Image URL copied to clipboard!');
+                }).catch(() => {
+                    alert('Unable to share. Please copy the URL manually: ' + image.url);
+                });
+            }
+        }
+        
+        // Show All Images Modal
+        function showAllImages() {
+            const grid = document.getElementById('allImagesGrid');
+            grid.innerHTML = '';
+            
+            galleryImages.forEach((image, index) => {
+                const imageDiv = document.createElement('div');
+                imageDiv.className = 'relative group overflow-hidden rounded-lg cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-lg';
+                imageDiv.onclick = () => {
+                    closeAllImagesModal();
+                    setTimeout(() => openFullImageModal(image.url, image.title, image.description), 100);
+                };
+                
+                imageDiv.innerHTML = `
+                    <img src="${image.url}" alt="${image.title}" class="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                        <i class="fas fa-expand text-white text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></i>
+                    </div>
+                    ${image.title ? `<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
+                        <p class="text-white text-xs font-medium">${image.title}</p>
+                    </div>` : ''}
+                `;
+                
+                grid.appendChild(imageDiv);
+            });
+            
+            document.getElementById('allImagesModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeAllImagesModal() {
+            document.getElementById('allImagesModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Legacy Gallery Modal Functions (keeping for compatibility)
+        function openGalleryModal(imageUrl, title, description) {
+            openFullImageModal(imageUrl, title, description);
+        }
+        
+        function closeGalleryModal() {
+            closeFullImageModal();
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (!document.getElementById('fullImageModal').classList.contains('hidden')) {
+                switch(e.key) {
+                    case 'Escape':
+                        closeFullImageModal();
+                        break;
+                    case 'ArrowLeft':
+                        showPreviousImage();
+                        break;
+                    case 'ArrowRight':
+                        showNextImage();
+                        break;
+                }
+            }
+            
+            if (!document.getElementById('allImagesModal').classList.contains('hidden')) {
+                if (e.key === 'Escape') {
+                    closeAllImagesModal();
+                }
+            }
+        });
+        
+        // Close modals when clicking outside
+        document.getElementById('fullImageModal').addEventListener('click', function(e) {
             if (e.target === this) {
-                closeGalleryModal();
+                closeFullImageModal();
+            }
+        });
+        
+        document.getElementById('allImagesModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAllImagesModal();
             }
         });
         

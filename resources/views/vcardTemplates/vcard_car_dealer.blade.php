@@ -342,6 +342,169 @@
         .header-action-btn:hover::before {
             left: 100%;
         }
+        
+        /* Glass UI Styles for About Section */
+        .glass-about-section {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+                        0 2px 8px rgba(0, 0, 0, 0.05),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .glass-about-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                rgba(255, 255, 255, 0.05) 50%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .glass-about-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15),
+                        0 4px 16px rgba(0, 0, 0, 0.08),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        .glass-content {
+            position: relative;
+            z-index: 1;
+        }
+        .glass-header {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        .glass-service-card {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(15px) saturate(180%);
+            -webkit-backdrop-filter: blur(15px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                transparent 50%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .glass-service-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.4);
+        }
+        .glass-service-content {
+            position: relative;
+            z-index: 1;
+        }
+        .glass-icon-glow {
+            filter: drop-shadow(0 4px 8px rgba(0, 122, 255, 0.3));
+            transition: all 0.3s ease;
+        }
+        .glass-service-card:hover .glass-icon-glow {
+            filter: drop-shadow(0 6px 12px rgba(0, 122, 255, 0.4));
+            transform: scale(1.1);
+        }
+        
+        /* Car Shop Section Styles */
+        .car-shop-section {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px) saturate(180%);
+            -webkit-backdrop-filter: blur(15px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .car-shop-section:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+        .car-item {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .car-item:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .car-image {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .car-item:hover .car-image {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+        .price-tag {
+            background: linear-gradient(135deg, #34C759 0%, #248A3D 100%);
+            color: white;
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 0.375rem 0.75rem;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(52, 199, 89, 0.3);
+            letter-spacing: -0.01em;
+        }
+        .shop-header-icon {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(255, 107, 107, 0.3);
+            margin-right: 1rem;
+        }
     </style>
 </head>
 <body class="dealer-gradient min-h-screen flex items-center justify-center p-4">
@@ -388,24 +551,7 @@
                 <p class="text-gray-600 font-medium text-lg mb-4 tracking-tight" style="font-weight: 500; letter-spacing: -0.01em;">
                     {{ $profile->profession ?? 'Vehicle Sales & Dealership' }}
                 </p>
-                <!-- Call and Email Action Buttons -->
-                <div class="flex items-center justify-center space-x-4 mb-4">
-                    @if($profile->phone)
-                    <a href="tel:{{ $profile->phone }}" 
-                       class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
-                        <i class="fas fa-phone mr-2"></i>
-                        Call
-                    </a>
-                    @endif
-                    
-                    @if($profile->email ?? $user->email)
-                    <a href="mailto:{{ $profile->email ?? $user->email }}" 
-                       class="flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
-                        <i class="fas fa-envelope mr-2"></i>
-                        Email
-                    </a>
-                    @endif
-                </div>
+
                 
                 @if($profile->location ?? null)
                 <div class="flex items-center justify-center text-gray-500 text-sm mb-6">
@@ -423,51 +569,86 @@
                         Premium
                     </div>
                 </div>
-            </div>
-            
-            <!-- Header Action Buttons -->
-            <div class="px-6 py-4">
-                <div class="flex gap-3 justify-center">
+                
+                <!-- Call and Email Buttons under Certified Dealer Premium -->
+                <div class="flex items-center justify-center space-x-4 mb-6">
                     @if($profile->phone)
-                    <a href="tel:{{ $profile->phone }}" class="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white py-4 px-6 rounded-xl font-bold text-center flex items-center justify-center text-lg shadow-lg hover:from-green-600 hover:to-green-700 transition-all transform hover:scale-105">
-                        <i class="fas fa-phone mr-3 text-xl"></i>
-                        <span>Call</span>
+                    <a href="tel:{{ $profile->phone }}" 
+                       class="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        <i class="fas fa-phone mr-2"></i>
+                        Call
                     </a>
                     @endif
+                    
                     @if($profile->email ?? $user->email)
-                    <a href="mailto:{{ $profile->email ?? $user->email }}?subject=Car Inquiry" class="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white py-4 px-6 rounded-xl font-bold text-center flex items-center justify-center text-lg shadow-lg hover:from-blue-600 hover:to-blue-700 transition-all transform hover:scale-105">
-                        <i class="fas fa-envelope mr-3 text-xl"></i>
-                        <span>Email</span>
+                    <a href="mailto:{{ $profile->email ?? $user->email }}" 
+                       class="flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        <i class="fas fa-envelope mr-2"></i>
+                        Email
                     </a>
                     @endif
                 </div>
             </div>
+            
+
             
             <div class="divider"></div>
-            <!-- Services Section (Bio + Dealer Services) -->
+            <!-- Services Section (Bio + Dealer Services) with Glass UI -->
             <div class="px-6 py-4">
-                <div class="rounded-2xl p-6 mb-6 bg-gradient-to-br from-blue-50 to-green-50 border-l-4 border-blue-500 shadow-lg">
-                    <div class="flex items-center mb-4">
-                        <i class="fas fa-info-circle text-blue-600 text-xl mr-3"></i>
-                        <h3 class="font-bold text-gray-800 text-lg">About Our Dealership</h3>
-                    </div>
-                    <p class="text-gray-700 text-sm leading-relaxed mb-6">
-                        {{ $profile->bio ?? 'Your trusted partner for new and used vehicles. We offer a wide range of cars, financing, and after-sales support with exceptional customer service.' }}
-                    </p>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="service-card rounded-xl p-4 text-center fade-in">
-                            <i class="fas fa-car-side text-blue-600 text-3xl mb-3"></i>
-                            <div class="text-sm font-bold text-gray-800">New Cars</div>
-                            <div class="text-xs text-gray-600 mt-1">Latest Models</div>
+                <div class="glass-about-section p-6 mb-6">
+                    <div class="glass-content">
+                        <!-- Glass Header -->
+                        <div class="glass-header">
+                            <div class="flex items-center justify-center">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mr-4 shadow-lg">
+                                    <i class="fas fa-info-circle text-white text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-gray-800 text-lg mb-1">About Our Dealership</h3>
+                                    <p class="text-xs text-gray-600 font-medium">Premium Vehicle Solutions</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="service-card rounded-xl p-4 text-center fade-in">
-                            <i class="fas fa-car text-green-600 text-3xl mb-3"></i>
-                            <div class="text-sm font-bold text-gray-800">Used Cars</div>
-                            <div class="text-xs text-gray-600 mt-1">Quality Assured</div>
+                        
+                        <!-- Bio Text with Glass Background -->
+                        <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 mb-6 border border-white/30">
+                            <p class="text-gray-800 text-sm leading-relaxed font-medium">
+                                {{ $profile->bio ?? 'Your trusted partner for new and used vehicles. We offer a wide range of cars, financing, and after-sales support with exceptional customer service.' }}
+                            </p>
+                        </div>
+                        
+                        <!-- Glass Service Cards -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="glass-service-card p-5 text-center fade-in">
+                                <div class="glass-service-content">
+                                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mx-auto mb-3 shadow-lg">
+                                        <i class="fas fa-car-side text-white text-2xl glass-icon-glow"></i>
+                                    </div>
+                                    <div class="text-sm font-bold text-gray-800 mb-1">New Cars</div>
+                                    <div class="text-xs text-gray-600 font-medium">Latest Models</div>
+                                    <div class="mt-2 px-2 py-1 bg-blue-100/50 rounded-full text-xs text-blue-700 font-semibold">
+                                        Premium Selection
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="glass-service-card p-5 text-center fade-in">
+                                <div class="glass-service-content">
+                                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mx-auto mb-3 shadow-lg">
+                                        <i class="fas fa-car text-white text-2xl glass-icon-glow"></i>
+                                    </div>
+                                    <div class="text-sm font-bold text-gray-800 mb-1">Used Cars</div>
+                                    <div class="text-xs text-gray-600 font-medium">Quality Assured</div>
+                                    <div class="mt-2 px-2 py-1 bg-green-100/50 rounded-full text-xs text-green-700 font-semibold">
+                                        Certified Pre-Owned
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            
             <!-- Brands Section -->
             <div class="px-6 py-4">
                 <h3 class="font-semibold text-gray-900 mb-6 flex items-center text-lg tracking-tight" style="font-weight: 600; letter-spacing: -0.015em;">
