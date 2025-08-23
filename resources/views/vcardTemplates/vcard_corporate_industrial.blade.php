@@ -505,27 +505,48 @@
 
         // vCard Download Function
         function downloadVCard() {
+            // Create a more detailed vCard format
             const vcard = `BEGIN:VCARD
 VERSION:3.0
 FN:{{ $profile->display_name ?: $user->name }}
-N:{{ $user->name }};;;;
-@if($profile->profession)ORG:{{ $profile->profession }}@endif
-@if($user->email)EMAIL:{{ $user->email }}@endif
-@if($profile->phone)TEL:{{ $profile->phone }}@endif
+N:{{ implode(';', array_pad(explode(' ', $user->name), 5, '')) }}
+@if($profile->profession)TITLE:{{ $profile->profession }}
+ORG:{{ $profile->profession }}@endif
+@if($user->email)EMAIL;type=INTERNET;type=HOME:{{ $user->email }}@endif
+@if($profile->phone)TEL;type=CELL:{{ $profile->phone }}@endif
 @if($profile->website)URL:{{ $profile->website }}@endif
-@if($profile->location)ADR:;;{{ $profile->location }};;;;@endif
+@if($profile->location)ADR;type=HOME:;;{{ $profile->location }};;;;
+LABEL;type=HOME:{{ $profile->location }}@endif
 @if($profile->bio)NOTE:{{ $profile->bio }}@endif
+REV:{{ now()->format('Y-m-d\THis\Z') }}
 END:VCARD`;
 
-            const blob = new Blob([vcard], { type: 'text/vcard' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = '{{ Str::slug($profile->display_name ?: $user->name) }}-contact.vcf';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
+            // Create Blob with UTF-8 encoding and proper MIME type
+            const blob = new Blob([vcard], { 
+                type: 'text/vcard;charset=utf-8' 
+            });
+
+            // Check if it's a mobile device
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+            if (isMobile) {
+                // For mobile devices, use a direct download that triggers the native contact save
+                const url = window.URL.createObjectURL(blob);
+                window.location.href = url;
+                setTimeout(() => {
+                    window.URL.revokeObjectURL(url);
+                }, 1000);
+            } else {
+                // For desktop devices, use the traditional download approach
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = '{{ Str::slug($profile->display_name ?: $user->name) }}-contact.vcf';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }
         }
 
         // Add scroll animations
