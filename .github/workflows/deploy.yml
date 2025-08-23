@@ -189,6 +189,9 @@ jobs:
           cp -r public/js/* ./js/ 2>/dev/null || true
           cp -r public/build/* ./build/ 2>/dev/null || true
           
+          # Ensure dashboard override CSS is in place
+          cp public/css/dashboard-override.css ./css/ 2>/dev/null || true
+          
           # Set proper permissions for asset directories
           chmod -R 755 css js build
           find css js build -type f -exec chmod 644 {} \;

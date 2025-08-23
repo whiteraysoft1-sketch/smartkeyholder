@@ -23,6 +23,9 @@
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+        <!-- Custom Dashboard Styles -->
+        <link rel="stylesheet" href="{{ asset('css/dashboard-override.css') }}">
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/css/liquid-glass.css', 'resources/js/app.js'])
     </head>

@@ -1,0 +1,52 @@
+/* Dashboard text color overrides */
+.text-gray-500 {
+    color: #1a1a1a !important; /* Darker gray, almost black */
+}
+
+.text-gray-600 {
+    color: #000000 !important; /* Black */
+}
+
+.text-gray-800, .text-gray-900 {
+    color: #000000 !important; /* Black */
+}
+
+/* Make sure text inputs have dark text */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+textarea {
+    color: #000000 !important;
+}
+
+/* Ensure dashboard content is clearly visible */
+.dashboard-content {
+    color: #000000 !important;
+}
+
+/* Override any white text in the dashboard */
+.dashboard-section {
+    color: #000000 !important;
+}
+
+/* Make sure links are visible */
+.dashboard-link {
+    color: #2563eb !important; /* Blue color for links */
+}
+
+/* Ensure form labels are visible */
+label {
+    color: #000000 !important;
+}
+
+/* Make card text visible */
+.card-content {
+    color: #000000 !important;
+}
+
+/* Ensure table text is visible */
+table td, 
+table th {
+    color: #000000 !important;
+}
