@@ -11,6 +11,48 @@
     color: #000000 !important; /* Black */
 }
 
+/* Social Links Section */
+.liquid-input, 
+select.liquid-input,
+input[type="url"],
+input[type="text"] {
+    color: #000000 !important;
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.liquid-glass {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Social Links Display */
+.bg-gray-50 {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.space-y-2 > div {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Social Links Text */
+.font-medium,
+.text-base,
+select option {
+    color: #000000 !important;
+}
+
+/* Platform Icons */
+[class*="fa-"] {
+    color: #2563eb !important; /* Blue color for better visibility */
+}
+
+/* Make select dropdowns text visible */
+select {
+    color: #000000 !important;
+    background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
 /* Make sure text inputs have dark text */
 input[type="text"],
 input[type="email"],
