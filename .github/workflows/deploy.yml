@@ -13,6 +13,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
       
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies and build assets
+      run: |
+        npm ci
+        npm run build
+      
     - name: Deploy to server
       uses: appleboy/ssh-action@v0.1.7
       with:
@@ -106,8 +116,16 @@ jobs:
           # Install/update dependencies
           ./composer2 install --no-dev --optimize-autoloader
           
+          # Install Node.js dependencies and build assets
+          npm install
+          npm run build
+          
           # Create storage symbolic link (critical for file uploads)
           php artisan storage:link
+          
+          # Ensure build directory exists and copy compiled assets
+          mkdir -p public/build
+          cp -r public/build/* ./build/ 2>/dev/null || true
           
           # Force clear ALL caches and compiled files
           php artisan config:clear
@@ -164,6 +182,16 @@ jobs:
           # Copy all public directory contents to web root
           cp -r public/* ./
           cp public/.htaccess ./ 2>/dev/null || true
+          
+          # Ensure CSS and assets are properly copied
+          mkdir -p css js build
+          cp -r public/css/* ./css/ 2>/dev/null || true
+          cp -r public/js/* ./js/ 2>/dev/null || true
+          cp -r public/build/* ./build/ 2>/dev/null || true
+          
+          # Set proper permissions for asset directories
+          chmod -R 755 css js build
+          find css js build -type f -exec chmod 644 {} \;
           
           # Use Hostinger-specific index.php
           cp hostinger-index.php index.php
