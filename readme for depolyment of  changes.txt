@@ -28,10 +28,10 @@ Deployment Configuration:
 
 Secrets Configured:
 ------------------
-- HOST: Server hostname
-- USERNAME: SSH username  
-- PASSWORD: SSH password
-- PORT: SSH port
-- DB_PASSWORD: Database password
+- HOST: Server hostname (configured in GitHub Secrets)
+- PORT: SSH port (configured in GitHub Secrets)  
+- USERNAME: SSH username (configured in GitHub Secrets)
+- PASSWORD: SSH password (configured in GitHub Secrets)
+- DB_PASSWORD: Database password (configured in GitHub Secrets)
 
 Next Update: Ready for deployment
