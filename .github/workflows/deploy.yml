@@ -23,11 +23,19 @@ jobs:
         script: |
           cd domains/smart-keyholder.click/public_html
           
+          # Stash any local changes including .env
+          git stash
+          
           # Pull latest changes
           git pull origin master
           
-          # Copy production environment file
-          cp .env.production .env
+          # Restore local changes but keep the pulled updates
+          git stash pop || true
+          
+          # Ensure we have the production environment file
+          if [ ! -f ".env" ]; then
+            cp .env.production .env
+          fi
           
           # Install/update dependencies
           ./composer2 install --no-dev --optimize-autoloader
