@@ -73,7 +73,7 @@ jobs:
           SESSION_DOMAIN=null
 
           BROADCAST_CONNECTION=log
-          FILESYSTEM_DISK=local
+          FILESYSTEM_DISK=public
           QUEUE_CONNECTION=database
 
           CACHE_STORE=database
@@ -154,9 +154,37 @@ jobs:
           php artisan view:cache
           php artisan optimize
           
-          # Set proper permissions for storage and uploads
-          chmod -R 755 storage bootstrap/cache
-          chmod -R 755 public/storage
+          # Set up storage and uploads with proper permissions
+          rm -rf public/storage
+          php artisan storage:link
+          
+          # Create required directories
+          mkdir -p storage/app/public/profile_images
+          mkdir -p storage/app/public/background_images
+          mkdir -p storage/app/public/gallery_images
+          mkdir -p storage/app/public/product_images
+          mkdir -p storage/app/public/pwa_icons
+          mkdir -p storage/framework/cache
+          mkdir -p storage/framework/sessions
+          mkdir -p storage/framework/views
+          
+          # Set directory permissions
+          find storage -type d -exec chmod 775 {} \;
+          find public/storage -type d -exec chmod 775 {} \;
+          find bootstrap/cache -type d -exec chmod 775 {} \;
+          
+          # Set file permissions
+          find storage -type f -exec chmod 664 {} \;
+          find public/storage -type f -exec chmod 664 {} \;
+          find bootstrap/cache -type f -exec chmod 664 {} \;
+          
+          # Set ownership
+          chown -R www-data:www-data storage
+          chown -R www-data:www-data public/storage
+          chown -R www-data:www-data bootstrap/cache
+          
+          # Ensure storage link exists and has proper permissions
+          chmod 775 public/storage
           
           # Ensure storage directories exist
           mkdir -p storage/app/public/profile_images
