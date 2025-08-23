@@ -1,2 +1,8 @@
-Deployment test - <?php echo date('Y-m-d H:i:s'); ?>
-This file was created to test the GitHub Actions deployment pipeline.
+Deployment
+This file was created to test the GitHub Actions deployment 
+host 145.223.108.4
+port 65002
+user names: u244291586
+password Kaggwa@96
+
+note: i was using Github Actictios to send the new changes of the code on my hosted project on hostiger
