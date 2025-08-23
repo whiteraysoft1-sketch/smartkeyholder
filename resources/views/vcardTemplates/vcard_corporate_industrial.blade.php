@@ -335,12 +335,17 @@
 
                     <div class="grid grid-cols-2 gap-3">
                         @foreach($galleryItems->take(6) as $item)
-                            <div class="relative group overflow-hidden rounded-xl animate-slide-up"
-                                 style="animation-delay: {{ $loop->index * 0.1 }}s">
+                            <div class="relative group overflow-hidden rounded-xl animate-slide-up cursor-pointer"
+                                 style="animation-delay: {{ $loop->index * 0.1 }}s"
+                                 onclick="openImageViewer('{{ Storage::disk('public')->url($item->image_path) }}', {{ $loop->index }})">
                                 <img src="{{ Storage::disk('public')->url($item->image_path) }}"
                                      alt="{{ $item->title }}"
-                                     class="w-full h-32 object-cover transition-transform duration-500 group-hover:scale-110">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                     class="w-full h-32 object-cover transition-transform duration-500 group-hover:scale-110 gallery-image">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                                        <i class="fas fa-search-plus text-white text-xl"></i>
+                                    </div>
+                                </div>
                                 @if($item->title)
                                     <div class="absolute bottom-0 left-0 right-0 p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                                         <p class="text-white text-xs font-medium">{{ $item->title }}</p>
@@ -433,8 +438,71 @@
         </div>
     </div>
 
+    <!-- Image Viewer Modal -->
+    <div id="imageViewer" class="fixed inset-0 bg-black/90 z-50 hidden">
+        <button onclick="closeImageViewer()" class="absolute top-4 right-4 text-white text-3xl hover:text-gray-300 z-10">
+            <i class="fas fa-times"></i>
+        </button>
+        <button id="prevImage" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-3xl hover:text-gray-300 z-10">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button id="nextImage" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-3xl hover:text-gray-300 z-10">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        <div class="w-full h-full flex items-center justify-center p-4">
+            <img id="fullImage" src="" alt="Full size image" class="max-h-full max-w-full object-contain">
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script>
+        // Image Viewer
+        let currentImageIndex = 0;
+        let galleryImages = [];
+
+        function openImageViewer(imageUrl, index) {
+            const viewer = document.getElementById('imageViewer');
+            const fullImage = document.getElementById('fullImage');
+            
+            // Get all gallery images if not already loaded
+            if (galleryImages.length === 0) {
+                galleryImages = Array.from(document.querySelectorAll('.gallery-image')).map(img => img.src);
+            }
+            
+            currentImageIndex = index;
+            fullImage.src = imageUrl;
+            viewer.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageViewer() {
+            const viewer = document.getElementById('imageViewer');
+            viewer.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function showNextImage() {
+            currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+            document.getElementById('fullImage').src = galleryImages[currentImageIndex];
+        }
+
+        function showPrevImage() {
+            currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+            document.getElementById('fullImage').src = galleryImages[currentImageIndex];
+        }
+
+        document.getElementById('prevImage').addEventListener('click', showPrevImage);
+        document.getElementById('nextImage').addEventListener('click', showNextImage);
+
+        // Handle keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('imageViewer').classList.contains('hidden')) return;
+            
+            if (e.key === 'Escape') closeImageViewer();
+            if (e.key === 'ArrowLeft') showPrevImage();
+            if (e.key === 'ArrowRight') showNextImage();
+        });
+
         // vCard Download Function
         function downloadVCard() {
             const vcard = `BEGIN:VCARD
