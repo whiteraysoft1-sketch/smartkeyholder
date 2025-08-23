@@ -3,36 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transport & Logistics vCard</title>
+    <title>{{ $profile->display_name ?? $user->name ?? 'Transport & Logistics' }} - Digital Business Card</title>
+    <meta name="description" content="{{ $profile->bio ?? 'Professional transport and logistics services digital business card' }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
     <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
         .logistics-gradient {
-            background: linear-gradient(135deg, #2563eb 0%, #38bdf8 60%, #fbbf24 100%);
-            background-size: cover;
-            background-position: center;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #f59e0b 100%);
+            background-size: 200% 200%;
+            animation: gradientFlow 15s ease infinite;
+        }
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50% }
+            50% { background-position: 100% 50% }
+            100% { background-position: 0% 50% }
         }
         .logistics-card {
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(12px);
             border-radius: 2rem;
-            box-shadow: 0 10px 32px 0 rgba(37,99,235,0.10);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .logistics-card:hover {
+            transform: translateY(-5px);
         }
         .service-badge {
-            background: linear-gradient(90deg, #2563eb 0%, #fbbf24 100%);
+            background: linear-gradient(90deg, #1e40af 0%, #f59e0b 100%);
             color: #fff;
             border-radius: 1rem;
-            padding: 0.25rem 0.75rem;
+            padding: 0.5rem 1rem;
             font-size: 0.95rem;
             font-weight: 500;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.15);
+            transition: all 0.3s ease;
+        }
+        .service-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37,99,235,0.2);
         }
         .divider {
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid rgba(37,99,235,0.1);
             margin: 1.5rem 0 1rem 0;
+        }
+        .tracking-section {
+            background: rgba(37,99,235,0.05);
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        .tracking-input {
+            border: 2px solid rgba(37,99,235,0.2);
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        .tracking-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+        }
+        .logistics-stat {
+            background: white;
+            border-radius: 1rem;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.05);
+            transition: transform 0.3s ease;
+        }
+        .logistics-stat:hover {
+            transform: translateY(-2px);
+        }
+        .contact-button {
+            background: linear-gradient(90deg, #1e40af 0%, #f59e0b 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.15);
+        }
+        .contact-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37,99,235,0.2);
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
     </style>
 </head>
@@ -109,6 +176,36 @@
                         @endif
                     </div>
                 </div>
+                <!-- Shipment Tracking Section -->
+                <div class="tracking-section mb-4">
+                    <div class="text-base text-blue-900/90 font-semibold mb-3 flex items-center gap-2">
+                        <i class="fas fa-search-location text-blue-600"></i> Track Your Shipment
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" placeholder="Enter tracking number" class="tracking-input" id="trackingInput">
+                        <button onclick="checkTracking()" class="contact-button whitespace-nowrap">
+                            <i class="fas fa-search"></i> Track
+                        </button>
+                    </div>
+                    <div id="trackingResult" class="hidden mt-3 text-sm"></div>
+                </div>
+
+                <!-- Key Statistics -->
+                <div class="grid grid-cols-3 gap-3 mb-4">
+                    <div class="logistics-stat">
+                        <div class="text-2xl font-bold text-blue-600">{{ $profile->stats_deliveries ?? '1K+' }}</div>
+                        <div class="text-xs text-gray-600">Deliveries</div>
+                    </div>
+                    <div class="logistics-stat">
+                        <div class="text-2xl font-bold text-blue-600">{{ $profile->stats_countries ?? '15+' }}</div>
+                        <div class="text-xs text-gray-600">Countries</div>
+                    </div>
+                    <div class="logistics-stat">
+                        <div class="text-2xl font-bold text-blue-600">{{ $profile->stats_clients ?? '500+' }}</div>
+                        <div class="text-xs text-gray-600">Clients</div>
+                    </div>
+                </div>
+
                 <div class="divider"></div>
                 @if($socialLinks->count() > 0)
                 <div class="flex gap-2 sm:gap-3 justify-center mb-4 flex-wrap">
@@ -161,7 +258,7 @@
             </div>
         </div>
     </div>
-    <div id="galleryModal" class="hidden fixed top-0 left-0 w-full h-full bg-black/90 z-50 flex items-center justify-center p-2 sm:p-4">
+    <div id="galleryModal" class="fixed top-0 left-0 w-full h-full bg-black/90 z-50 items-center justify-center p-2 sm:p-4" style="display: none;">
         <div class="bg-white rounded-2xl max-w-lg w-full max-h-full overflow-auto relative">
             <div class="flex justify-between items-center p-4 border-b">
                 <h3 id="galleryModalTitle" class="text-lg font-bold text-blue-900"></h3>
@@ -180,7 +277,20 @@
             const website = "{{ $profile->website ?? '' }}";
             const location = "{{ $profile->location ?? '' }}";
             const bio = `{{ $profile->bio ?? '' }}`;
-            const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTITLE:${title}\nEMAIL:${email}\nTEL:${phone}\nURL:${website}\nADR:;;${location};;;;\nNOTE:${bio}\nEND:VCARD`;
+            const organization = "{{ $profile->company_name ?? '' }}";
+            
+            const vcard = `BEGIN:VCARD
+VERSION:3.0
+FN:${name}
+ORG:${organization}
+TITLE:${title}
+EMAIL:${email}
+TEL:${phone}
+URL:${website}
+ADR:;;${location};;;;
+NOTE:${bio}
+END:VCARD`;
+            
             const blob = new Blob([vcard], { type: 'text/vcard' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -190,6 +300,58 @@
             a.click();
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
+            
+            // Show success message
+            const successMessage = document.createElement('div');
+            successMessage.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg';
+            successMessage.textContent = 'Contact saved successfully!';
+            document.body.appendChild(successMessage);
+            setTimeout(() => successMessage.remove(), 3000);
+        }
+        
+        function checkTracking() {
+            const trackingNumber = document.getElementById('trackingInput').value.trim();
+            const resultDiv = document.getElementById('trackingResult');
+            
+            if (!trackingNumber) {
+                showTrackingError('Please enter a tracking number');
+                return;
+            }
+            
+            // Simulate tracking status - In a real implementation, this would call your tracking API
+            const statuses = [
+                { status: 'In Transit', location: 'Distribution Center', eta: '2 days' },
+                { status: 'Out for Delivery', location: 'Local Hub', eta: 'Today' },
+                { status: 'Delivered', location: 'Destination', eta: 'Completed' }
+            ];
+            
+            const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+            
+            resultDiv.innerHTML = `
+                <div class="bg-white rounded-lg p-3 shadow-sm">
+                    <div class="flex items-center gap-2 text-blue-600 font-medium mb-2">
+                        <i class="fas fa-truck-loading"></i>
+                        Status: ${randomStatus.status}
+                    </div>
+                    <div class="text-gray-600 text-xs space-y-1">
+                        <div><i class="fas fa-map-marker-alt text-blue-500 mr-2"></i>Location: ${randomStatus.location}</div>
+                        <div><i class="fas fa-clock text-blue-500 mr-2"></i>ETA: ${randomStatus.eta}</div>
+                    </div>
+                </div>
+            `;
+            
+            resultDiv.classList.remove('hidden');
+            resultDiv.classList.add('animate-fade-in');
+        }
+        
+        function showTrackingError(message) {
+            const resultDiv = document.getElementById('trackingResult');
+            resultDiv.innerHTML = `
+                <div class="text-red-500 bg-red-50 rounded-lg p-3">
+                    <i class="fas fa-exclamation-circle mr-2"></i>${message}
+                </div>
+            `;
+            resultDiv.classList.remove('hidden');
         }
         function openGalleryModal(imageUrl, title, description) {
             document.getElementById('galleryModalImage').src = imageUrl;
