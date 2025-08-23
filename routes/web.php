@@ -9,14 +9,9 @@ use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes - Root route with explicit methods
-Route::get('/', function () {
+Route::match(['GET', 'HEAD'], '/', function () {
     return view('welcome');
 })->name('home');
-
-// Explicitly handle HEAD requests for the root route
-Route::match(['HEAD'], '/', function () {
-    return response('', 200);
-});
 
 // Debug route to test routing
 Route::get('/debug-route', function () {
