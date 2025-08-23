@@ -299,11 +299,18 @@ use Illuminate\Support\Facades\Storage;
                 </h3>
 
                 <!-- Add Photo Form -->
-                <form action="{{ route('dashboard.gallery.add') }}" method="POST" enctype="multipart/form-data" class="mb-6 p-4 bg-white/20 rounded-xl border border-white/30">
+                <form id="gallery-upload-form" action="{{ route('dashboard.gallery.add') }}" method="POST" enctype="multipart/form-data" class="mb-6 p-4 bg-white/20 rounded-xl border border-white/30">
                     @csrf
                     <div class="mb-3">
                         <label for="image" class="liquid-label">Upload New Photo</label>
-                        <input type="file" name="image" id="image" accept="image/jpeg,image/png,image/jpg,image/gif" class="liquid-input" required>
+                        <div class="relative">
+                            <input type="file" name="image" id="image" accept="image/jpeg,image/png,image/jpg,gif" 
+                                   class="liquid-input" required
+                                   onchange="handleFileSelect(this)">
+                            <div class="text-xs text-gray-500 mt-1 text-center">
+                                Drag and drop your photo here or click to browse
+                            </div>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="title" class="liquid-label">Photo Title (Optional)</label>
@@ -314,6 +321,113 @@ use Illuminate\Support\Facades\Storage;
                         Add Photo
                     </button>
                 </form>
+
+                <!-- Upload Progress Overlay -->
+                <div id="upload-progress" class="upload-progress-overlay">
+                    <div class="upload-progress-container">
+                        <div class="upload-spinner"></div>
+                        <div class="progress-bar">
+                            <div id="progress-bar-fill" class="progress-bar-fill"></div>
+                        </div>
+                        <div id="progress-text" class="progress-text">Uploading... 0%</div>
+                    </div>
+                </div>
+
+                <!-- Upload Complete Animation -->
+                <div id="upload-complete" class="upload-progress-overlay" style="display: none;">
+                    <div class="upload-progress-container upload-complete">
+                        <i class="fas fa-check-circle text-6xl text-green-500 mb-4"></i>
+                        <div class="text-xl font-semibold">Upload Complete!</div>
+                    </div>
+                </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const form = document.getElementById('gallery-upload-form');
+                        const fileInput = document.getElementById('image');
+                        const progressOverlay = document.getElementById('upload-progress');
+                        const progressBarFill = document.getElementById('progress-bar-fill');
+                        const progressText = document.getElementById('progress-text');
+                        const uploadComplete = document.getElementById('upload-complete');
+
+                        // Drag and drop functionality
+                        fileInput.addEventListener('dragenter', function(e) {
+                            e.preventDefault();
+                            fileInput.classList.add('drag-over');
+                        });
+
+                        fileInput.addEventListener('dragleave', function(e) {
+                            e.preventDefault();
+                            fileInput.classList.remove('drag-over');
+                        });
+
+                        fileInput.addEventListener('dragover', function(e) {
+                            e.preventDefault();
+                        });
+
+                        fileInput.addEventListener('drop', function(e) {
+                            e.preventDefault();
+                            fileInput.classList.remove('drag-over');
+                            if (e.dataTransfer.files.length) {
+                                fileInput.files = e.dataTransfer.files;
+                                handleFileSelect(fileInput);
+                            }
+                        });
+
+                        form.addEventListener('submit', function(e) {
+                            e.preventDefault();
+                            const formData = new FormData(form);
+
+                            progressOverlay.style.display = 'block';
+                            progressBarFill.style.width = '0%';
+                            progressText.textContent = 'Uploading... 0%';
+
+                            const xhr = new XMLHttpRequest();
+                            xhr.open('POST', form.action, true);
+                            xhr.upload.addEventListener('progress', function(e) {
+                                if (e.lengthComputable) {
+                                    const percentComplete = (e.loaded / e.total) * 100;
+                                    progressBarFill.style.width = percentComplete + '%';
+                                    progressText.textContent = `Uploading... ${Math.round(percentComplete)}%`;
+                                }
+                            });
+
+                            xhr.addEventListener('load', function() {
+                                if (xhr.status === 200) {
+                                    progressOverlay.style.display = 'none';
+                                    uploadComplete.style.display = 'block';
+                                    setTimeout(() => {
+                                        uploadComplete.style.display = 'none';
+                                        window.location.reload();
+                                    }, 1500);
+                                } else {
+                                    alert('Upload failed. Please try again.');
+                                    progressOverlay.style.display = 'none';
+                                }
+                            });
+
+                            xhr.addEventListener('error', function() {
+                                alert('Upload failed. Please try again.');
+                                progressOverlay.style.display = 'none';
+                            });
+
+                            xhr.send(formData);
+                        });
+                    });
+
+                    function handleFileSelect(input) {
+                        if (input.files && input.files[0]) {
+                            const file = input.files[0];
+                            const reader = new FileReader();
+                            
+                            reader.onload = function(e) {
+                                // You could show a preview here if desired
+                            };
+                            
+                            reader.readAsDataURL(file);
+                        }
+                    }
+                </script>
 
                 <!-- Image Grid -->
                 @if($galleryItems->count() > 0)

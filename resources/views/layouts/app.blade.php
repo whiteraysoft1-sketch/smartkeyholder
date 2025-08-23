@@ -25,6 +25,7 @@
 
         <!-- Custom Dashboard Styles -->
         <link rel="stylesheet" href="{{ asset('css/dashboard-override.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/gallery-upload.css') }}">
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/css/liquid-glass.css', 'resources/js/app.js'])
