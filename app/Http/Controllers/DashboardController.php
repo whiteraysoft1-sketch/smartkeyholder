@@ -74,8 +74,8 @@ class DashboardController extends Controller
             'currency' => 'nullable|string|max:8',
             'pwa_enabled' => 'nullable|boolean',
             'pwa_app_name' => 'nullable|string|max:255',
-            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'background_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // 5MB max for background
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1128000', // Allow up to 1128MB
+            'background_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1128000', // Allow up to 1128MB
         ]);
         
         // Only update user fields if provided
@@ -178,7 +178,7 @@ class DashboardController extends Controller
     {
         $request->validate([
             'title' => 'nullable|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:1128000', // Allow up to 1128MB
         ]);
         
         $file = $request->file('image');

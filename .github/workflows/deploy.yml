@@ -113,6 +113,10 @@ jobs:
           VITE_APP_NAME="${APP_NAME}"
           EOL
           
+          # Set up PHP configuration for large file uploads
+          cp php-custom.ini /etc/php/8.2/fpm/conf.d/custom-upload.ini
+          service php8.2-fpm reload || true
+          
           # Install/update dependencies
           ./composer2 install --no-dev --optimize-autoloader
           
