@@ -28,9 +28,9 @@ jobs:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
-          ssh -p 65002 -o StrictHostKeyChecking=yes $DEPLOY_USER@$DEPLOY_HOST << 'EOF'
+          ssh -p 65002 -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST << 'EOF'
             set -e
-            cd "$DEPLOY_PATH"
+            cd ~/domains/smart-keyholder.click/public_html
 
             # Pull latest code
             git fetch --all
@@ -39,9 +39,9 @@ jobs:
             # Install PHP dependencies
             composer install --no-interaction --prefer-dist --no-dev -o
 
-            # Optional: build frontend assets on server
-            # npm ci
-            # npm run build
+            # Build frontend assets on server
+            npm ci
+            npm run build
 
             # Laravel maintenance tasks
             php artisan migrate --force || echo "Migrations failed or not needed"
@@ -49,10 +49,17 @@ jobs:
             php artisan route:clear
             php artisan view:cache || true
 
+            # Clear all caches
+            php artisan cache:clear || true
+            php artisan optimize:clear || true
+
             # Non-critical diagnostics
             php artisan route:list || echo "Route listing failed"
 
             # Restart queues/workers if used
             php artisan queue:restart || true
-            # Add service restarts here if using Horizon/Octane/PHP-FPM
+            
+            # Set proper permissions
+            chmod -R 755 storage bootstrap/cache
+            chmod -R 644 storage bootstrap/cache/*
           EOF
