@@ -2,7 +2,7 @@ name: Deploy to Hostinger (code-only, safe for live DB)
 
 on:
   push:
-    branches: [ master, main ]
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
@@ -46,8 +46,8 @@ jobs:
 
             # Update only code (no DB changes)
             git fetch origin
-            git checkout main
-            git pull origin main
+            git checkout master
+            git pull origin master
 
             # Composer install (no dev, optimized)
             if [ -x ./composer2 ]; then
