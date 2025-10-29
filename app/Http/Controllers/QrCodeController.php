@@ -65,6 +65,9 @@ class QrCodeController extends Controller
             'vcard_universal_business',
             'vcard_printing_design_branding',
             'vcard_real_estate',
+            'vcard_church',
+            'vcard_blood_donation',
+            'vcard_cloth_store',
         ];
 
         if (in_array($selectedTemplate, $availableTemplates)) {
