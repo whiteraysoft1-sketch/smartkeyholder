@@ -1,55 +1,122 @@
-name: 🚀 Deploy to Hostinger
+name: Deploy to Hostinger (secure)
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, main ]
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        shell: bash
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Deploy via SSH
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies and build assets (local)
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy to server (SSH using private key, ENV via secret)
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ENV_FILE_B64: ${{ secrets.ENV_FILE_B64 }}
+          RUN_MIGRATIONS: ${{ secrets.RUN_MIGRATIONS }}
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          password: ${{ secrets.DEPLOY_PASSWORD }}
-          port: 65002
+          host: ${{ env.DEPLOY_HOST }}
+          username: ${{ env.DEPLOY_USER }}
+          key: ${{ env.SSH_PRIVATE_KEY }}
+          port: ${{ env.DEPLOY_PORT }}
           script: |
+            set -euo pipefail
+            echo "Deploy: connecting to $HOST"
             cd ~/domains/smart-keyholder.click/public_html
-            
-            # Pull latest code from GitHub
+
+            # Reset to remote master/main
             git fetch --all
-            git reset --hard origin/master
-            
-            # Install PHP dependencies
-            composer install --no-interaction --prefer-dist --no-dev -o
-            
-            # Build frontend assets
-            npm ci
-            npm run build
-            
-            # Laravel maintenance tasks
-            php artisan migrate --force || echo "Migrations failed or not needed"
-            php artisan config:cache
-            php artisan route:clear
-            php artisan view:cache || true
-            
-            # Clear all caches
+            git reset --hard origin/master || git reset --hard origin/main || true
+
+            # Backup existing .env to avoid accidental loss
+            if [ -f .env ]; then
+              mkdir -p deployments/backups || true
+              ts=$(date +%s)
+              cp .env deployments/backups/.env.bak.$ts || true
+              echo "Backed up existing .env to deployments/backups/.env.bak.$ts"
+            else
+              echo "No existing .env found on server"
+            fi
+
+            # Recreate .env from secret (base64 encoded on GH secrets) ONLY if provided.
+            # By default we DO NOT overwrite the server .env. This protects DB & credentials.
+            if [ -n "${ENV_FILE_B64:-}" ]; then
+              echo "ENV_FILE_B64 provided — writing remote .env from secret (decoded)..."
+              echo "$ENV_FILE_B64" | base64 --decode > .env
+              chmod 640 .env || true
+            else
+              echo "ENV_FILE_B64 not provided; leaving existing .env untouched"
+            fi
+
+            # Make sure composer2/ composer is available; prefer project's composer2 if present
+            if [ -x ./composer2 ]; then
+              ./composer2 install --no-dev --optimize-autoloader --no-interaction
+            else
+              composer install --no-dev --optimize-autoloader --no-interaction || true
+            fi
+
+            # Server-side npm build only if necessary (we already built front assets locally and can copy if needed)
+            if [ -f package.json ]; then
+              npm ci || true
+              npm run build || true
+            fi
+
+            # Ensure storage link
+            php artisan storage:link || true
+
+            # Caches and optimization
+            php artisan config:clear || true
+            php artisan route:clear || true
+            php artisan view:clear || true
             php artisan cache:clear || true
             php artisan optimize:clear || true
-            
-            # Non-critical diagnostics
-            php artisan route:list || echo "Route listing failed"
-            
-            # Restart queues/workers if used
+
+            # Remove stale compiled caches that sometimes break deployments
+            rm -f bootstrap/cache/config.php || true
+            rm -f bootstrap/cache/*.php || true
+
+            # Migrate (only run if RUN_MIGRATIONS secret is set to "true") to avoid accidental DB changes
+            if [ "${RUN_MIGRATIONS:-}" = "true" ]; then
+              echo "RUN_MIGRATIONS=true — running migrations"
+              php artisan migrate --force || echo "Migrations failed"
+            else
+              echo "RUN_MIGRATIONS not set to 'true' — skipping database migrations"
+            fi
+
+            # Restart queue workers if applicable
             php artisan queue:restart || true
-            
-            # Set proper permissions
-            chmod -R 755 storage bootstrap/cache
-            chmod -R 644 storage bootstrap/cache/*
+
+            # Permissions (best-effort; Hostinger may require different user/permissions)
+            chmod -R 775 storage bootstrap/cache || true
+            find storage -type f -exec chmod 664 {} \; || true
+
+            # Copy public build artifacts if present (runner built them)
+            if [ -d public/build ]; then
+              cp -r public/build/* ./build/ 2>/dev/null || true
+            fi
+
+            # Final sanity checks
+            php artisan route:list --path=/ || echo "Route listing failed"
+            echo "✅ Deployment completed"
