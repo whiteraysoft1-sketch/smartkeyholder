@@ -1,4 +1,4 @@
-name: Deploy to Hostinger
+name: Deploy to Hostinger (live-safe)
 
 on:
   push:
@@ -8,178 +8,62 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v3
 
-      - name: Deploy to Hostinger
+      - name: Deploy code to Hostinger (SSH)
         uses: appleboy/ssh-action@v0.1.7
         env:
-          APP_KEY: ${{ secrets.APP_KEY }}
+          DEPLOY_HOST: ${{ secrets.HOST }}
+          DEPLOY_USER: ${{ secrets.USERNAME }}
+          DEPLOY_PORT: ${{ secrets.PORT }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
+          host: ${{ env.DEPLOY_HOST }}
+          username: ${{ env.DEPLOY_USER }}
+          key: ${{ env.SSH_PRIVATE_KEY }}
+          port: ${{ env.DEPLOY_PORT }}
           script: |
-          cd domains/smart-keyholder.click/public_html
-          chmod +x deploy.sh
-          ./deploy.sh
-          cd domains/smart-keyholder.click/public_html
-          
-          echo "🔍 Current directory: $(pwd)"
-          echo "📦 Checking Git status..."
-          git status
-          
-          # Force reset any local changes
-          echo "🔄 Resetting local changes..."
-          git reset --hard HEAD
-          git clean -fd
-          
-          # Pull latest changes with force
-          echo "⬇️ Pulling latest changes..."
-          git fetch origin master
-          git reset --hard origin/master
-          
-          # Ensure we have the production environment file with correct database credentials
-          echo "⚙️ Setting up environment..."
-          cat > .env << 'EOL'
-APP_NAME="Smart Key Holder"
-APP_ENV=production
-APP_DEBUG=false
-APP_URL=https://smart-keyholder.click
+            set -euo pipefail
+            echo "🔹 Connecting to $DEPLOY_HOST..."
+            cd ~/domains/smart-keyholder.click/public_html
 
-LOG_CHANNEL=stack
-LOG_DEPRECATIONS_CHANNEL=null
-LOG_LEVEL=error
+            # Update code only, no database changes
+            echo "⬇️ Pulling latest code..."
+            git fetch origin
+            git checkout master
+            git pull origin master
 
-DB_CONNECTION=mysql
-DB_HOST=145.223.108.4
-DB_PORT=3306
-DB_DATABASE=u244291586_smart_key
-DB_USERNAME=u244291586_smart_key
-DB_PASSWORD=Kaggwa@96
+            # Install composer dependencies (production)
+            if [ -x ./composer2 ]; then
+              ./composer2 install --no-dev --optimize-autoloader --no-interaction
+            else
+              composer install --no-dev --optimize-autoloader --no-interaction || true
+            fi
 
-BROADCAST_DRIVER=log
-CACHE_DRIVER=file
-FILESYSTEM_DISK=local
-QUEUE_CONNECTION=sync
-SESSION_DRIVER=file
-SESSION_LIFETIME=120
+            # Clear Laravel caches
+            php artisan config:clear || true
+            php artisan route:clear || true
+            php artisan view:clear || true
+            php artisan cache:clear || true
+            php artisan optimize:clear || true
 
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.hostinger.com
-MAIL_PORT=465
-MAIL_USERNAME=support@smart-keyholder.click
-MAIL_PASSWORD=Kaggwa@96
-MAIL_ENCRYPTION=ssl
-MAIL_FROM_ADDRESS=support@smart-keyholder.click
-MAIL_FROM_NAME="${APP_NAME}"
-EOL
+            # Ensure storage link exists
+            php artisan storage:link || true
 
-          # Set proper permissions for .env file
-          chmod 644 .env
-          
-          # Verify database connection
-          echo "🔍 Testing database connection..."
-          php artisan db:monitor || echo "Database connection failed!"
-          
-          # Force update the car dealer template
-          echo "🚗 Updating Car Dealer template..."
-          if [ -f "resources/views/vcardTemplates/vcard_car_dealer.blade.php" ]; then
-            chmod 644 resources/views/vcardTemplates/vcard_car_dealer.blade.php
-            touch resources/views/vcardTemplates/vcard_car_dealer.blade.php
-          fi
-          
-          # Install/update dependencies
-          ./composer2 install --no-dev --optimize-autoloader
-          
-          # Create storage symbolic link (critical for file uploads)
-          php artisan storage:link
-          
-          # Force clear ALL caches and compiled files
-          echo "🧹 Clearing all caches..."
-          php artisan config:clear
-          php artisan view:clear
-          php artisan route:clear
-          php artisan cache:clear
-          php artisan optimize:clear
-          
-          # Clear OPcache if available
-          echo "📋 Clearing OPcache..."
-          php -r "if(function_exists('opcache_reset')) { opcache_reset(); }"
-          
-          # Clear realpath cache
-          echo "🔄 Clearing realpath cache..."
-          php -r "clearstatcache(true);"
-          
-          # Remove compiled files manually if they exist
-          rm -f bootstrap/cache/config.php
-          rm -f bootstrap/cache/routes-v7.php
-          rm -f bootstrap/cache/services.php
-          rm -f bootstrap/cache/packages.php
-          
-          # Additional cache clearing for route issues
-          rm -rf storage/framework/cache/data/*
-          rm -rf storage/framework/views/*
-          rm -rf storage/framework/sessions/*
-          
-          # Remove any existing index.php to prevent conflicts
-          rm -f index.php
-          
-          # Rebuild caches in correct order
-          php artisan config:cache
-          php artisan route:cache
-          php artisan view:cache
-          php artisan optimize
-          
-          # Set proper permissions for storage and uploads
-          chmod -R 755 storage bootstrap/cache
-          chmod -R 755 public/storage
-          
-          # Ensure storage directories exist
-          mkdir -p storage/app/public/profile_images
-          mkdir -p storage/app/public/background_images
-          mkdir -p storage/app/public/gallery_images
-          mkdir -p storage/app/public/product_images
-          mkdir -p storage/app/public/pwa_icons
-          
-          # Set permissions for storage directories
-          chmod -R 755 storage/app/public
-          
-          # Hostinger-specific setup: Copy Laravel public contents to web root
-          echo "Setting up Hostinger document root..."
-          
-          # Backup existing index files if they exist
-          if [ -f "index.html" ]; then
-            mv index.html index.html.backup
-          fi
-          if [ -f "index.php" ] && [ ! -f "public/index.php" ]; then
-            mv index.php index.php.backup
-          fi
-          
-          # Copy all public directory contents to web root
-          cp -r public/* ./
-          cp public/.htaccess ./ 2>/dev/null || true
-          
-          # Use Hostinger-specific index.php
-          cp hostinger-index.php index.php
-          
-          # Ensure proper permissions for web files
-          chmod 644 index.php
-          chmod 644 .htaccess
-          
-          # Force clear route cache again after copying files
-          php artisan route:clear
-          php artisan config:clear
-          
-          # Remove any cached route files that might interfere
-          rm -f bootstrap/cache/routes-*.php
-          
-          # Test the route configuration
-          php artisan route:list --path=/ || echo "Route listing failed"
-          
-          # Create a simple test file to verify deployment
-          echo "<?php echo 'Deployment successful at ' . date('Y-m-d H:i:s'); ?>" > deployment-test.php
-          
-          echo "✅ Deployment completed successfully!"
+            # Restart queue workers if applicable
+            php artisan queue:restart || true
+
+            # Set proper permissions (best effort)
+            chmod -R 755 storage bootstrap/cache public
+            find storage -type f -exec chmod 644 {} \; || true
+
+            # Optional: copy local built assets to public (if your workflow built assets)
+            if [ -d public/build ]; then
+              cp -r public/build/* ./build/ 2>/dev/null || true
+            fi
+
+            # Optional: verify deployment
+            php artisan route:list --path=/ || echo "Route listing failed"
+            echo "✅ Code-only deployment completed. Database untouched. .env untouched."
