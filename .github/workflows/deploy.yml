@@ -20,7 +20,7 @@ jobs:
       - name: Add server to known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -p 65002 -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy to server
         env:
@@ -28,7 +28,7 @@ jobs:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
-          ssh -o StrictHostKeyChecking=yes $DEPLOY_USER@$DEPLOY_HOST << 'EOF'
+          ssh -p 65002 -o StrictHostKeyChecking=yes $DEPLOY_USER@$DEPLOY_HOST << 'EOF'
             set -e
             cd "$DEPLOY_PATH"
 
