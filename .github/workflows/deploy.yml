@@ -1,251 +1,58 @@
-name: Deploy to Hostinger
-
+name: Deploy
 on:
   push:
-    branches: [ master, main ]
-  workflow_dispatch:
+    branches: [ master ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        
-    - name: Install dependencies and build assets
-      run: |
-        npm ci
-        npm run build
-      
-    - name: Deploy to server
-      uses: appleboy/ssh-action@v0.1.7
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-        script: |
-          cd domains/smart-keyholder.click/public_html
-          
-          # Pull latest changes
-          git pull origin master
-          
-          # Create/Update .env file with production settings
-          cat > .env << 'EOL'
-          APP_NAME="Whiteray Smart Tag"
-          APP_ENV=production
-          APP_KEY=base64:g5g3ASiSWqUUXufhX8/hmFCltkSJiFd6+AlwW9/1/mU=
-          APP_DEBUG=false
-          APP_TIMEZONE=UTC
-          APP_URL=https://smart-keyholder.click/public/
+      - name: Checkout
+        uses: actions/checkout@v4
 
-          APP_LOCALE=en
-          APP_FALLBACK_LOCALE=en
-          APP_FAKER_LOCALE=en_US
+      - name: Start SSH agent and add key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: |
+            ${{ secrets.DEPLOY_SSH_KEY }}
 
-          APP_MAINTENANCE_DRIVER=file
-          APP_MAINTENANCE_STORE=database
+      - name: Add server to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
 
-          BCRYPT_ROUNDS=12
+      - name: Deploy to server
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          ssh -o StrictHostKeyChecking=yes $DEPLOY_USER@$DEPLOY_HOST << 'EOF'
+            set -e
+            cd "$DEPLOY_PATH"
 
-          LOG_CHANNEL=stack
-          LOG_STACK=single
-          LOG_DEPRECATIONS_CHANNEL=null
-          LOG_LEVEL=error
+            # Pull latest code
+            git fetch --all
+            git reset --hard origin/master
 
-          DB_CONNECTION=mysql
-          DB_HOST=localhost
-          DB_PORT=3306
-          DB_DATABASE=u244291586_smartk
-          DB_USERNAME=u244291586_smarkey
-          DB_PASSWORD=Kaggwa@96
+            # Install PHP dependencies
+            composer install --no-interaction --prefer-dist --no-dev -o
 
-          SESSION_DRIVER=database
-          SESSION_LIFETIME=120
-          SESSION_ENCRYPT=false
-          SESSION_PATH=/
-          SESSION_DOMAIN=null
+            # Optional: build frontend assets on server
+            # npm ci
+            # npm run build
 
-          BROADCAST_CONNECTION=log
-          FILESYSTEM_DISK=public
-          QUEUE_CONNECTION=database
+            # Laravel maintenance tasks
+            php artisan migrate --force || echo "Migrations failed or not needed"
+            php artisan config:cache
+            php artisan route:clear
+            php artisan view:cache || true
 
-          CACHE_STORE=database
-          CACHE_PREFIX=
+            # Non-critical diagnostics
+            php artisan route:list || echo "Route listing failed"
 
-          MEMCACHED_HOST=127.0.0.1
-
-          REDIS_CLIENT=phpredis
-          REDIS_HOST=127.0.0.1
-          REDIS_PASSWORD=null
-          REDIS_PORT=6379
-
-          MAIL_MAILER=smtp
-          MAIL_HOST=smtp.hostinger.com
-          MAIL_PORT=587
-          MAIL_USERNAME=noreply@smartkeyholder.mgtbiz.link
-          MAIL_PASSWORD=your-actual-email-password
-          MAIL_ENCRYPTION=tls
-          MAIL_FROM_ADDRESS="noreply@smartkeyholder.mgtbiz.link"
-          MAIL_FROM_NAME="${APP_NAME}"
-
-          FLUTTERWAVE_PUBLIC_KEY=your_flutterwave_public_key
-          FLUTTERWAVE_SECRET_KEY=your_flutterwave_secret_key
-          FLUTTERWAVE_SECRET_HASH=your_flutterwave_secret_hash
-          FLUTTERWAVE_ENVIRONMENT=live
-
-          AWS_ACCESS_KEY_ID=
-          AWS_SECRET_ACCESS_KEY=
-          AWS_DEFAULT_REGION=us-east-1
-          AWS_BUCKET=
-          AWS_USE_PATH_STYLE_ENDPOINT=false
-
-          VAPID_PUBLIC_KEY=izCb5pRgksWljhXNSZQA1fRaIl22XejxIkCAfacT6kRwUzYJzrfkHdj8gTQS1EwzzQxs75t2bGA368AeI03azNw=
-          VAPID_PRIVATE_KEY=z+bk/qZ1WuxdQGrBAQlrnFYuwiSWBcHuzji0uaoxK1A=
-          VAPID_SUBJECT=mailto:admin@smarttag.com
-
-          VITE_APP_NAME="${APP_NAME}"
-          EOL
-          
-          # Set up PHP configuration for large file uploads
-          cp php-custom.ini /etc/php/8.2/fpm/conf.d/custom-upload.ini
-          service php8.2-fpm reload || true
-          
-          # Install/update dependencies
-          ./composer2 install --no-dev --optimize-autoloader
-          
-          # Install Node.js dependencies and build assets
-          npm install
-          npm run build
-          
-          # Create storage symbolic link (critical for file uploads)
-          php artisan storage:link
-          
-          # Ensure build directory exists and copy compiled assets
-          mkdir -p public/build
-          cp -r public/build/* ./build/ 2>/dev/null || true
-          
-          # Force clear ALL caches and compiled files
-          php artisan config:clear
-          php artisan view:clear
-          php artisan route:clear
-          php artisan cache:clear
-          php artisan optimize:clear
-          
-          # Remove compiled files manually if they exist
-          rm -f bootstrap/cache/config.php
-          rm -f bootstrap/cache/routes-v7.php
-          rm -f bootstrap/cache/services.php
-          rm -f bootstrap/cache/packages.php
-          
-          # Additional cache clearing for route issues
-          rm -rf storage/framework/cache/data/*
-          rm -rf storage/framework/views/*
-          rm -rf storage/framework/sessions/*
-          
-          # Remove any existing index.php to prevent conflicts
-          rm -f index.php
-          
-          # Rebuild caches in correct order
-          php artisan config:cache
-          php artisan route:cache
-          php artisan view:cache
-          php artisan optimize
-          
-          # Set up storage and uploads with proper permissions
-          rm -rf public/storage
-          php artisan storage:link
-          
-          # Create required directories
-          mkdir -p storage/app/public/profile_images
-          mkdir -p storage/app/public/background_images
-          mkdir -p storage/app/public/gallery_images
-          mkdir -p storage/app/public/product_images
-          mkdir -p storage/app/public/pwa_icons
-          mkdir -p storage/framework/cache
-          mkdir -p storage/framework/sessions
-          mkdir -p storage/framework/views
-          
-          # Set directory permissions
-          find storage -type d -exec chmod 775 {} \;
-          find public/storage -type d -exec chmod 775 {} \;
-          find bootstrap/cache -type d -exec chmod 775 {} \;
-          
-          # Set file permissions
-          find storage -type f -exec chmod 664 {} \;
-          find public/storage -type f -exec chmod 664 {} \;
-          find bootstrap/cache -type f -exec chmod 664 {} \;
-          
-          # Set ownership
-          chown -R www-data:www-data storage
-          chown -R www-data:www-data public/storage
-          chown -R www-data:www-data bootstrap/cache
-          
-          # Ensure storage link exists and has proper permissions
-          chmod 775 public/storage
-          
-          # Ensure storage directories exist
-          mkdir -p storage/app/public/profile_images
-          mkdir -p storage/app/public/background_images
-          mkdir -p storage/app/public/gallery_images
-          mkdir -p storage/app/public/product_images
-          mkdir -p storage/app/public/pwa_icons
-          
-          # Set permissions for storage directories
-          chmod -R 755 storage/app/public
-          
-          # Hostinger-specific setup: Copy Laravel public contents to web root
-          echo "Setting up Hostinger document root..."
-          
-          # Backup existing index files if they exist
-          if [ -f "index.html" ]; then
-            mv index.html index.html.backup
-          fi
-          if [ -f "index.php" ] && [ ! -f "public/index.php" ]; then
-            mv index.php index.php.backup
-          fi
-          
-          # Copy all public directory contents to web root
-          cp -r public/* ./
-          cp public/.htaccess ./ 2>/dev/null || true
-          
-          # Ensure CSS and assets are properly copied
-          mkdir -p css js build
-          cp -r public/css/* ./css/ 2>/dev/null || true
-          cp -r public/js/* ./js/ 2>/dev/null || true
-          cp -r public/build/* ./build/ 2>/dev/null || true
-          
-          # Ensure dashboard override CSS is in place
-          cp public/css/dashboard-override.css ./css/ 2>/dev/null || true
-          
-          # Set proper permissions for asset directories
-          chmod -R 755 css js build
-          find css js build -type f -exec chmod 644 {} \;
-          
-          # Use Hostinger-specific index.php
-          cp hostinger-index.php index.php
-          
-          # Ensure proper permissions for web files
-          chmod 644 index.php
-          chmod 644 .htaccess
-          
-          # Force clear route cache again after copying files
-          php artisan route:clear
-          php artisan config:clear
-          
-          # Remove any cached route files that might interfere
-          rm -f bootstrap/cache/routes-*.php
-          
-          # Test the route configuration
-          php artisan route:list --path=/ || echo "Route listing failed"
-          
-          # Create a simple test file to verify deployment
-          echo "<?php echo 'Deployment successful at ' . date('Y-m-d H:i:s'); ?>" > deployment-test.php
-          
-          echo "✅ Deployment completed successfully!"
+            # Restart queues/workers if used
+            php artisan queue:restart || true
+            # Add service restarts here if using Horizon/Octane/PHP-FPM
+          EOF
