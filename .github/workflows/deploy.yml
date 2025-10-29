@@ -1,65 +1,55 @@
-name: Deploy
+name: 🚀 Deploy to Hostinger
+
 on:
   push:
     branches: [ master ]
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Start SSH agent and add key
-        uses: webfactory/ssh-agent@v0.9.0
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v0.1.7
         with:
-          ssh-private-key: |
-            ${{ secrets.DEPLOY_SSH_KEY }}
-
-      - name: Add server to known_hosts
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -p 65002 -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
-
-      - name: Deploy to server
-        env:
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
-        run: |
-          ssh -p 65002 -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST << 'EOF'
-            set -e
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          password: ${{ secrets.DEPLOY_PASSWORD }}
+          port: 65002
+          script: |
             cd ~/domains/smart-keyholder.click/public_html
-
-            # Pull latest code
+            
+            # Pull latest code from GitHub
             git fetch --all
             git reset --hard origin/master
-
+            
             # Install PHP dependencies
             composer install --no-interaction --prefer-dist --no-dev -o
-
-            # Build frontend assets on server
+            
+            # Build frontend assets
             npm ci
             npm run build
-
+            
             # Laravel maintenance tasks
             php artisan migrate --force || echo "Migrations failed or not needed"
             php artisan config:cache
             php artisan route:clear
             php artisan view:cache || true
-
+            
             # Clear all caches
             php artisan cache:clear || true
             php artisan optimize:clear || true
-
+            
             # Non-critical diagnostics
             php artisan route:list || echo "Route listing failed"
-
+            
             # Restart queues/workers if used
             php artisan queue:restart || true
             
             # Set proper permissions
             chmod -R 755 storage bootstrap/cache
             chmod -R 644 storage bootstrap/cache/*
-          EOF
