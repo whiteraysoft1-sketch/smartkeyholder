@@ -120,3 +120,4 @@ jobs:
             # Final sanity checks
             php artisan route:list --path=/ || echo "Route listing failed"
             echo "✅ Deployment completed"
+
