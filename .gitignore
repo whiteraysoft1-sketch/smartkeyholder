@@ -50,3 +50,7 @@ temp_line.txt
 
 # Test files
 test.php
+
+# Local SSH keypair (do NOT commit private keys)
+keyfile
+keyfile.pub
