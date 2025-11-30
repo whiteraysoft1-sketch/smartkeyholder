@@ -1,32 +1,14 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    RewriteBase /
+
+    # If the request is not going to /public directory
+    RewriteCond %{REQUEST_URI} !^/public/ [NC]
     
-    # Check if the request is to public folder, if not, rewrite to public
-    RewriteCond %{REQUEST_URI} !^/public/
+    # and the request is not to an existing file or directory
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ public/$1 [L,QSA]
-</IfModule>
-
-# Proper Laravel rewrite rules for /public folder
-<IfModule mod_rewrite.c>
-    <IfModule mod_negotiation.c>
-        Options -MultiViews -Indexes
-    </IfModule>
-
-    RewriteEngine On
-
-    # Handle Authorization Header
-    RewriteCond %{HTTP:Authorization} .
-    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-
-    # Redirect Trailing Slashes If Not A Folder
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} (.+)/$
-    RewriteRule ^ %1 [L,R=301]
-
-    # Handle Requests To Non-Existent Files
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^ public/index.php [L]
+    
+    # Rewrite to /public/index.php
+    RewriteRule ^(.*)$ /public/index.php?url=$1 [QSA,L]
 </IfModule>
