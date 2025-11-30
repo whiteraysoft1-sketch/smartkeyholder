@@ -48,47 +48,58 @@ jobs:
           script: |
             DEPLOY_PATH="/home/u933773389/domains/smart-keyholder.click/public_html"
             ENV_FILE="$DEPLOY_PATH/.env"
-            BACKUP_DIR="/home/u933773389/backups"
+            TEMP_DIR="/home/u933773389/temp_deploy"
             
             echo "🔍 Starting deployment..."
             echo "📁 Deploy path: $DEPLOY_PATH"
             echo "👤 Current user: $(whoami)"
             echo "📍 Current directory: $(pwd)"
             
-            # Create backup directory if it doesn't exist
-            mkdir -p "$BACKUP_DIR"
-            
-            # Backup .env file OUTSIDE deployment directory before deletion
+            # Backup .env file to temporary location (NEVER overwrite production .env)
             if [ -f "$ENV_FILE" ]; then
-              echo "💾 Backing up .env file to safe location..."
-              cp "$ENV_FILE" "$BACKUP_DIR/.env.backup"
-              echo "✅ .env backed up to $BACKUP_DIR/.env.backup"
+              echo "💾 Backing up production .env file..."
+              cp "$ENV_FILE" "/tmp/.env.production.backup"
+              echo "✅ Production .env backed up"
             fi
             
-            # Remove old deployment and do fresh clone
-            echo "🗑️  Removing old deployment directory..."
-            rm -rf $DEPLOY_PATH
+            # Clone to temporary directory first
+            echo "📥 Cloning repository to temporary location..."
+            rm -rf $TEMP_DIR
+            git clone https://github.com/whiteraysoft1-sketch/smartkeyholder.git $TEMP_DIR
             
-            echo "📥 Cloning repository..."
-            git clone https://github.com/whiteraysoft1-sketch/smartkeyholder.git $DEPLOY_PATH
-            
-            if [ ! -d "$DEPLOY_PATH" ]; then
+            if [ ! -d "$TEMP_DIR" ]; then
               echo "❌ Clone failed!"
               exit 1
             fi
             
-            cd $DEPLOY_PATH
-            echo "✅ Repository cloned successfully"
-            echo "📊 Files in deployment path:"
-            ls -la | head -20
+            # Remove .env from cloned repository (never use it)
+            echo "🗑️  Removing .env from cloned files..."
+            rm -f $TEMP_DIR/.env
+            rm -f $TEMP_DIR/.env.example
             
-            # Restore .env file from backup (NEVER overwrite production .env)
-            if [ -f "$BACKUP_DIR/.env.backup" ]; then
-              echo "🔄 Restoring production .env file from backup..."
-              cp "$BACKUP_DIR/.env.backup" "$ENV_FILE"
-              echo "✅ Production .env restored successfully"
+            # Now sync files to deployment directory (excluding .env)
+            echo "🔄 Syncing files to production (excluding .env)..."
+            rsync -av --delete --exclude='.env' --exclude='.git' --exclude='storage/app/public/*' --exclude='storage/logs/*' --exclude='storage/framework/sessions/*' --exclude='storage/framework/cache/*' --exclude='storage/framework/views/*' $TEMP_DIR/ $DEPLOY_PATH/
+            
+            # Clean up temp directory
+            rm -rf $TEMP_DIR
+            
+            cd $DEPLOY_PATH
+            echo "✅ Files synced successfully"
+            
+            # Verify .env file still exists and was not touched
+            if [ -f "$ENV_FILE" ]; then
+              echo "✅ Production .env file preserved successfully"
+              echo "📋 Current APP_ENV: $(grep APP_ENV $ENV_FILE)"
+              echo "📋 Current DB_DATABASE: $(grep DB_DATABASE $ENV_FILE)"
             else
-              echo "⚠️  No .env backup found! Using repository .env as fallback"
+              echo "⚠️  WARNING: .env file missing! Restoring from backup..."
+              if [ -f "/tmp/.env.production.backup" ]; then
+                cp "/tmp/.env.production.backup" "$ENV_FILE"
+                echo "✅ .env restored from backup"
+              else
+                echo "❌ CRITICAL: No .env backup found! Manual intervention required!"
+              fi
             fi
             
             echo "📦 Installing Composer dependencies..."
