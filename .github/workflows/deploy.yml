@@ -117,7 +117,9 @@ jobs:
             php artisan view:clear
             php artisan cache:clear
             php artisan config:clear
-            php artisan optimize
+            
+            # Optimize but skip route caching due to Hostinger compatibility
+            php artisan optimize --no-routes
             
             # Set proper permissions for storage
             echo "🔐 Setting file permissions..."
