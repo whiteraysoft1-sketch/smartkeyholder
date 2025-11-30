@@ -46,7 +46,13 @@ jobs:
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
           port: ${{ secrets.HOSTINGER_PORT }}
           script: |
-            cd /home/u933773389/domains/smart-keyholder.click/public_html
+            DEPLOY_PATH="/home/u933773389/domains/smart-keyholder.click/public_html"
+            if [ ! -d "$DEPLOY_PATH/.git" ]; then
+              echo "Cloning repository..."
+              rm -rf $DEPLOY_PATH
+              git clone https://github.com/whiteraysoft1-sketch/smartkeyholder.git $DEPLOY_PATH
+            fi
+            cd $DEPLOY_PATH
             git fetch origin
             git checkout main
             git pull origin main
