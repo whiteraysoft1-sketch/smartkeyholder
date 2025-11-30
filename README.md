@@ -80,4 +80,7 @@ The project is built with Laravel for the backend, Blade for templating, and inc
 ## License
 See LICENSE file for details.
 # smartkeyholder
+#
+## Deployment Trigger
+Triggered redeployment on November 30, 2025.
 # smartkeyholder
