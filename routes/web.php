@@ -9,9 +9,14 @@ use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes - Root route
-Route::get('/', function () {
+Route::match(['get', 'head'], '/', function () {
     return view('welcome');
 })->name('home');
+
+// Test route - simple text response (no views, no middleware)
+Route::get('/test-simple', function () {
+    return 'Laravel is working! Time: ' . now();
+})->name('test.simple');
 
 // Debug route to test routing
 Route::get('/debug-route', function () {
