@@ -118,8 +118,13 @@ jobs:
             php artisan cache:clear
             php artisan config:clear
             
-            # Optimize application
+            # Optimize application (routes will be cached)
             php artisan optimize
+            
+            # Delete route cache immediately after optimize to prevent HEAD-only bug
+            echo "🔧 Removing route cache to fix Hostinger compatibility..."
+            rm -f bootstrap/cache/routes-*.php
+            php disable-route-cache.php
             
             # Set proper permissions for storage
             echo "🔐 Setting file permissions..."
