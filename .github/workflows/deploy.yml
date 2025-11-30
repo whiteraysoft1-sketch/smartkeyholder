@@ -59,8 +59,15 @@ jobs:
             # Preserve .env file (don't overwrite server config)
             git checkout HEAD -- .env || true
             composer install --no-dev --optimize-autoloader
+            # Create storage symlink for images
+            php artisan storage:link || true
+            # Clear caches
             php artisan config:clear
             php artisan route:clear
             php artisan view:clear
             php artisan cache:clear
             php artisan optimize
+            # Set proper permissions for storage
+            chmod -R 775 storage bootstrap/cache || true
+            find storage -type f -exec chmod 664 {} \; || true
+            echo "✅ Deployment completed successfully"
