@@ -1,64 +1,62 @@
 name: Deploy Laravel to Hostinger
 
 on:
-push:
-branches:
-- main
+  push:
+    branches:
+      - main
 
 jobs:
-deploy:
-runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-latest
 
-```
-steps:
-  - name: Checkout repository
-    uses: actions/checkout@v3
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-  - name: Setup PHP
-    uses: shivammathur/setup-php@v2
-    with:
-      php-version: "8.2"
-      extensions: mbstring, bcmath, intl, openssl, pdo, pdo_mysql
-      coverage: none
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: mbstring, bcmath, intl, openssl, pdo, pdo_mysql
+          coverage: none
 
-  - name: Install Composer dependencies
-    run: composer install --no-dev --optimize-autoloader
+      - name: Install Composer dependencies
+        run: composer install --no-dev --optimize-autoloader
 
-  - name: Setup Node.js
-    uses: actions/setup-node@v3
-    with:
-      node-version: "18"
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
 
-  - name: Build frontend assets
-    run: |
-      npm ci
-      npm run build
+      - name: Build frontend assets
+        run: |
+          npm ci
+          npm run build
 
-  - name: Prepare zip for deployment
-    run: |
-      rm -rf node_modules
-      zip -r deployment.zip . -x "*.git*" "node_modules/*" ".github/*"
+      - name: Prepare zip for deployment
+        run: |
+          rm -rf node_modules
+          zip -r deployment.zip . -x "*.git*" "node_modules/*" ".github/*"
 
-  - name: Upload to Hostinger via SFTP
-    uses: wlixcc/SFTP-Deploy-Action@v1.0
-    with:
-      username: ${{ secrets.HOSTINGER_USERNAME }}
-      server: ${{ secrets.HOSTINGER_HOST }}
-      port: ${{ secrets.HOSTINGER_PORT }}
-      ssh_private_key: ${{ secrets.HOSTINGER_SSH_KEY }}
-      local_path: "deployment.zip"
-      remote_path: "/home/u933773389/domains/smart-keyholder.click/public_html"
+      - name: Upload to Hostinger via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.0
+        with:
+          username: ${{ secrets.HOSTINGER_USERNAME }}
+          server: ${{ secrets.HOSTINGER_HOST }}
+          port: ${{ secrets.HOSTINGER_PORT }}
+          ssh_private_key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          local_path: "deployment.zip"
+          remote_path: "/home/u933773389/domains/smart-keyholder.click/public_html"
 
-  - name: Unzip and optimize on server
-    uses: appleboy/ssh-action@v1.0.0
-    with:
-      host: ${{ secrets.HOSTINGER_HOST }}
-      username: ${{ secrets.HOSTINGER_USERNAME }}
-      key: ${{ secrets.HOSTINGER_SSH_KEY }}
-      port: ${{ secrets.HOSTINGER_PORT }}
-      script: |
-        cd /home/u933773389/domains/smart-keyholder.click/public_html
-        unzip -o deployment.zip
-        rm deployment.zip
-        php artisan optimize
-```
+      - name: Unzip and optimize on server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.HOSTINGER_HOST }}
+          username: ${{ secrets.HOSTINGER_USERNAME }}
+          key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          port: ${{ secrets.HOSTINGER_PORT }}
+          script: |
+            cd /home/u933773389/domains/smart-keyholder.click/public_html
+            unzip -o deployment.zip
+            rm deployment.zip
+            php artisan optimize
