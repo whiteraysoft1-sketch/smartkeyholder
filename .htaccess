@@ -5,15 +5,10 @@
 
     RewriteEngine On
 
-    # If the request is not for a valid file or directory, redirect to public folder
+    # If the request is not for a valid file or directory
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_URI} !^/public/
-    RewriteRule ^(.*)$ /public/$1 [L]
-
-    # Inside public folder, handle the front controller
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_URI} ^/public/
-    RewriteRule ^public/(.*)$ /public/index.php [L]
+    
+    # Redirect everything to /public/index.php
+    RewriteRule ^(.*)$ /public/index.php/$1 [L]
 </IfModule>
