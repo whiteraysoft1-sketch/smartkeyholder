@@ -2,13 +2,14 @@
     RewriteEngine On
     RewriteBase /
 
-    # If the request is not going to /public directory
-    RewriteCond %{REQUEST_URI} !^/public/ [NC]
-    
-    # and the request is not to an existing file or directory
+    # If the request is to /public, just serve it directly
+    RewriteCond %{REQUEST_URI} ^/public/ [NC]
+    RewriteRule ^public/(.*)$ public/$1 [L]
+
+    # If the request is not to an existing file or directory
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     
-    # Rewrite to /public/index.php
-    RewriteRule ^(.*)$ /public/index.php?url=$1 [QSA,L]
+    # Redirect to public/index.php (internal rewrite, not visible to user)
+    RewriteRule ^(.*)$ public/index.php [L]
 </IfModule>
