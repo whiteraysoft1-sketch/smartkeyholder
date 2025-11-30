@@ -9,7 +9,7 @@ use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes - Root route
-Route::match(['get', 'head'], '/', function () {
+Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
