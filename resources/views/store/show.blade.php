@@ -156,7 +156,7 @@
                         <!-- Product Image -->
                         <div class="aspect-square bg-gray-100 overflow-hidden cursor-pointer touch-target" onclick='showProductModal(@json($product))'>
                             @if($product->image)
-                                <img src="{{ Storage::disk('public')->url($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                                <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                             @else
                                 <div class="w-full h-full flex items-center justify-center text-gray-400">
                                     <i class="fas fa-image text-2xl md:text-4xl"></i>
@@ -584,8 +584,8 @@ function showProductModal(product) {
     const modal = document.getElementById('product-modal');
     const overlay = document.getElementById('overlay');
     
-    document.getElementById('modal-image').innerHTML = product.image 
-        ? `<img src="/storage/${product.image}" alt="${product.name}" class="w-full h-full object-cover">`
+    document.getElementById('modal-image').innerHTML = product.image_url 
+        ? `<img src="${product.image_url}" alt="${product.name}" class="w-full h-full object-cover">`
         : '<div class="w-full h-full flex items-center justify-center text-gray-400"><i class="fas fa-image text-4xl md:text-6xl"></i></div>';
     
     document.getElementById('modal-title').textContent = product.name;
