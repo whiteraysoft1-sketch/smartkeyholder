@@ -2,11 +2,12 @@
     RewriteEngine On
     RewriteBase /
 
-    # For Hostinger: Serve files directly if they exist
+    # Don't process if it's a real file or directory
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
 
-    # Rewrite all requests to public/index.php
-    RewriteRule ^(.*)$ public/index.php?path=$1 [QSA,L]
+    # For requests not going to /public, prepend /public
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ /public/$1 [L]
 </IfModule>
