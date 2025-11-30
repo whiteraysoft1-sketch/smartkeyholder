@@ -5,10 +5,13 @@
 
     RewriteEngine On
 
-    # If the request is not for a valid file or directory
+    # Redirect Trailing Slashes If Not A Folder
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Handle Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
-    
-    # Redirect everything to /public/index.php
-    RewriteRule ^(.*)$ /public/index.php/$1 [L]
+    RewriteRule ^ public/index.php [L]
 </IfModule>
