@@ -48,16 +48,21 @@ jobs:
           script: |
             DEPLOY_PATH="/home/u933773389/domains/smart-keyholder.click/public_html"
             ENV_FILE="$DEPLOY_PATH/.env"
+            BACKUP_DIR="/home/u933773389/backups"
             
             echo "🔍 Starting deployment..."
             echo "📁 Deploy path: $DEPLOY_PATH"
             echo "👤 Current user: $(whoami)"
             echo "📍 Current directory: $(pwd)"
             
-            # Backup .env file before any git operations
+            # Create backup directory if it doesn't exist
+            mkdir -p "$BACKUP_DIR"
+            
+            # Backup .env file OUTSIDE deployment directory before deletion
             if [ -f "$ENV_FILE" ]; then
-              echo "💾 Backing up .env file..."
-              cp "$ENV_FILE" "$ENV_FILE.backup"
+              echo "💾 Backing up .env file to safe location..."
+              cp "$ENV_FILE" "$BACKUP_DIR/.env.backup"
+              echo "✅ .env backed up to $BACKUP_DIR/.env.backup"
             fi
             
             # Remove old deployment and do fresh clone
@@ -78,10 +83,12 @@ jobs:
             ls -la | head -20
             
             # Restore .env file from backup (NEVER overwrite production .env)
-            if [ -f "$ENV_FILE.backup" ]; then
-              echo "🔄 Restoring .env file from backup..."
-              cp "$ENV_FILE.backup" "$ENV_FILE"
-              rm "$ENV_FILE.backup"
+            if [ -f "$BACKUP_DIR/.env.backup" ]; then
+              echo "🔄 Restoring production .env file from backup..."
+              cp "$BACKUP_DIR/.env.backup" "$ENV_FILE"
+              echo "✅ Production .env restored successfully"
+            else
+              echo "⚠️  No .env backup found! Using repository .env as fallback"
             fi
             
             echo "📦 Installing Composer dependencies..."
