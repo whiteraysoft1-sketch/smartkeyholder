@@ -74,6 +74,15 @@ jobs:
             fi
             
             composer install --no-dev --optimize-autoloader
+            # Create all necessary image directories
+            mkdir -p storage/app/public/profile_images
+            mkdir -p storage/app/public/background_images
+            mkdir -p storage/app/public/gallery_images
+            mkdir -p storage/app/public/product_images
+            mkdir -p storage/app/public/store_products
+            mkdir -p storage/app/public/logos
+            mkdir -p storage/app/public/pwa_icons
+            mkdir -p storage/app/public/whatsapp_images
             # Create storage symlink for images
             php artisan storage:link || true
             # Clear caches (but NOT config - to keep .env values)

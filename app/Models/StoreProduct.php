@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Storage;
 
 class StoreProduct extends Model
 {
@@ -55,7 +56,11 @@ class StoreProduct extends Model
     public function getImageUrlAttribute()
     {
         if ($this->image) {
-            return asset('storage/' . $this->image);
+            $path = $this->image;
+            if (strpos($path, 'store_products/') !== 0) {
+                $path = 'store_products/' . ltrim($path, '/');
+            }
+            return Storage::disk('public')->url($path);
         }
         return asset('images/default-product.png');
     }

@@ -108,7 +108,12 @@ class DashboardController extends Controller
         if ($request->hasFile('profile_image')) {
             // Delete old image if exists
             if ($profile->profile_image) {
-                \Storage::disk('public')->delete($profile->profile_image);
+                $oldPath = $profile->profile_image;
+                if (strpos($oldPath, 'profile_images/') === 0) {
+                    \Storage::disk('public')->delete($oldPath);
+                } else {
+                    \Storage::disk('public')->delete('profile_images/' . ltrim($oldPath, '/'));
+                }
             }
             
             $file = $request->file('profile_image');
@@ -120,7 +125,12 @@ class DashboardController extends Controller
         if ($request->hasFile('background_image')) {
             // Delete old background image if exists
             if ($profile->background_image) {
-                \Storage::disk('public')->delete($profile->background_image);
+                $oldPath = $profile->background_image;
+                if (strpos($oldPath, 'background_images/') === 0) {
+                    \Storage::disk('public')->delete($oldPath);
+                } else {
+                    \Storage::disk('public')->delete('background_images/' . ltrim($oldPath, '/'));
+                }
             }
             
             $file = $request->file('background_image');
@@ -183,7 +193,7 @@ class DashboardController extends Controller
         
         $file = $request->file('image');
         $filename = time() . '_' . $file->getClientOriginalName();
-        $path = $file->storeAs('gallery', $filename, 'public');
+        $path = $file->storeAs('gallery_images', $filename, 'public');
         
         Auth::user()->galleryItems()->create([
             'title' => $request->title ?: 'Gallery Image',
@@ -418,9 +428,13 @@ class DashboardController extends Controller
         ];
 
         if ($request->hasFile('image')) {
-            // Delete old image if exists
+            // Delete old image if exists with path normalization
             if ($product->image) {
-                \Storage::disk('public')->delete($product->image);
+                $oldPath = $product->image;
+                if (strpos($oldPath, 'store_products/') !== 0) {
+                    $oldPath = 'store_products/' . ltrim($oldPath, '/');
+                }
+                \Storage::disk('public')->delete($oldPath);
             }
 
             $file = $request->file('image');
@@ -441,9 +455,13 @@ class DashboardController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        // Delete the image file from storage
+        // Delete the image file from storage with path normalization
         if ($product->image) {
-            \Storage::disk('public')->delete($product->image);
+            $path = $product->image;
+            if (strpos($path, 'store_products/') !== 0) {
+                $path = 'store_products/' . ltrim($path, '/');
+            }
+            \Storage::disk('public')->delete($path);
         }
 
         $product->delete();
@@ -474,8 +492,12 @@ class DashboardController extends Controller
         $profile = $user->profile;
 
         if ($profile && $profile->profile_image) {
-            // Delete the image file from storage
-            \Storage::disk('public')->delete($profile->profile_image);
+            // Delete the image file from storage with path normalization
+            $path = $profile->profile_image;
+            if (strpos($path, 'profile_images/') !== 0) {
+                $path = 'profile_images/' . ltrim($path, '/');
+            }
+            \Storage::disk('public')->delete($path);
             
             // Remove the image path from database
             $profile->profile_image = null;
@@ -493,8 +515,12 @@ class DashboardController extends Controller
         $profile = $user->profile;
 
         if ($profile && $profile->background_image) {
-            // Delete the image file from storage
-            \Storage::disk('public')->delete($profile->background_image);
+            // Delete the image file from storage with path normalization
+            $path = $profile->background_image;
+            if (strpos($path, 'background_images/') !== 0) {
+                $path = 'background_images/' . ltrim($path, '/');
+            }
+            \Storage::disk('public')->delete($path);
             
             // Remove the image path from database
             $profile->background_image = null;
