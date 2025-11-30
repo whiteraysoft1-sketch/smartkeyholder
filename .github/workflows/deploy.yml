@@ -47,27 +47,43 @@ jobs:
           port: ${{ secrets.HOSTINGER_PORT }}
           script: |
             DEPLOY_PATH="/home/u933773389/domains/smart-keyholder.click/public_html"
+            ENV_FILE="$DEPLOY_PATH/.env"
+            
+            # Backup .env file before any git operations
+            if [ -f "$ENV_FILE" ]; then
+              echo "Backing up .env file..."
+              cp "$ENV_FILE" "$ENV_FILE.backup"
+            fi
+            
             if [ ! -d "$DEPLOY_PATH/.git" ]; then
               echo "Cloning repository..."
               rm -rf $DEPLOY_PATH
               git clone https://github.com/whiteraysoft1-sketch/smartkeyholder.git $DEPLOY_PATH
             fi
+            
             cd $DEPLOY_PATH
             git fetch origin
             git checkout main
             git pull origin main
-            # Preserve .env file (don't overwrite server config)
-            git checkout HEAD -- .env || true
+            
+            # Restore .env file from backup (NEVER overwrite production .env)
+            if [ -f "$ENV_FILE.backup" ]; then
+              echo "Restoring .env file from backup..."
+              cp "$ENV_FILE.backup" "$ENV_FILE"
+              rm "$ENV_FILE.backup"
+            fi
+            
             composer install --no-dev --optimize-autoloader
             # Create storage symlink for images
             php artisan storage:link || true
-            # Clear caches
-            php artisan config:clear
+            # Clear caches (but NOT config - to keep .env values)
             php artisan route:clear
             php artisan view:clear
             php artisan cache:clear
+            # Reload config after cache clear (doesn't reload .env)
+            php artisan config:clear
             php artisan optimize
             # Set proper permissions for storage
             chmod -R 775 storage bootstrap/cache || true
             find storage -type f -exec chmod 664 {} \; || true
-            echo "✅ Deployment completed successfully"
+            echo "✅ Deployment completed successfully - .env file preserved"
