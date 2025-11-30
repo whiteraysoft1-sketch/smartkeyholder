@@ -49,32 +49,46 @@ jobs:
             DEPLOY_PATH="/home/u933773389/domains/smart-keyholder.click/public_html"
             ENV_FILE="$DEPLOY_PATH/.env"
             
+            echo "🔍 Starting deployment..."
+            echo "📁 Deploy path: $DEPLOY_PATH"
+            echo "👤 Current user: $(whoami)"
+            echo "📍 Current directory: $(pwd)"
+            
             # Backup .env file before any git operations
             if [ -f "$ENV_FILE" ]; then
-              echo "Backing up .env file..."
+              echo "💾 Backing up .env file..."
               cp "$ENV_FILE" "$ENV_FILE.backup"
             fi
             
-            if [ ! -d "$DEPLOY_PATH/.git" ]; then
-              echo "Cloning repository..."
-              rm -rf $DEPLOY_PATH
-              git clone https://github.com/whiteraysoft1-sketch/smartkeyholder.git $DEPLOY_PATH
+            # Remove old deployment and do fresh clone
+            echo "🗑️  Removing old deployment directory..."
+            rm -rf $DEPLOY_PATH
+            
+            echo "📥 Cloning repository..."
+            git clone https://github.com/whiteraysoft1-sketch/smartkeyholder.git $DEPLOY_PATH
+            
+            if [ ! -d "$DEPLOY_PATH" ]; then
+              echo "❌ Clone failed!"
+              exit 1
             fi
             
             cd $DEPLOY_PATH
-            git fetch origin
-            git checkout main
-            git pull origin main
+            echo "✅ Repository cloned successfully"
+            echo "📊 Files in deployment path:"
+            ls -la | head -20
             
             # Restore .env file from backup (NEVER overwrite production .env)
             if [ -f "$ENV_FILE.backup" ]; then
-              echo "Restoring .env file from backup..."
+              echo "🔄 Restoring .env file from backup..."
               cp "$ENV_FILE.backup" "$ENV_FILE"
               rm "$ENV_FILE.backup"
             fi
             
+            echo "📦 Installing Composer dependencies..."
             composer install --no-dev --optimize-autoloader
+            
             # Create all necessary image directories
+            echo "📁 Creating storage directories..."
             mkdir -p storage/app/public/profile_images
             mkdir -p storage/app/public/background_images
             mkdir -p storage/app/public/gallery_images
@@ -83,16 +97,30 @@ jobs:
             mkdir -p storage/app/public/logos
             mkdir -p storage/app/public/pwa_icons
             mkdir -p storage/app/public/whatsapp_images
+            
             # Create storage symlink for images
+            echo "🔗 Creating storage symlink..."
             php artisan storage:link || true
-            # Clear caches (but NOT config - to keep .env values)
+            
+            # Clear caches
+            echo "🧹 Clearing caches..."
             php artisan route:clear
             php artisan view:clear
             php artisan cache:clear
-            # Reload config after cache clear (doesn't reload .env)
             php artisan config:clear
             php artisan optimize
+            
             # Set proper permissions for storage
+            echo "🔐 Setting file permissions..."
             chmod -R 775 storage bootstrap/cache || true
             find storage -type f -exec chmod 664 {} \; || true
-            echo "✅ Deployment completed successfully - .env file preserved"
+            find storage -type d -exec chmod 775 {} \; || true
+            
+            # Set public directory permissions
+            chmod -R 755 public || true
+            
+            echo "📋 Verifying deployment..."
+            echo "Files in public_html:"
+            ls -la $DEPLOY_PATH | head -30
+            
+            echo "✅ Deployment completed successfully!"
