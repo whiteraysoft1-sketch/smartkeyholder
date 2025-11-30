@@ -98,9 +98,18 @@ jobs:
             mkdir -p storage/app/public/pwa_icons
             mkdir -p storage/app/public/whatsapp_images
             
-            # Create storage symlink for images
+            # Create storage symlink (important for file uploads)
             echo "🔗 Creating storage symlink..."
+            rm -f $DEPLOY_PATH/public/storage 2>/dev/null || true
             php artisan storage:link || true
+            
+            # Verify symlink exists
+            if [ -L "$DEPLOY_PATH/public/storage" ]; then
+              echo "✅ Storage symlink created successfully"
+            else
+              echo "⚠️  Storage symlink might not have been created, checking manually..."
+              ln -s $DEPLOY_PATH/storage/app/public $DEPLOY_PATH/public/storage || true
+            fi
             
             # Clear caches
             echo "🧹 Clearing caches..."
