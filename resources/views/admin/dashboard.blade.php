@@ -299,7 +299,7 @@
                         <div class="flex items-end justify-between h-48 space-x-2">
                             @php
                                 $months = ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'];
-                                $colors = ['bg-purple-500', 'bg-teal-500', 'bg-purple-400', 'bg-pink-400', 'bg-purple-600', 'bg-red-400', 'bg-purple-700', 'bg-green-500', 'bg-purple-500', 'bg-pink-500', 'bg-gray-400'];
+                                $colors = ['bg-purple-500', 'bg-teal-500', 'bg-purple-400', 'bg-pink-400', 'bg-purple-600', 'bg-red-400', 'bg-purple-700', 'bg-green-500', 'bg-purple-500', 'bg-pink-500', 'bg-gray-400', 'bg-purple-400'];
                                 $heights = [30, 45, 35, 50, 60, 40, 75, 85, 70, 90, 65, 55];
                             @endphp
                             @foreach($months as $index => $month)
