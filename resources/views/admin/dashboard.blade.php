@@ -125,133 +125,92 @@
             </div>
         </header>
 
-        <div class="p-6">
-            <!-- Stats Cards -->
-            <section aria-label="Statistics Overview">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                <!-- Total Users Card -->
-                <div class="stat-card cyber-card rounded-2xl p-6 border-l-4 border-blue-500">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="bg-blue-100 p-3 rounded-xl">
-                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path d="M17 20h5v-2a4 4 0 0 0-3-3.87M9 20H4v-2a4 4 0 0 1 3-3.87"/><circle cx="9" cy="7" r="4"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="text-sm text-gray-500 mb-1">Total Users</div>
-                    <div class="text-3xl font-bold text-gray-900 mb-1">{{ $stats['total_users'] }}</div>
-                </div>
-
-                <!-- Total QR Codes Card -->
-                <div class="stat-card cyber-card rounded-2xl p-6 border-l-4 border-green-500">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="bg-green-100 p-3 rounded-xl">
-                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <rect x="3" y="3" width="6" height="6"/><rect x="15" y="3" width="6" height="6"/><rect x="3" y="15" width="6" height="6"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="text-sm text-gray-500 mb-1">Total QR Codes</div>
-                    <div class="text-3xl font-bold text-gray-900 mb-1">{{ $stats['total_qr_codes'] }}</div>
-                </div>
-
+        <div class="p-8 bg-gray-50">
+            <!-- Stats Cards Row -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mb-8">
                 <!-- Claimed QR Codes Card -->
-                <div class="stat-card cyber-card rounded-2xl p-6 border-l-4 border-purple-500">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="bg-purple-100 p-3 rounded-xl">
-                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <div class="stat-card bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
+                    <div class="flex items-start justify-between mb-6">
+                        <div class="bg-purple-100 p-4 rounded-2xl">
+                            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <circle cx="12" cy="12" r="10"/><path d="M9 12l2 2l4-4"/>
                             </svg>
                         </div>
                     </div>
-                    <div class="text-sm text-gray-500 mb-1">Claimed QR Codes</div>
-                    <div class="text-3xl font-bold text-gray-900 mb-1">{{ $stats['claimed_qr_codes'] }}</div>
+                    <div class="text-sm font-medium text-gray-500 mb-2">Claimed QR Codes</div>
+                    <div class="text-5xl font-bold text-gray-900">{{ $stats['claimed_qr_codes'] }}</div>
                 </div>
 
                 <!-- Active Subscriptions Card -->
-                <div class="stat-card cyber-card rounded-2xl p-6 border-l-4 border-yellow-500">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="bg-yellow-100 p-3 rounded-xl">
-                            <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <div class="stat-card bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
+                    <div class="flex items-start justify-between mb-6">
+                        <div class="bg-yellow-100 p-4 rounded-2xl">
+                            <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/>
                             </svg>
                         </div>
                     </div>
-                    <div class="text-sm text-gray-500 mb-1">Active Subscriptions</div>
-                    <div class="text-3xl font-bold text-gray-900 mb-1">{{ $stats['active_subscriptions'] }}</div>
+                    <div class="text-sm font-medium text-gray-500 mb-2">Active Subscriptions</div>
+                    <div class="text-5xl font-bold text-gray-900">{{ $stats['active_subscriptions'] }}</div>
                 </div>
             </div>
-            </section>
 
             <!-- Quick Actions -->
-            <div class="bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50 border border-gray-200 rounded-2xl p-6 mb-6">
-                <h3 class="text-lg font-semibold mb-4 text-gray-800">Quick Actions</h3>
+            <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 mb-8">
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-                    <a href="{{ route('admin.qr-codes') }}" class="flex flex-col items-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-2 rounded-xl shadow transition">
-                        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3h6v6H3V3zm12 0h6v6h-6V3zM3 15h6v6H3v-6zm12 6h6v-6h-6v6z"/></svg>
-                        <span class="text-xs sm:text-sm">Manage QR Codes</span>
+                    <a href="{{ route('admin.qr-codes') }}" class="flex flex-col items-center justify-center bg-blue-500 hover:bg-blue-600 text-white font-semibold py-6 px-4 rounded-2xl shadow-md transition-all hover:shadow-lg hover:scale-105">
+                        <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3h6v6H3V3zm12 0h6v6h-6V3zM3 15h6v6H3v-6zm12 6h6v-6h-6v6z"/></svg>
+                        <span class="text-sm">Manage QR Codes</span>
                     </a>
-                    <a href="{{ route('admin.users') }}" class="flex flex-col items-center bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-2 rounded-xl shadow transition">
-                        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a4 4 0 0 0-3-3.87M9 20H4v-2a4 4 0 0 1 3-3.87"/><circle cx="9" cy="7" r="4"/></svg>
-                        <span class="text-xs sm:text-sm">Manage Users</span>
+                    <a href="{{ route('admin.users') }}" class="flex flex-col items-center justify-center bg-green-500 hover:bg-green-600 text-white font-semibold py-6 px-4 rounded-2xl shadow-md transition-all hover:shadow-lg hover:scale-105">
+                        <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a4 4 0 0 0-3-3.87M9 20H4v-2a4 4 0 0 1 3-3.87"/><circle cx="9" cy="7" r="4"/></svg>
+                        <span class="text-sm">Manage Users</span>
                     </a>
-                    <a href="{{ route('admin.subscriptions') }}" class="flex flex-col items-center bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 px-2 rounded-xl shadow transition">
-                        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
-                        <span class="text-xs sm:text-sm">Subscriptions</span>
+                    <a href="{{ route('admin.subscriptions') }}" class="flex flex-col items-center justify-center bg-purple-500 hover:bg-purple-600 text-white font-semibold py-6 px-4 rounded-2xl shadow-md transition-all hover:shadow-lg hover:scale-105">
+                        <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
+                        <span class="text-sm">Subscriptions</span>
                     </a>
-                    <a href="{{ route('admin.settings') }}" class="flex flex-col items-center bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-2 rounded-xl shadow transition">
-                        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
-                        <span class="text-xs sm:text-sm">Settings</span>
+                    <a href="{{ route('admin.settings') }}" class="flex flex-col items-center justify-center bg-orange-500 hover:bg-orange-600 text-white font-semibold py-6 px-4 rounded-2xl shadow-md transition-all hover:shadow-lg hover:scale-105">
+                        <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24"/></svg>
+                        <span class="text-sm">Settings</span>
                     </a>
-                    <a href="{{ route('admin.qr-codes.export') }}" class="flex flex-col items-center bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-2 rounded-xl shadow transition">
-                        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v16h16V4H4zm4 4h8v8H8V8z"/></svg>
-                        <span class="text-xs sm:text-sm">Export QR Codes</span>
+                    <a href="{{ route('admin.qr-codes.export') }}" class="flex flex-col items-center justify-center bg-gray-700 hover:bg-gray-800 text-white font-semibold py-6 px-4 rounded-2xl shadow-md transition-all hover:shadow-lg hover:scale-105">
+                        <svg class="w-8 h-8 mb-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        <span class="text-sm">Export QR Codes</span>
                     </a>
                 </div>
             </div>
 
             <!-- Recent Activity -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Recent Users -->
-                <div class="cyber-card rounded-2xl p-6">
-                    <h3 class="text-lg font-semibold mb-4 text-gray-800 flex items-center"><svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a4 4 0 0 0-3-3.87M9 20H4v-2a4 4 0 0 1 3-3.87"/><circle cx="9" cy="7" r="4"/></svg>Recent Users</h3>
-                    <div class="space-y-3">
-                        @foreach($recentUsers as $user)
-                            <div class="flex items-center justify-between border-b pb-2">
-                                <div>
-                                    <div class="font-medium text-gray-900">{{ $user->name }}</div>
-                                    <div class="text-sm text-gray-500">{{ $user->email }}</div>
-                                </div>
-                                <div class="text-xs text-gray-400">
-                                    {{ $user->created_at->diffForHumans() }}
-                                </div>
-                            </div>
-                        @endforeach
+            <!-- Recent Subscriptions -->
+            <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
+                <div class="flex items-center mb-6">
+                    <div class="bg-purple-100 p-2 rounded-xl mr-3">
+                        <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/>
+                        </svg>
                     </div>
+                    <h3 class="text-xl font-bold text-gray-900">Recent Subscriptions</h3>
                 </div>
-
-                <!-- Recent Subscriptions -->
-                <div class="cyber-card rounded-2xl p-6">
-                    <h3 class="text-lg font-semibold mb-4 text-gray-800 flex items-center"><svg class="w-5 h-5 mr-2 text-purple-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>Recent Subscriptions</h3>
-                    <div class="space-y-3">
-                        @foreach($recentSubscriptions as $subscription)
-                            <div class="flex items-center justify-between border-b pb-2">
-                                <div>
-                                    <div class="font-medium text-gray-900">{{ $subscription->user->name }}</div>
-                                    <div class="text-sm text-gray-500">{{ $subscription->plan_name }} - ${{ $subscription->amount }}</div>
+                <div class="space-y-4">
+                    @foreach($recentSubscriptions as $subscription)
+                        <div class="flex items-start justify-between py-3 border-b border-gray-100 last:border-0">
+                            <div class="flex-1">
+                                <div class="flex items-center mb-1">
+                                    <span class="font-semibold text-gray-900 text-base">{{ $subscription->user->name }}</span>
                                 </div>
-                                <div class="text-xs">
-                                    <span class="px-2 py-1 rounded text-xs {{ $subscription->status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
-                                        {{ ucfirst($subscription->status) }}
-                                    </span>
-                                </div>
+                                <div class="text-sm text-gray-500">{{ $subscription->plan_name }} - ${{ number_format($subscription->amount, 2) }}</div>
                             </div>
-                        @endforeach
-                    </div>
+                            <div class="flex flex-col items-end">
+                                <span class="px-3 py-1 rounded-full text-xs font-medium {{ $subscription->status === 'active' ? 'bg-green-100 text-green-700' : ($subscription->status === 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-700') }}">
+                                    {{ ucfirst($subscription->status) }}
+                                </span>
+                                <span class="text-xs text-gray-400 mt-1">{{ $subscription->created_at->diffForHumans() }}</span>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
-        </div>
     </main>
 </div>
 
