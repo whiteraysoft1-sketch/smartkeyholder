@@ -6,9 +6,13 @@
     body > div > nav {
         display: none;
     }
+    body > div.min-h-screen {
+        background: transparent !important;
+    }
     .cyber-sidebar {
         background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
         transition: transform 0.3s ease-in-out;
+        width: 224px;
     }
     .cyber-sidebar.collapsed {
         transform: translateX(-100%);
@@ -22,6 +26,7 @@
     }
     .main-content {
         transition: margin-left 0.3s ease-in-out;
+        margin-left: 224px;
     }
     .main-content.expanded {
         margin-left: 0;
@@ -39,12 +44,12 @@
     }
 </style>
 
-<div class="flex min-h-screen bg-gray-100 -mt-16">
+<div class="flex min-h-screen bg-gray-100" style="margin-top: -64px; padding-top: 0;">
     <!-- Overlay for mobile -->
     <div id="sidebarOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-20" onclick="toggleSidebar()"></div>
     
     <!-- Sidebar -->
-    <aside id="sidebar" class="cyber-sidebar w-56 min-h-screen flex-shrink-0 fixed left-0 top-0 z-30">
+    <aside id="sidebar" class="cyber-sidebar min-h-screen flex-shrink-0 fixed left-0 top-0 z-30">
         <div class="p-5">
             <!-- Logo -->
             <div class="flex items-center mb-10">
@@ -110,7 +115,7 @@
     </aside>
 
     <!-- Main Content -->
-    <main id="mainContent" class="main-content flex-1 overflow-x-hidden ml-56">
+    <main id="mainContent" class="main-content flex-1 overflow-x-hidden">
         <!-- Top Header -->
         <header class="bg-white shadow-sm sticky top-0 z-20">
             <div class="px-8 py-4 flex items-center justify-between">
