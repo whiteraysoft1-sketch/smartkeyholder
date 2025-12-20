@@ -16,6 +16,10 @@
     }
     .cyber-sidebar {
         background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+        transition: transform 0.3s ease-in-out;
+    }
+    .cyber-sidebar.collapsed {
+        transform: translateX(-100%);
     }
     .stat-card {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -27,11 +31,20 @@
     .chart-container {
         background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
     }
+    .main-content {
+        transition: margin-left 0.3s ease-in-out;
+    }
+    .main-content.expanded {
+        margin-left: 0;
+    }
 </style>
 
 <div class="flex min-h-screen bg-gray-50 -mt-16">
+    <!-- Overlay for mobile -->
+    <div id="sidebarOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-20" onclick="toggleSidebar()"></div>
+    
     <!-- Sidebar -->
-    <aside class="cyber-sidebar w-64 min-h-screen flex-shrink-0 fixed left-0 top-0 z-30">
+    <aside id="sidebar" class="cyber-sidebar w-64 min-h-screen flex-shrink-0 fixed left-0 top-0 z-30">
         <div class="p-6">
             <!-- Logo -->
             <div class="flex items-center mb-8">
@@ -98,10 +111,16 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 overflow-x-hidden ml-64">
+    <main id="mainContent" class="main-content flex-1 overflow-x-hidden ml-64">
         <!-- Top Header -->
         <header class="bg-white shadow-sm sticky top-0 z-20">
             <div class="px-6 py-4 flex items-center justify-between">
+                <!-- Mobile Menu Toggle -->
+                <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 mr-4">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
                 <div class="flex-1 max-w-2xl">
                     <div class="relative">
                         <input type="text" placeholder="Search project, folder or file" class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -208,10 +227,37 @@
                                 <span class="text-xs text-gray-400 mt-1">{{ $subscription->created_at->diffForHumans() }}</span>
                             </div>
                         </div>
-                    @endforeach
-                </div>
-            </div>
-    </main>
+<form id="logout-form" action="{{ route('admin.logout') }}" method="POST" class="hidden">
+    @csrf
+</form>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const overlay = document.getElementById('sidebarOverlay');
+        
+        sidebar.classList.toggle('collapsed');
+        mainContent.classList.toggle('expanded');
+        
+        // For mobile, show overlay
+        if (window.innerWidth < 1024) {
+            overlay.classList.toggle('hidden');
+        }
+    }
+
+    // Close sidebar on mobile when clicking outside
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-collapse on mobile
+        if (window.innerWidth < 1024) {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            sidebar.classList.add('collapsed');
+            mainContent.classList.add('expanded');
+        }
+    });
+</script>
+@endsection
 </div>
 
 <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" class="hidden">
