@@ -2,6 +2,10 @@
 
 @section('content')
 <style>
+    /* Hide default navigation for admin dashboard */
+    body > div > nav {
+        display: none;
+    }
     .cyber-gradient {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
@@ -25,9 +29,9 @@
     }
 </style>
 
-<div class="flex min-h-screen bg-gray-50">
+<div class="flex min-h-screen bg-gray-50 -mt-16">
     <!-- Sidebar -->
-    <aside class="cyber-sidebar w-64 min-h-screen flex-shrink-0 hidden lg:block">
+    <aside class="cyber-sidebar w-64 min-h-screen flex-shrink-0 fixed left-0 top-0 z-30">
         <div class="p-6">
             <!-- Logo -->
             <div class="flex items-center mb-8">
@@ -94,9 +98,9 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 overflow-x-hidden">
+    <main class="flex-1 overflow-x-hidden ml-64">
         <!-- Top Header -->
-        <header class="bg-white shadow-sm sticky top-0 z-10">
+        <header class="bg-white shadow-sm sticky top-0 z-20">
             <div class="px-6 py-4 flex items-center justify-between">
                 <div class="flex-1 max-w-2xl">
                     <div class="relative">
