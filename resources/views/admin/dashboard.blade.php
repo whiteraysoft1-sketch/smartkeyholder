@@ -227,6 +227,13 @@
                                 <span class="text-xs text-gray-400 mt-1">{{ $subscription->created_at->diffForHumans() }}</span>
                             </div>
                         </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
 <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" class="hidden">
     @csrf
 </form>
@@ -257,10 +264,4 @@
         }
     });
 </script>
-@endsection
-</div>
-
-<form id="logout-form" action="{{ route('admin.logout') }}" method="POST" class="hidden">
-    @csrf
-</form>
 @endsection
