@@ -4,15 +4,25 @@
 <style>
     /* Hide default navigation for admin dashboard */
     body > div > nav {
-        display: none;
+        display: none !important;
     }
     body > div.min-h-screen {
         background: transparent !important;
+        padding: 0 !important;
+    }
+    .admin-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
     }
     .cyber-sidebar {
         background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
         transition: transform 0.3s ease-in-out;
         width: 224px;
+        flex-shrink: 0;
     }
     .cyber-sidebar.collapsed {
         transform: translateX(-100%);
@@ -25,11 +35,13 @@
         box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
     }
     .main-content {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
         transition: margin-left 0.3s ease-in-out;
-        margin-left: 224px;
     }
     .main-content.expanded {
-        margin-left: 0;
+        margin-left: -224px;
     }
     .bonus-card {
         background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
@@ -44,12 +56,12 @@
     }
 </style>
 
-<div class="flex min-h-screen bg-gray-100" style="margin-top: -64px; padding-top: 0;">
+<div class="admin-wrapper bg-gray-100">
     <!-- Overlay for mobile -->
     <div id="sidebarOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-20" onclick="toggleSidebar()"></div>
     
     <!-- Sidebar -->
-    <aside id="sidebar" class="cyber-sidebar min-h-screen flex-shrink-0 fixed left-0 top-0 z-30">
+    <aside id="sidebar" class="cyber-sidebar h-full overflow-y-auto">
         <div class="p-5">
             <!-- Logo -->
             <div class="flex items-center mb-10">
@@ -115,7 +127,7 @@
     </aside>
 
     <!-- Main Content -->
-    <main id="mainContent" class="main-content flex-1 overflow-x-hidden">
+    <main id="mainContent" class="main-content">
         <!-- Top Header -->
         <header class="bg-white shadow-sm sticky top-0 z-20">
             <div class="px-8 py-4 flex items-center justify-between">
