@@ -118,15 +118,20 @@ jobs:
             
             # Create storage symlink (important for file uploads)
             echo "🔗 Creating storage symlink..."
-            rm -f $DEPLOY_PATH/public/storage 2>/dev/null || true
-            php artisan storage:link || true
+            rm -rf $DEPLOY_PATH/public/storage 2>/dev/null || true
+            
+            # Create symlink directly with absolute path
+            ln -s $DEPLOY_PATH/storage/app/public $DEPLOY_PATH/public/storage 2>/dev/null || true
             
             # Verify symlink exists
             if [ -L "$DEPLOY_PATH/public/storage" ]; then
               echo "✅ Storage symlink created successfully"
+              echo "✅ Symlink target: $(readlink $DEPLOY_PATH/public/storage)"
             else
-              echo "⚠️  Storage symlink might not have been created, checking manually..."
-              ln -s $DEPLOY_PATH/storage/app/public $DEPLOY_PATH/public/storage || true
+              echo "❌ ERROR: Storage symlink could not be created!"
+              echo "📁 Checking if directories exist..."
+              ls -la $DEPLOY_PATH/storage/app/public || echo "storage/app/public missing"
+              ls -la $DEPLOY_PATH/public || echo "public directory missing"
             fi
             
             # Clear caches
