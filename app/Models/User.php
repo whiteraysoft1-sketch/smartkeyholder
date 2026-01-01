@@ -117,6 +117,11 @@ class User extends Authenticatable
         return $this->hasMany(StoreOrder::class)->recent();
     }
 
+    public function storeBanners()
+    {
+        return $this->hasMany(StoreBanner::class)->ordered();
+    }
+
     public function availableProducts()
     {
         return $this->hasMany(StoreProduct::class)->available()->inStock()->ordered();

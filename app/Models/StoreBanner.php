@@ -4,18 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Storage;
 
-class StoreCategory extends Model
+class StoreBanner extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'user_id',
-        'name',
-        'description',
-        'icon',
-        'color',
+        'title',
+        'subtitle',
+        'button_text',
+        'button_link',
         'image',
+        'background_color',
+        'text_color',
         'sort_order',
         'is_active',
     ];
@@ -29,29 +32,19 @@ class StoreCategory extends Model
 
     protected $appends = ['image_url'];
 
-    // Accessors
-    public function getImageUrlAttribute()
-    {
-        if ($this->image) {
-            return \Storage::disk('public')->url($this->image);
-        }
-        return null;
-    }
-
     // Relationships
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function products()
+    // Accessors
+    public function getImageUrlAttribute()
     {
-        return $this->hasMany(StoreProduct::class, 'category_id');
-    }
-
-    public function activeProducts()
-    {
-        return $this->hasMany(StoreProduct::class, 'category_id')->where('is_available', true);
+        if ($this->image) {
+            return Storage::disk('public')->url($this->image);
+        }
+        return null;
     }
 
     // Scopes
@@ -62,6 +55,6 @@ class StoreCategory extends Model
 
     public function scopeOrdered($query)
     {
-        return $query->orderBy('sort_order')->orderBy('name');
+        return $query->orderBy('sort_order', 'asc');
     }
 }

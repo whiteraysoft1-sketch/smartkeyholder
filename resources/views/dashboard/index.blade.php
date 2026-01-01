@@ -478,59 +478,43 @@ use Illuminate\Support\Facades\Storage;
             
             <!-- Store Settings Card -->
             <div class="liquid-glass p-5">
-                <h3 class="text-base font-bold mb-2">WhatsApp Store Settings</h3>
-                <form action="{{ route('dashboard.store-settings.update') }}" method="POST" class="space-y-2">
+                <h3 class="text-base font-bold mb-4">🛍️ WhatsApp Store</h3>
+                <form action="{{ route('dashboard.store-settings.update') }}" method="POST" class="space-y-4">
                     @csrf
                     <input type="hidden" name="store_enabled" value="0">
-                    <label class="flex items-center">
-                        <input type="checkbox" name="store_enabled" value="1" {{ $profile->store_enabled ? 'checked' : '' }} class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                        <span class="ml-2 text-sm text-gray-700">Enable WhatsApp Store</span>
+                    <label class="flex items-center p-3 rounded-lg hover:bg-white/50 transition-colors cursor-pointer">
+                        <input type="checkbox" name="store_enabled" value="1" {{ $profile->store_enabled ? 'checked' : '' }} class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 w-5 h-5">
+                        <span class="ml-3 text-sm font-medium text-gray-700">Enable WhatsApp Store</span>
                     </label>
-                    <input type="text" name="store_name" value="{{ $profile->store_name ?? '' }}" placeholder="Store Name" class="liquid-input">
-                    <input type="text" name="store_whatsapp" value="{{ $profile->store_whatsapp ?? $profile->phone }}" placeholder="WhatsApp Number" class="liquid-input">
-                    <textarea name="store_description" rows="2" placeholder="Store Description" class="liquid-input">{{ $profile->store_description ?? '' }}</textarea>
-                    <input type="text" name="store_address" value="{{ $profile->store_address ?? '' }}" placeholder="Store Address" class="liquid-input">
-                    <input type="number" name="minimum_order" value="{{ $profile->minimum_order ?? 0 }}" min="0" step="0.01" placeholder="Minimum Order" class="liquid-input">
-                    <select name="currency" class="liquid-input">
-                        @foreach($currencies as $code => $currency)
-                            <option value="{{ $code }}" {{ ($profile->currency ?? 'USD') === $code ? 'selected' : '' }}>
-                                {{ $currency['symbol'] }} - {{ $currency['name'] }} ({{ $code }})
-                            </option>
-                        @endforeach
-                    </select>
-                    <div class="flex space-x-2">
-                        <input type="hidden" name="delivery_available" value="0">
-                        <label class="flex items-center">
-                            <input type="checkbox" name="delivery_available" value="1" {{ $profile->delivery_available ? 'checked' : '' }} class="rounded border-gray-300 text-blue-600 shadow-sm">
-                            <span class="ml-2 text-sm text-gray-700">Delivery</span>
-                        </label>
-                        <input type="hidden" name="pickup_available" value="0">
-                        <label class="flex items-center">
-                            <input type="checkbox" name="pickup_available" value="1" {{ $profile->pickup_available ? 'checked' : '' }} class="rounded border-gray-300 text-blue-600 shadow-sm">
-                            <span class="ml-2 text-sm text-gray-700">Pickup</span>
-                        </label>
-                    </div>
-                    <input type="number" name="delivery_fee" value="{{ $profile->delivery_fee ?? 0 }}" min="0" step="0.01" placeholder="Delivery Fee" class="liquid-input">
-                    <button type="submit" class="w-full py-4 px-6 rounded-full font-bold text-white text-lg tracking-wide shadow-xl bg-gradient-to-br from-green-500 via-green-600 to-green-700 backdrop-blur-md border border-white/30 transition-all duration-200 hover:scale-105 hover:from-green-600 hover:to-green-800 focus:outline-none focus:ring-4 focus:ring-green-300/40 mb-4">
-                        <span class="drop-shadow">Update Store Settings</span>
+                    
+                    <button type="submit" class="w-full py-3 px-6 rounded-full font-bold text-white text-sm tracking-wide shadow-lg bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 backdrop-blur-md border border-white/30 transition-all duration-200 hover:scale-105 hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300/40">
+                        <span class="drop-shadow">💾 Save Changes</span>
                     </button>
-                    @if($profile->store_enabled)
-                        <div class="flex flex-col gap-4 mt-2">
-                            <a href="{{ route('dashboard.store') }}" class="w-full py-4 px-6 rounded-full font-bold text-white text-base tracking-wide shadow-lg bg-gradient-to-br from-green-400 via-green-500 to-green-600 backdrop-blur-md border border-white/30 flex items-center justify-center transition-all duration-200 hover:scale-105 hover:from-green-500 hover:to-green-700 focus:outline-none focus:ring-4 focus:ring-green-300/40">
-                                <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-green-700 mr-3">
-                                    <i class="fas fa-cogs fa-lg text-white"></i>
-                                </span>
-                                <span class="drop-shadow">Manage Store</span>
-                            </a>
-                            <a href="{{ route('store.show', $qrCode->uuid) }}" target="_blank" class="w-full py-4 px-6 rounded-full font-bold text-white text-base tracking-wide shadow-lg bg-gradient-to-br from-purple-400 via-purple-500 to-purple-700 backdrop-blur-md border border-white/30 flex items-center justify-center transition-all duration-200 hover:scale-105 hover:from-purple-500 hover:to-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300/40">
-                                <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-purple-700 mr-3">
-                                    <i class="fas fa-store fa-lg text-white"></i>
-                                </span>
-                                <span class="drop-shadow">View Store</span>
-                            </a>
-                        </div>
-                    @endif
                 </form>
+
+                @if($profile->store_enabled)
+                    <div class="flex flex-col gap-3 mt-4 pt-4 border-t border-white/30">
+                        <a href="{{ route('dashboard.store') }}" class="w-full py-4 px-6 rounded-full font-bold text-white text-base tracking-wide shadow-lg bg-gradient-to-br from-green-400 via-green-500 to-green-600 backdrop-blur-md border border-white/30 flex items-center justify-center transition-all duration-200 hover:scale-105 hover:from-green-500 hover:to-green-700 focus:outline-none focus:ring-4 focus:ring-green-300/40">
+                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-green-700 mr-3">
+                                <i class="fas fa-cogs fa-lg text-white"></i>
+                            </span>
+                            <span class="drop-shadow">Manage Store</span>
+                        </a>
+                        <a href="{{ route('store.show', $qrCode->uuid) }}" target="_blank" class="w-full py-4 px-6 rounded-full font-bold text-white text-base tracking-wide shadow-lg bg-gradient-to-br from-purple-400 via-purple-500 to-purple-700 backdrop-blur-md border border-white/30 flex items-center justify-center transition-all duration-200 hover:scale-105 hover:from-purple-500 hover:to-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300/40">
+                            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-purple-700 mr-3">
+                                <i class="fas fa-store fa-lg text-white"></i>
+                            </span>
+                            <span class="drop-shadow">View Store</span>
+                        </a>
+                    </div>
+                @else
+                    <div class="mt-4 pt-4 border-t border-white/30">
+                        <p class="text-sm text-gray-600 text-center">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Enable store to access management features
+                        </p>
+                    </div>
+                @endif
             </div>
 
                     </div>

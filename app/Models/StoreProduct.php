@@ -21,11 +21,21 @@ class StoreProduct extends Model
         'gallery',
         'is_available',
         'is_featured',
+        'product_type',
         'sort_order',
         'sku',
         'stock_quantity',
         'track_stock',
         'variants',
+    ];
+
+    protected $appends = [
+        'image_url',
+        'formatted_price',
+        'formatted_original_price',
+        'discount_percentage',
+        'is_on_sale',
+        'stock_status',
     ];
 
     protected function casts(): array

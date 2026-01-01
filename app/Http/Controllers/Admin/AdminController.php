@@ -44,9 +44,39 @@ class AdminController extends Controller
     /**
      * Manage QR codes
      */
-    public function qrCodes()
+    public function qrCodes(Request $request)
     {
-        $qrCodes = QrCode::with('user')->paginate(20);
+        $query = QrCode::with('user');
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('code', 'like', "%{$search}%")
+                  ->orWhere('uuid', 'like', "%{$search}%")
+                  ->orWhereHas('user', function($userQuery) use ($search) {
+                      $userQuery->where('email', 'like', "%{$search}%")
+                                ->orWhere('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        // Status filter
+        if ($request->filled('status')) {
+            switch ($request->status) {
+                case 'claimed':
+                    $query->where('is_claimed', true);
+                    break;
+                case 'available':
+                    $query->where('is_claimed', false)->where('is_active', true);
+                    break;
+                case 'inactive':
+                    $query->where('is_active', false);
+                    break;
+            }
+        }
+
+        $qrCodes = $query->paginate(20)->withQueryString();
         return view('admin.qr-codes', compact('qrCodes'));
     }
 

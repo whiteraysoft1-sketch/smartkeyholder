@@ -55,6 +55,52 @@ class DashboardController extends Controller
         $recentOrders = $user->storeOrders()->latest()->take(5)->get();
         return view('dashboard.store', compact('user', 'profile', 'products', 'categories', 'orders', 'recentOrders'));
     }
+    
+    /**
+     * Store Settings Page
+     */
+    public function storeSettings()
+    {
+        $user = Auth::user();
+        $profile = $user->profile;
+        return view('dashboard.store.settings', compact('user', 'profile'));
+    }
+    
+    /**
+     * Products Page
+     */
+    public function storeProducts()
+    {
+        $user = Auth::user();
+        $profile = $user->profile;
+        $products = $user->storeProducts()->with('category')->ordered()->get();
+        $categories = $user->storeCategories()->ordered()->get();
+        $currencySymbol = $profile->currency_symbol ?? '$';
+        return view('dashboard.store.products.index', compact('user', 'profile', 'products', 'categories', 'currencySymbol'));
+    }
+    
+    /**
+     * Categories Page
+     */
+    public function storeCategories()
+    {
+        $user = Auth::user();
+        $profile = $user->profile;
+        $categories = $user->storeCategories()->withCount('products')->ordered()->get();
+        return view('dashboard.store.categories.index', compact('user', 'profile', 'categories'));
+    }
+    
+    /**
+     * Orders Page
+     */
+    public function storeOrders()
+    {
+        $user = Auth::user();
+        $profile = $user->profile;
+        $orders = $user->storeOrders()->with(['items.product'])->latest()->get();
+        $currencySymbol = $profile->currency_symbol ?? '$';
+        return view('dashboard.store.orders.index', compact('user', 'profile', 'orders', 'currencySymbol'));
+    }
 
     public function updateProfile(Request $request)
     {
@@ -263,6 +309,17 @@ class DashboardController extends Controller
             'delivery_available' => 'nullable|boolean',
             'pickup_available' => 'nullable|boolean',
             'currency' => 'nullable|string|max:8',
+            'store_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'store_theme' => 'nullable|string|in:default,modern,minimal,vibrant,dark',
+            'store_primary_color' => 'nullable|string|max:7',
+            'store_secondary_color' => 'nullable|string|max:7',
+            'store_text_color' => 'nullable|string|max:7',
+            'store_background_color' => 'nullable|string|max:7',
+            'slider_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'slider_titles.*' => 'nullable|string|max:255',
+            'slider_subtitles.*' => 'nullable|string|max:255',
+            'delete_banners.*' => 'nullable|integer|exists:store_banners,id',
+            'existing_banner_titles.*' => 'nullable|string|max:255',
         ]);
         $profile->store_enabled = $request->boolean('store_enabled');
         $profile->store_name = $request->store_name;
@@ -275,12 +332,101 @@ class DashboardController extends Controller
         $profile->delivery_available = $request->boolean('delivery_available');
         $profile->pickup_available = $request->boolean('pickup_available');
         
+        // Handle store logo upload
+        if ($request->hasFile('store_logo')) {
+            // Delete old logo if exists
+            if ($profile->store_logo) {
+                \Storage::disk('public')->delete($profile->store_logo);
+            }
+            $file = $request->file('store_logo');
+            $filename = time() . '_store_logo_' . $file->getClientOriginalName();
+            $path = $file->storeAs('store_logos', $filename, 'public');
+            $profile->store_logo = $path;
+        }
+        
+        // Update theme and color settings
+        if ($request->filled('store_theme')) {
+            $profile->store_theme = $request->store_theme;
+        }
+        if ($request->filled('store_primary_color')) {
+            $profile->store_primary_color = $request->store_primary_color;
+        }
+        if ($request->filled('store_secondary_color')) {
+            $profile->store_secondary_color = $request->store_secondary_color;
+        }
+        if ($request->filled('store_text_color')) {
+            $profile->store_text_color = $request->store_text_color;
+        }
+        if ($request->filled('store_background_color')) {
+            $profile->store_background_color = $request->store_background_color;
+        }
+        
         // Update currency and automatically set currency symbol
         if ($request->filled('currency')) {
             $profile->currency = $request->currency;
         }
         $profile->save();
-        return redirect()->back()->with('success', 'Store settings updated.');
+
+        // Handle Store Banner Sliders
+        // Delete marked banners
+        if ($request->has('delete_banners')) {
+            foreach ($request->delete_banners as $bannerId) {
+                $banner = \App\Models\StoreBanner::where('id', $bannerId)
+                    ->where('user_id', $user->id)
+                    ->first();
+                if ($banner) {
+                    // Delete image file
+                    if ($banner->image) {
+                        \Storage::disk('public')->delete($banner->image);
+                    }
+                    $banner->delete();
+                }
+            }
+        }
+
+        // Update existing banner titles
+        if ($request->has('existing_banner_titles')) {
+            foreach ($request->existing_banner_titles as $bannerId => $title) {
+                $banner = \App\Models\StoreBanner::where('id', $bannerId)
+                    ->where('user_id', $user->id)
+                    ->first();
+                if ($banner) {
+                    $banner->title = $title;
+                    $banner->save();
+                }
+            }
+        }
+
+        // Handle new slider images upload
+        if ($request->hasFile('slider_images')) {
+            $sliderImages = $request->file('slider_images');
+            $sliderTitles = $request->slider_titles ?? [];
+            $sliderSubtitles = $request->slider_subtitles ?? [];
+            
+            foreach ($sliderImages as $index => $image) {
+                // Validate individual image
+                if ($image->isValid() && in_array($image->getMimeType(), ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp'])) {
+                    // Store the image
+                    $filename = time() . '_' . $index . '_' . $image->getClientOriginalName();
+                    $path = $image->storeAs('store_banners', $filename, 'public');
+                    
+                    // Get the next sort order
+                    $sortOrder = $user->storeBanners()->count();
+                    
+                    // Create banner record
+                    \App\Models\StoreBanner::create([
+                        'user_id' => $user->id,
+                        'title' => $sliderTitles[$index] ?? '',
+                        'subtitle' => $sliderSubtitles[$index] ?? '',
+                        'image' => $path,
+                        'sort_order' => $sortOrder,
+                        'is_active' => true,
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->back()->with('success', 'Store settings and sliders updated successfully.');
     }
 
     // Store Category Management
@@ -290,14 +436,27 @@ class DashboardController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:500',
             'icon' => 'nullable|string|max:50',
+            'color' => 'nullable|string|max:10',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
-        Auth::user()->storeCategories()->create([
+        $data = [
             'name' => $request->name,
             'description' => $request->description,
-            'icon' => $request->icon,
+            'icon' => $request->icon ?? 'folder',
+            'color' => $request->color ?? '#6B7280',
             'is_active' => true,
-        ]);
+        ];
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '_category_' . $file->getClientOriginalName();
+            $path = $file->storeAs('store_categories', $filename, 'public');
+            $data['image'] = $path;
+        }
+
+        Auth::user()->storeCategories()->create($data);
 
         return redirect()->back()->with('success', 'Category added successfully.');
     }
@@ -323,17 +482,41 @@ class DashboardController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:500',
             'icon' => 'nullable|string|max:50',
+            'color' => 'nullable|string|max:10',
             'is_active' => 'nullable|boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'delete_image' => 'nullable|boolean',
         ]);
 
-        $category->update([
+        $data = [
             'name' => $request->name,
             'description' => $request->description,
-            'icon' => $request->icon,
+            'icon' => $request->icon ?? 'folder',
+            'color' => $request->color ?? '#6B7280',
             'is_active' => $request->boolean('is_active'),
-        ]);
+        ];
 
-        return redirect()->route('dashboard.store')->with('success', 'Category updated successfully.');
+        // Handle image deletion
+        if ($request->boolean('delete_image') && $category->image) {
+            \Storage::disk('public')->delete($category->image);
+            $data['image'] = null;
+        }
+
+        // Handle new image upload
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($category->image) {
+                \Storage::disk('public')->delete($category->image);
+            }
+            $file = $request->file('image');
+            $filename = time() . '_category_' . $file->getClientOriginalName();
+            $path = $file->storeAs('store_categories', $filename, 'public');
+            $data['image'] = $path;
+        }
+
+        $category->update($data);
+
+        return redirect()->route('dashboard.store.categories.index')->with('success', 'Category updated successfully.');
     }
 
     public function deleteStoreCategory(StoreCategory $category)
@@ -346,6 +529,11 @@ class DashboardController extends Controller
         // Check if category has products
         if ($category->products()->count() > 0) {
             return redirect()->back()->with('error', 'Cannot delete category with products. Please move or delete products first.');
+        }
+
+        // Delete category image if exists
+        if ($category->image) {
+            \Storage::disk('public')->delete($category->image);
         }
 
         $category->delete();

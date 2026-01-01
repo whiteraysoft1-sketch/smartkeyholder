@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\StoreCategory;
 use App\Models\StoreProduct;
 use App\Models\StoreOrder;
+use App\Models\StoreBanner;
 use App\Models\QrCode;
 use Illuminate\Support\Facades\Storage;
 
@@ -30,9 +31,10 @@ class StoreController extends Controller
             abort(404, 'Store not available');
         }
 
-        $products = $user->storeProducts()->available()->ordered()->get();
-        $categories = $user->storeCategories()->active()->ordered()->get();
-        return view('store.show', compact('profile', 'products', 'categories'));
+        $products = $user->storeProducts()->ordered()->get();
+        $categories = $user->storeCategories()->active()->ordered()->withCount('products')->get();
+        $banners = $user->storeBanners()->active()->ordered()->get();
+        return view('store.show', compact('profile', 'products', 'categories', 'banners'));
     }
 
     /**
@@ -178,5 +180,117 @@ class StoreController extends Controller
         }
 
         return response()->json($product);
+    }
+
+    /**
+     * Display banners management page
+     */
+    public function bannersIndex()
+    {
+        $banners = auth()->user()->storeBanners()->ordered()->get();
+        return view('dashboard.store.banners.index', compact('banners'));
+    }
+
+    /**
+     * Store a new banner
+     */
+    public function storeBanner(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'subtitle' => 'nullable|string|max:255',
+            'button_text' => 'nullable|string|max:50',
+            'button_link' => 'nullable|string|max:500',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'background_color' => 'nullable|string|max:50',
+            'text_color' => 'nullable|string|max:50',
+        ]);
+
+        $data = $request->only(['title', 'subtitle', 'button_text', 'button_link', 'background_color', 'text_color']);
+        $data['user_id'] = auth()->id();
+        $data['sort_order'] = auth()->user()->storeBanners()->count();
+        $data['is_active'] = true;
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('banners', 'public');
+            $data['image'] = $path;
+        }
+
+        StoreBanner::create($data);
+
+        return redirect()->route('dashboard.store.banners')->with('success', 'Banner created successfully!');
+    }
+
+    /**
+     * Update a banner
+     */
+    public function updateBanner(Request $request, StoreBanner $banner)
+    {
+        if ($banner->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'subtitle' => 'nullable|string|max:255',
+            'button_text' => 'nullable|string|max:50',
+            'button_link' => 'nullable|string|max:500',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'background_color' => 'nullable|string|max:50',
+            'text_color' => 'nullable|string|max:50',
+        ]);
+
+        $data = $request->only(['title', 'subtitle', 'button_text', 'button_link', 'background_color', 'text_color']);
+        $data['is_active'] = $request->has('is_active');
+
+        if ($request->hasFile('image')) {
+            // Delete old image
+            if ($banner->image) {
+                Storage::disk('public')->delete($banner->image);
+            }
+            $path = $request->file('image')->store('banners', 'public');
+            $data['image'] = $path;
+        }
+
+        $banner->update($data);
+
+        return redirect()->route('dashboard.store.banners')->with('success', 'Banner updated successfully!');
+    }
+
+    /**
+     * Delete a banner
+     */
+    public function deleteBanner(StoreBanner $banner)
+    {
+        if ($banner->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        if ($banner->image) {
+            Storage::disk('public')->delete($banner->image);
+        }
+
+        $banner->delete();
+
+        return redirect()->route('dashboard.store.banners')->with('success', 'Banner deleted successfully!');
+    }
+
+    /**
+     * Reorder banners
+     */
+    public function reorderBanners(Request $request)
+    {
+        $request->validate([
+            'order' => 'required|array',
+            'order.*' => 'integer|exists:store_banners,id',
+        ]);
+
+        foreach ($request->order as $index => $id) {
+            StoreBanner::where('id', $id)
+                ->where('user_id', auth()->id())
+                ->update(['sort_order' => $index]);
+        }
+
+        return response()->json(['success' => true]);
     }
 }

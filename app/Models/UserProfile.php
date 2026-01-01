@@ -29,8 +29,15 @@ class UserProfile extends Model
 
         'latest_inapp_message',
         'store_enabled',
+        'featured_products_type',
         'store_name',
         'store_description',
+        'store_logo',
+        'store_theme',
+        'store_primary_color',
+        'store_secondary_color',
+        'store_text_color',
+        'store_background_color',
         'store_whatsapp',
         'store_address',
         'store_hours',
@@ -145,6 +152,23 @@ class UserProfile extends Model
     public function hasBackgroundImage()
     {
         return !empty($this->background_image);
+    }
+
+    public function getStoreLogoUrlAttribute()
+    {
+        if ($this->store_logo) {
+            $path = $this->store_logo;
+            if (strpos($path, 'store_logos/') !== 0) {
+                $path = 'store_logos/' . ltrim($path, '/');
+            }
+            return Storage::disk('public')->url($path);
+        }
+        return null;
+    }
+
+    public function hasStoreLogo()
+    {
+        return !empty($this->store_logo);
     }
 
     // PWA Helper Methods

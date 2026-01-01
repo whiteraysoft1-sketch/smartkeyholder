@@ -1,0 +1,1569 @@
+var simplemaps_countrymap_mapdata={
+  main_settings: {
+    //General settings
+		width: "responsive", //or 'responsive'
+    background_color: "#FFFFFF",
+    background_transparent: "yes",
+    border_color: "#ffffff",
+    pop_ups: "detect",
+    
+		//State defaults
+		state_description: "State description",
+    state_color: "#88A4BC",
+    state_hover_color: "#3B729F",
+    state_url: "",
+    border_size: 1.5,
+    all_states_inactive: "no",
+    all_states_zoomable: "yes",
+    
+		//Location defaults
+		location_description: "Location description",
+    location_url: "",
+    location_color: "#FF0067",
+    location_opacity: 0.8,
+    location_hover_opacity: 1,
+    location_size: 25,
+    location_type: "square",
+    location_image_source: "frog.png",
+    location_border_color: "#FFFFFF",
+    location_border: 2,
+    location_hover_border: 2.5,
+    all_locations_inactive: "no",
+    all_locations_hidden: "no",
+    
+		//Label defaults
+		label_color: "#ffffff",
+    label_hover_color: "#ffffff",
+    label_size: 16,
+    label_font: "Arial",
+    label_display: "auto",
+    label_scale: "yes",
+    hide_labels: "no",
+    hide_eastern_labels: "no",
+   
+		//Zoom settings
+		zoom: "yes",
+    manual_zoom: "yes",
+    back_image: "no",
+    initial_back: "no",
+    initial_zoom: "-1",
+    initial_zoom_solo: "no",
+    region_opacity: 1,
+    region_hover_opacity: 0.6,
+    zoom_out_incrementally: "yes",
+    zoom_percentage: 0.99,
+    zoom_time: 0.5,
+    
+		//Popup settings
+		popup_color: "white",
+    popup_opacity: 0.9,
+    popup_shadow: 1,
+    popup_corners: 5,
+    popup_font: "12px/1.5 Verdana, Arial, Helvetica, sans-serif",
+    popup_nocss: "no",
+    
+		//Advanced settings
+		div: "map",
+    auto_load: "yes",
+    url_new_tab: "no",
+    images_directory: "default",
+    fade_time: 0.1,
+    link_text: "View Website"
+  },
+  state_specific: {
+    UG101: {
+      name: "Kalangala",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG102: {
+      name: "Kampala",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG103: {
+      name: "Kiboga",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG104: {
+      name: "Luwero",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG105: {
+      name: "Masaka",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG106: {
+      name: "Mpigi",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG107: {
+      name: "Mubende",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG108: {
+      name: "Mukono",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG109: {
+      name: "Nakasongola",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG110: {
+      name: "Rakai",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG111: {
+      name: "Ssembabule",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG112: {
+      name: "Kayunga",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG113: {
+      name: "Wakiso",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG114: {
+      name: "Lyantonde",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG115: {
+      name: "Mityana",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG116: {
+      name: "Nakaseke",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG117: {
+      name: "Buikwe",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG118: {
+      name: "Bukomansimbi",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG119: {
+      name: "Butambala",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG120: {
+      name: "Buvuma",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG121: {
+      name: "Gomba",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG122: {
+      name: "Kalungu",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG123: {
+      name: "Kyankwanzi",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG124: {
+      name: "Lwengo",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG125: {
+      name: "Kyotera",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG126: {
+      name: "Kassanda",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG201: {
+      name: "Bugiri",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG202: {
+      name: "Busia",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG203: {
+      name: "Iganga",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG204: {
+      name: "Jinja",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG205: {
+      name: "Kamuli",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG206: {
+      name: "Kapchorwa",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG207: {
+      name: "Katakwi",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG208: {
+      name: "Kumi",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG209: {
+      name: "Mbale",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG210: {
+      name: "Pallisa",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG211: {
+      name: "Soroti",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG212: {
+      name: "Tororo",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG213: {
+      name: "Kaberamaido",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG214: {
+      name: "Mayuge",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG215: {
+      name: "Sironko",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG216: {
+      name: "Amuria",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG217: {
+      name: "Budaka",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG218: {
+      name: "Bududa",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG219: {
+      name: "Bukedea",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG220: {
+      name: "Bukwo",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG221: {
+      name: "Butaleja",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG222: {
+      name: "Kaliro",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG223: {
+      name: "Manafwa",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG224: {
+      name: "Namutumba",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG225: {
+      name: "Bulambuli",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG226: {
+      name: "Buyende",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG227: {
+      name: "Kibuku",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG228: {
+      name: "Kween",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG229: {
+      name: "Luuka",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG230: {
+      name: "Namayingo",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG231: {
+      name: "Ngora",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG232: {
+      name: "Serere",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG233: {
+      name: "Butebo",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG234: {
+      name: "Namisindwa",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG235: {
+      name: "Bugweri",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG236: {
+      name: "Kapelebyong",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG237: {
+      name: "Kalaki",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG301: {
+      name: "Adjumani",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG302: {
+      name: "Apac",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG303: {
+      name: "Arua",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG304: {
+      name: "Gulu",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG305: {
+      name: "Kitgum",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG306: {
+      name: "Kotido",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG307: {
+      name: "Lira",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG308: {
+      name: "Moroto",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG309: {
+      name: "Moyo",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG310: {
+      name: "Nebbi",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG311: {
+      name: "Nakapiripirit",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG312: {
+      name: "Pader",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG313: {
+      name: "Yumbe",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG314: {
+      name: "Abim",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG315: {
+      name: "Amolatar",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG316: {
+      name: "Amuru",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG317: {
+      name: "Dokolo",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG318: {
+      name: "Kaabong",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG319: {
+      name: "Koboko",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG320: {
+      name: "Maracha",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG321: {
+      name: "Oyam",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG322: {
+      name: "Agago",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG323: {
+      name: "Alebtong",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG324: {
+      name: "Amudat",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG325: {
+      name: "Kole",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG326: {
+      name: "Lamwo",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG327: {
+      name: "Napak",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG328: {
+      name: "Nwoya",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG329: {
+      name: "Otuke",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG330: {
+      name: "Zombo",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG331: {
+      name: "Omoro",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG332: {
+      name: "Pakwach",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG333: {
+      name: "Kwania",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG334: {
+      name: "Nabilatuk",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG335: {
+      name: "Karenga",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG336: {
+      name: "Madi Okollo",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG337: {
+      name: "Obongi",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG401: {
+      name: "Bundibugyo",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG402: {
+      name: "Bushenyi",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG403: {
+      name: "Hoima",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG404: {
+      name: "Kabale",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG405: {
+      name: "Kabarole",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG406: {
+      name: "Kasese",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG407: {
+      name: "Kibaale",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG408: {
+      name: "Kisoro",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG409: {
+      name: "Masindi",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG410: {
+      name: "Mbarara",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG411: {
+      name: "Ntungamo",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG412: {
+      name: "Rukungiri",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG413: {
+      name: "Kamwenge",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG414: {
+      name: "Kanungu",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG415: {
+      name: "Kyenjojo",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG416: {
+      name: "Buliisa",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG417: {
+      name: "Ibanda",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG418: {
+      name: "Isingiro",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG419: {
+      name: "Kiruhura",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG420: {
+      name: "Buhweju",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG421: {
+      name: "Kiryandongo",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG422: {
+      name: "Kyegegwa",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG423: {
+      name: "Mitooma",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG424: {
+      name: "Ntoroko",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG425: {
+      name: "Rubirizi",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG426: {
+      name: "Sheema",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG427: {
+      name: "Kagadi",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG428: {
+      name: "Kakumiro",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG429: {
+      name: "Rubanda",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG430: {
+      name: "Bunyangabu",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG431: {
+      name: "Rukiga",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG432: {
+      name: "Kikuube",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG433: {
+      name: "Kazo",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG434: {
+      name: "Kitagwenda",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    },
+    UG435: {
+      name: "Rwampara",
+      description: "default",
+      color: "default",
+      hover_color: "default",
+      url: "default"
+    }
+  },
+  locations: {
+    "0": {
+      name: "Kampala",
+      lat: "0.315556",
+      lng: "32.565556"
+    }
+  },
+  labels: {
+    UG101: {
+      name: "Kalangala",
+      parent_id: "UG101"
+    },
+    UG102: {
+      name: "Kampala",
+      parent_id: "UG102"
+    },
+    UG103: {
+      name: "Kiboga",
+      parent_id: "UG103"
+    },
+    UG104: {
+      name: "Luwero",
+      parent_id: "UG104"
+    },
+    UG105: {
+      name: "Masaka",
+      parent_id: "UG105"
+    },
+    UG106: {
+      name: "Mpigi",
+      parent_id: "UG106"
+    },
+    UG107: {
+      name: "Mubende",
+      parent_id: "UG107"
+    },
+    UG108: {
+      name: "Mukono",
+      parent_id: "UG108"
+    },
+    UG109: {
+      name: "Nakasongola",
+      parent_id: "UG109"
+    },
+    UG110: {
+      name: "Rakai",
+      parent_id: "UG110"
+    },
+    UG111: {
+      name: "Ssembabule",
+      parent_id: "UG111"
+    },
+    UG112: {
+      name: "Kayunga",
+      parent_id: "UG112"
+    },
+    UG113: {
+      name: "Wakiso",
+      parent_id: "UG113"
+    },
+    UG114: {
+      name: "Lyantonde",
+      parent_id: "UG114"
+    },
+    UG115: {
+      name: "Mityana",
+      parent_id: "UG115"
+    },
+    UG116: {
+      name: "Nakaseke",
+      parent_id: "UG116"
+    },
+    UG117: {
+      name: "Buikwe",
+      parent_id: "UG117"
+    },
+    UG118: {
+      name: "Bukomansimbi",
+      parent_id: "UG118"
+    },
+    UG119: {
+      name: "Butambala",
+      parent_id: "UG119"
+    },
+    UG120: {
+      name: "Buvuma",
+      parent_id: "UG120"
+    },
+    UG121: {
+      name: "Gomba",
+      parent_id: "UG121"
+    },
+    UG122: {
+      name: "Kalungu",
+      parent_id: "UG122"
+    },
+    UG123: {
+      name: "Kyankwanzi",
+      parent_id: "UG123"
+    },
+    UG124: {
+      name: "Lwengo",
+      parent_id: "UG124"
+    },
+    UG125: {
+      name: "Kyotera",
+      parent_id: "UG125"
+    },
+    UG126: {
+      name: "Kassanda",
+      parent_id: "UG126"
+    },
+    UG201: {
+      name: "Bugiri",
+      parent_id: "UG201"
+    },
+    UG202: {
+      name: "Busia",
+      parent_id: "UG202"
+    },
+    UG203: {
+      name: "Iganga",
+      parent_id: "UG203"
+    },
+    UG204: {
+      name: "Jinja",
+      parent_id: "UG204"
+    },
+    UG205: {
+      name: "Kamuli",
+      parent_id: "UG205"
+    },
+    UG206: {
+      name: "Kapchorwa",
+      parent_id: "UG206"
+    },
+    UG207: {
+      name: "Katakwi",
+      parent_id: "UG207"
+    },
+    UG208: {
+      name: "Kumi",
+      parent_id: "UG208"
+    },
+    UG209: {
+      name: "Mbale",
+      parent_id: "UG209"
+    },
+    UG210: {
+      name: "Pallisa",
+      parent_id: "UG210"
+    },
+    UG211: {
+      name: "Soroti",
+      parent_id: "UG211"
+    },
+    UG212: {
+      name: "Tororo",
+      parent_id: "UG212"
+    },
+    UG213: {
+      name: "Kaberamaido",
+      parent_id: "UG213"
+    },
+    UG214: {
+      name: "Mayuge",
+      parent_id: "UG214"
+    },
+    UG215: {
+      name: "Sironko",
+      parent_id: "UG215"
+    },
+    UG216: {
+      name: "Amuria",
+      parent_id: "UG216"
+    },
+    UG217: {
+      name: "Budaka",
+      parent_id: "UG217"
+    },
+    UG218: {
+      name: "Bududa",
+      parent_id: "UG218"
+    },
+    UG219: {
+      name: "Bukedea",
+      parent_id: "UG219"
+    },
+    UG220: {
+      name: "Bukwo",
+      parent_id: "UG220"
+    },
+    UG221: {
+      name: "Butaleja",
+      parent_id: "UG221"
+    },
+    UG222: {
+      name: "Kaliro",
+      parent_id: "UG222"
+    },
+    UG223: {
+      name: "Manafwa",
+      parent_id: "UG223"
+    },
+    UG224: {
+      name: "Namutumba",
+      parent_id: "UG224"
+    },
+    UG225: {
+      name: "Bulambuli",
+      parent_id: "UG225"
+    },
+    UG226: {
+      name: "Buyende",
+      parent_id: "UG226"
+    },
+    UG227: {
+      name: "Kibuku",
+      parent_id: "UG227"
+    },
+    UG228: {
+      name: "Kween",
+      parent_id: "UG228"
+    },
+    UG229: {
+      name: "Luuka",
+      parent_id: "UG229"
+    },
+    UG230: {
+      name: "Namayingo",
+      parent_id: "UG230"
+    },
+    UG231: {
+      name: "Ngora",
+      parent_id: "UG231"
+    },
+    UG232: {
+      name: "Serere",
+      parent_id: "UG232"
+    },
+    UG233: {
+      name: "Butebo",
+      parent_id: "UG233"
+    },
+    UG234: {
+      name: "Namisindwa",
+      parent_id: "UG234"
+    },
+    UG235: {
+      name: "Bugweri",
+      parent_id: "UG235"
+    },
+    UG236: {
+      name: "Kapelebyong",
+      parent_id: "UG236"
+    },
+    UG237: {
+      name: "Kalaki",
+      parent_id: "UG237"
+    },
+    UG301: {
+      name: "Adjumani",
+      parent_id: "UG301"
+    },
+    UG302: {
+      name: "Apac",
+      parent_id: "UG302"
+    },
+    UG303: {
+      name: "Arua",
+      parent_id: "UG303"
+    },
+    UG304: {
+      name: "Gulu",
+      parent_id: "UG304"
+    },
+    UG305: {
+      name: "Kitgum",
+      parent_id: "UG305"
+    },
+    UG306: {
+      name: "Kotido",
+      parent_id: "UG306"
+    },
+    UG307: {
+      name: "Lira",
+      parent_id: "UG307"
+    },
+    UG308: {
+      name: "Moroto",
+      parent_id: "UG308"
+    },
+    UG309: {
+      name: "Moyo",
+      parent_id: "UG309"
+    },
+    UG310: {
+      name: "Nebbi",
+      parent_id: "UG310"
+    },
+    UG311: {
+      name: "Nakapiripirit",
+      parent_id: "UG311"
+    },
+    UG312: {
+      name: "Pader",
+      parent_id: "UG312"
+    },
+    UG313: {
+      name: "Yumbe",
+      parent_id: "UG313"
+    },
+    UG314: {
+      name: "Abim",
+      parent_id: "UG314"
+    },
+    UG315: {
+      name: "Amolatar",
+      parent_id: "UG315"
+    },
+    UG316: {
+      name: "Amuru",
+      parent_id: "UG316"
+    },
+    UG317: {
+      name: "Dokolo",
+      parent_id: "UG317"
+    },
+    UG318: {
+      name: "Kaabong",
+      parent_id: "UG318"
+    },
+    UG319: {
+      name: "Koboko",
+      parent_id: "UG319"
+    },
+    UG320: {
+      name: "Maracha",
+      parent_id: "UG320"
+    },
+    UG321: {
+      name: "Oyam",
+      parent_id: "UG321"
+    },
+    UG322: {
+      name: "Agago",
+      parent_id: "UG322"
+    },
+    UG323: {
+      name: "Alebtong",
+      parent_id: "UG323"
+    },
+    UG324: {
+      name: "Amudat",
+      parent_id: "UG324"
+    },
+    UG325: {
+      name: "Kole",
+      parent_id: "UG325"
+    },
+    UG326: {
+      name: "Lamwo",
+      parent_id: "UG326"
+    },
+    UG327: {
+      name: "Napak",
+      parent_id: "UG327"
+    },
+    UG328: {
+      name: "Nwoya",
+      parent_id: "UG328"
+    },
+    UG329: {
+      name: "Otuke",
+      parent_id: "UG329"
+    },
+    UG330: {
+      name: "Zombo",
+      parent_id: "UG330"
+    },
+    UG331: {
+      name: "Omoro",
+      parent_id: "UG331"
+    },
+    UG332: {
+      name: "Pakwach",
+      parent_id: "UG332"
+    },
+    UG333: {
+      name: "Kwania",
+      parent_id: "UG333"
+    },
+    UG334: {
+      name: "Nabilatuk",
+      parent_id: "UG334"
+    },
+    UG335: {
+      name: "Karenga",
+      parent_id: "UG335"
+    },
+    UG336: {
+      name: "Madi Okollo",
+      parent_id: "UG336"
+    },
+    UG337: {
+      name: "Obongi",
+      parent_id: "UG337"
+    },
+    UG401: {
+      name: "Bundibugyo",
+      parent_id: "UG401"
+    },
+    UG402: {
+      name: "Bushenyi",
+      parent_id: "UG402"
+    },
+    UG403: {
+      name: "Hoima",
+      parent_id: "UG403"
+    },
+    UG404: {
+      name: "Kabale",
+      parent_id: "UG404"
+    },
+    UG405: {
+      name: "Kabarole",
+      parent_id: "UG405"
+    },
+    UG406: {
+      name: "Kasese",
+      parent_id: "UG406"
+    },
+    UG407: {
+      name: "Kibaale",
+      parent_id: "UG407"
+    },
+    UG408: {
+      name: "Kisoro",
+      parent_id: "UG408"
+    },
+    UG409: {
+      name: "Masindi",
+      parent_id: "UG409"
+    },
+    UG410: {
+      name: "Mbarara",
+      parent_id: "UG410"
+    },
+    UG411: {
+      name: "Ntungamo",
+      parent_id: "UG411"
+    },
+    UG412: {
+      name: "Rukungiri",
+      parent_id: "UG412"
+    },
+    UG413: {
+      name: "Kamwenge",
+      parent_id: "UG413"
+    },
+    UG414: {
+      name: "Kanungu",
+      parent_id: "UG414"
+    },
+    UG415: {
+      name: "Kyenjojo",
+      parent_id: "UG415"
+    },
+    UG416: {
+      name: "Buliisa",
+      parent_id: "UG416"
+    },
+    UG417: {
+      name: "Ibanda",
+      parent_id: "UG417"
+    },
+    UG418: {
+      name: "Isingiro",
+      parent_id: "UG418"
+    },
+    UG419: {
+      name: "Kiruhura",
+      parent_id: "UG419"
+    },
+    UG420: {
+      name: "Buhweju",
+      parent_id: "UG420"
+    },
+    UG421: {
+      name: "Kiryandongo",
+      parent_id: "UG421"
+    },
+    UG422: {
+      name: "Kyegegwa",
+      parent_id: "UG422"
+    },
+    UG423: {
+      name: "Mitooma",
+      parent_id: "UG423"
+    },
+    UG424: {
+      name: "Ntoroko",
+      parent_id: "UG424"
+    },
+    UG425: {
+      name: "Rubirizi",
+      parent_id: "UG425"
+    },
+    UG426: {
+      name: "Sheema",
+      parent_id: "UG426"
+    },
+    UG427: {
+      name: "Kagadi",
+      parent_id: "UG427"
+    },
+    UG428: {
+      name: "Kakumiro",
+      parent_id: "UG428"
+    },
+    UG429: {
+      name: "Rubanda",
+      parent_id: "UG429"
+    },
+    UG430: {
+      name: "Bunyangabu",
+      parent_id: "UG430"
+    },
+    UG431: {
+      name: "Rukiga",
+      parent_id: "UG431"
+    },
+    UG432: {
+      name: "Kikuube",
+      parent_id: "UG432"
+    },
+    UG433: {
+      name: "Kazo",
+      parent_id: "UG433"
+    },
+    UG434: {
+      name: "Kitagwenda",
+      parent_id: "UG434"
+    },
+    UG435: {
+      name: "Rwampara",
+      parent_id: "UG435"
+    }
+  }
+};

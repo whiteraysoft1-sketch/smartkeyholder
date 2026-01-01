@@ -219,15 +219,34 @@ Route::get('/qr/{uuid}/store/product/{product}', [\App\Http\Controllers\StoreCon
 Route::middleware(['auth', 'subscribed'])->group(function () {
     Route::post('/dashboard/store-settings', [DashboardController::class, 'updateStoreSettings'])->name('dashboard.store-settings.update');
     Route::get('/dashboard/store', [DashboardController::class, 'storeManagement'])->name('dashboard.store');
-    Route::post('/dashboard/store/categories', [DashboardController::class, 'addStoreCategory'])->name('dashboard.store.categories.add');
-    Route::get('/dashboard/store/categories/{category}/edit', [DashboardController::class, 'editStoreCategory'])->name('dashboard.store.categories.edit');
-    Route::put('/dashboard/store/categories/{category}', [DashboardController::class, 'updateStoreCategory'])->name('dashboard.store.categories.update');
-    Route::delete('/dashboard/store/categories/{category}', [DashboardController::class, 'deleteStoreCategory'])->name('dashboard.store.categories.delete');
-    Route::post('/dashboard/store/products', [DashboardController::class, 'addStoreProduct'])->name('dashboard.store.products.add');
+    
+    // Store Settings page
+    Route::get('/dashboard/store/settings', [DashboardController::class, 'storeSettings'])->name('dashboard.store.settings');
+    
+    // Products page
+    Route::get('/dashboard/store/products', [DashboardController::class, 'storeProducts'])->name('dashboard.store.products.index');
+    Route::post('/dashboard/store/products', [DashboardController::class, 'addStoreProduct'])->name('dashboard.store.products.store');
     Route::get('/dashboard/store/products/{product}/edit', [DashboardController::class, 'editStoreProduct'])->name('dashboard.store.products.edit');
     Route::put('/dashboard/store/products/{product}', [DashboardController::class, 'updateStoreProduct'])->name('dashboard.store.products.update');
-    Route::delete('/dashboard/store/products/{product}', [DashboardController::class, 'deleteStoreProduct'])->name('dashboard.store.products.delete');
-    Route::patch('/dashboard/store/orders/{order}/status', [DashboardController::class, 'updateOrderStatus'])->name('dashboard.store.orders.status');
+    Route::delete('/dashboard/store/products/{product}', [DashboardController::class, 'deleteStoreProduct'])->name('dashboard.store.products.destroy');
+    
+    // Categories page
+    Route::get('/dashboard/store/categories', [DashboardController::class, 'storeCategories'])->name('dashboard.store.categories.index');
+    Route::post('/dashboard/store/categories', [DashboardController::class, 'addStoreCategory'])->name('dashboard.store.categories.store');
+    Route::get('/dashboard/store/categories/{category}/edit', [DashboardController::class, 'editStoreCategory'])->name('dashboard.store.categories.edit');
+    Route::put('/dashboard/store/categories/{category}', [DashboardController::class, 'updateStoreCategory'])->name('dashboard.store.categories.update');
+    Route::delete('/dashboard/store/categories/{category}', [DashboardController::class, 'deleteStoreCategory'])->name('dashboard.store.categories.destroy');
+    
+    // Orders page
+    Route::get('/dashboard/store/orders', [DashboardController::class, 'storeOrders'])->name('dashboard.store.orders.index');
+    Route::put('/dashboard/store/orders/{order}/status', [DashboardController::class, 'updateOrderStatus'])->name('dashboard.store.orders.status');
+    
+    // Banners page
+    Route::get('/dashboard/store/banners', [\App\Http\Controllers\StoreController::class, 'bannersIndex'])->name('dashboard.store.banners');
+    Route::post('/dashboard/store/banners', [\App\Http\Controllers\StoreController::class, 'storeBanner'])->name('dashboard.store.banners.store');
+    Route::put('/dashboard/store/banners/{banner}', [\App\Http\Controllers\StoreController::class, 'updateBanner'])->name('dashboard.store.banners.update');
+    Route::delete('/dashboard/store/banners/{banner}', [\App\Http\Controllers\StoreController::class, 'deleteBanner'])->name('dashboard.store.banners.destroy');
+    Route::post('/dashboard/store/banners/reorder', [\App\Http\Controllers\StoreController::class, 'reorderBanners'])->name('dashboard.store.banners.reorder');
 });
 Route::get('/dashboard/templates', [DashboardController::class, 'templatePreview'])->name('dashboard.templates')->middleware(['auth', 'subscribed']);
 Route::get('/dashboard/vcard-templates', [DashboardController::class, 'vcardTemplates'])->name('dashboard.vcard-templates')->middleware(['auth', 'subscribed']);
