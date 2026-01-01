@@ -7,6 +7,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PwaController;
 use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 // Public routes - Root route
 Route::get('/', function () {
@@ -27,6 +28,23 @@ Route::get('/debug-route', function () {
         'laravel_version' => app()->version(),
     ]);
 })->name('debug.route');
+
+// Debug route to check storage symlink
+Route::get('/debug-storage', function () {
+    $publicStoragePath = public_path('storage');
+    $storageAppPath = storage_path('app/public');
+    
+    return response()->json([
+        'storage_disk_url' => Storage::disk('public')->url('test.txt'),
+        'public_storage_exists' => file_exists($publicStoragePath),
+        'public_storage_is_link' => is_link($publicStoragePath),
+        'public_storage_target' => is_link($publicStoragePath) ? readlink($publicStoragePath) : 'Not a symlink',
+        'storage_app_exists' => file_exists($storageAppPath),
+        'storage_app_is_dir' => is_dir($storageAppPath),
+        'public_storage_path' => $publicStoragePath,
+        'storage_app_path' => $storageAppPath,
+    ]);
+})->name('debug.storage');
 
 // PWA routes (for dashboard and profiles)
 Route::get('/pwa/manifest/{uuid?}', [PwaController::class, 'manifest'])->name('pwa.manifest');
