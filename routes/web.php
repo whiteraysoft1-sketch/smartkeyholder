@@ -29,20 +29,26 @@ Route::get('/debug-route', function () {
     ]);
 })->name('debug.route');
 
-// Debug route to check storage symlink
+// Debug route to check storage symlink (NO DATABASE ACCESS)
 Route::get('/debug-storage', function () {
     $publicStoragePath = public_path('storage');
     $storageAppPath = storage_path('app/public');
     
+    $publicStorageExists = file_exists($publicStoragePath);
+    $publicStorageIsLink = is_link($publicStoragePath);
+    $publicStorageTarget = $publicStorageIsLink ? readlink($publicStoragePath) : null;
+    $storageAppExists = file_exists($storageAppPath);
+    $storageAppIsDir = is_dir($storageAppPath);
+    
     return response()->json([
-        'storage_disk_url' => Storage::disk('public')->url('test.txt'),
-        'public_storage_exists' => file_exists($publicStoragePath),
-        'public_storage_is_link' => is_link($publicStoragePath),
-        'public_storage_target' => is_link($publicStoragePath) ? readlink($publicStoragePath) : 'Not a symlink',
-        'storage_app_exists' => file_exists($storageAppPath),
-        'storage_app_is_dir' => is_dir($storageAppPath),
         'public_storage_path' => $publicStoragePath,
+        'public_storage_exists' => $publicStorageExists,
+        'public_storage_is_link' => $publicStorageIsLink,
+        'public_storage_target' => $publicStorageTarget,
         'storage_app_path' => $storageAppPath,
+        'storage_app_exists' => $storageAppExists,
+        'storage_app_is_dir' => $storageAppIsDir,
+        'status' => $publicStorageIsLink ? '✅ Symlink working!' : '❌ Symlink missing!',
     ]);
 })->name('debug.storage');
 
