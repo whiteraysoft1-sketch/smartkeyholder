@@ -6,15 +6,15 @@
     RewriteEngine On
     RewriteBase /
 
-    # If the request is a real file or directory, serve it directly
+    # Since users access /public/ directly, we don't need to rewrite
+    # Just let the public/.htaccess handle routing within the public folder
+    
+    # Allow real files and directories to be served directly
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
 
-    # Skip if already in /public directory
+    # If accessing /public/, let public/.htaccess handle it
     RewriteCond %{REQUEST_URI} ^/public/
     RewriteRule ^ - [L]
-
-    # Rewrite everything else to public/index.php (internally)
-    RewriteRule ^(.*)$ public/index.php [QSA,L]
 </IfModule>
