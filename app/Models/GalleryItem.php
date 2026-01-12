@@ -47,7 +47,7 @@ class GalleryItem extends Model
             if (strpos($path, 'gallery_images/') !== 0) {
                 $path = 'gallery_images/' . ltrim($path, '/');
             }
-            return Storage::disk('public')->url($path);
+            return $this->getStorageUrl($path);
         }
         
         // Return a default placeholder if nothing is available
@@ -62,9 +62,24 @@ class GalleryItem extends Model
             if (strpos($path, 'gallery_images/') !== 0) {
                 $path = 'gallery_images/' . ltrim($path, '/');
             }
-            return Storage::disk('public')->url($path);
+            return $this->getStorageUrl($path);
         }
         
         return $value;
+    }
+
+    /**
+     * Generate storage URL that works in hosted environments
+     */
+    private function getStorageUrl($path)
+    {
+        // For hosted environments, use direct storage URL
+        if (app()->environment('production') || str_contains(config('app.url'), 'smart-keyholder.click')) {
+            $baseUrl = env('STORAGE_URL', 'https://smart-keyholder.click/storage');
+            return $baseUrl . '/' . ltrim($path, '/');
+        }
+        
+        // For local development, use standard Laravel storage
+        return Storage::disk('public')->url($path);
     }
 }

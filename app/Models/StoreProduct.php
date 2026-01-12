@@ -70,9 +70,24 @@ class StoreProduct extends Model
             if (strpos($path, 'store_products/') !== 0) {
                 $path = 'store_products/' . ltrim($path, '/');
             }
-            return Storage::disk('public')->url($path);
+            return $this->getStorageUrl($path);
         }
         return asset('images/default-product.png');
+    }
+
+    /**
+     * Generate storage URL that works in hosted environments
+     */
+    private function getStorageUrl($path)
+    {
+        // For hosted environments, use direct storage URL
+        if (app()->environment('production') || str_contains(config('app.url'), 'smart-keyholder.click')) {
+            $baseUrl = env('STORAGE_URL', 'https://smart-keyholder.click/storage');
+            return $baseUrl . '/' . ltrim($path, '/');
+        }
+        
+        // For local development, use standard Laravel storage
+        return Storage::disk('public')->url($path);
     }
 
     public function getFormattedPriceAttribute()
