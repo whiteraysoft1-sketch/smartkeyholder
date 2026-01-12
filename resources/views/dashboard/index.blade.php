@@ -9,10 +9,11 @@ use Illuminate\Support\Facades\Storage;
         /* Adaptive Apple-Style Liquid Glass Dashboard */
         .dashboard-container {
             min-height: 100vh;
-            background: #ffffff;
+            background: #ffffff !important;
             position: relative;
             overflow-x: hidden;
             transition: background-color 0.3s ease;
+            color: #1f2937 !important;
         }
 
         .dashboard-container::before {
@@ -128,7 +129,7 @@ use Illuminate\Support\Facades\Storage;
             gap: 1rem;
             font-weight: 700;
             font-size: 1.125rem;
-            color: #1f2937;
+            color: #1f2937 !important;
             margin: 0;
         }
 
@@ -253,64 +254,60 @@ use Illuminate\Support\Facades\Storage;
                 rgba(255, 255, 255, 0.1) 100%);
         }
 
-        /* Dark mode support */
-        @media (prefers-color-scheme: dark) {
-            .dashboard-container {
-                background: #0f172a;
-            }
-            
-            .dashboard-container::before {
-                background: 
-                    radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
-                    radial-gradient(circle at 40% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 50%);
-            }
-            
-            .dashboard-header {
-                background: rgba(15, 23, 42, 0.9);
-                border-bottom-color: rgba(255, 255, 255, 0.1);
-            }
-            
-            .collapsible-card {
-                background: linear-gradient(145deg, 
-                    rgba(30, 41, 59, 0.9) 0%, 
-                    rgba(30, 41, 59, 0.7) 100%);
-                border-color: rgba(255, 255, 255, 0.1);
-                box-shadow: 
-                    0 4px 25px rgba(0, 0, 0, 0.3),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            }
-            
-            .collapsible-card:hover {
-                background: linear-gradient(145deg, 
-                    rgba(30, 41, 59, 0.95) 0%, 
-                    rgba(30, 41, 59, 0.85) 100%);
-                box-shadow: 
-                    0 8px 40px rgba(0, 0, 0, 0.4),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-            }
-            
-            .card-header {
-                background: linear-gradient(145deg, 
-                    rgba(255, 255, 255, 0.1) 0%, 
-                    rgba(255, 255, 255, 0.05) 100%);
-                border-bottom-color: rgba(255, 255, 255, 0.08);
-            }
-            
-            .card-title {
-                color: #f1f5f9;
-            }
-            
-            .expand-icon {
-                background: rgba(255, 255, 255, 0.05);
-                border-color: rgba(255, 255, 255, 0.1);
-                color: #94a3b8;
-            }
-            
-            .expand-icon.expanded {
-                background: rgba(59, 130, 246, 0.15);
-                color: #60a5fa;
-            }
+        /* Force Light Theme - Override any dark mode preferences */
+        * {
+            color-scheme: light !important;
+        }
+        
+        body {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+        }
+
+        /* Form and Input Styling for Light Theme */
+        input, select, textarea, button {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+            border-color: #d1d5db !important;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+            border-color: #3b82f6 !important;
+            outline: 0 !important;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+        }
+
+        label {
+            color: #374151 !important;
+        }
+
+        /* Ensure all text is light theme */
+        .form-label, .card-text, p, span, div {
+            color: #1f2937 !important;
+        }
+
+        /* Override any dark backgrounds */
+        .bg-dark, .dark {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+        }
+
+        /* Override Tailwind gray text classes */
+        .text-gray-600, .text-gray-700, .text-gray-500, .text-gray-800, .text-gray-900 {
+            color: #374151 !important;
+        }
+
+        /* Ensure QR code container background is always light */
+        .qr-code-container {
+            background: #ffffff !important;
+            color: #1f2937 !important;
+        }
+
+        /* Force all text elements to light theme colors */
+        * {
+            color-scheme: light !important;
         }
 
         /* Clean Modern Buttons */
@@ -1659,7 +1656,7 @@ use Illuminate\Support\Facades\Storage;
                     <div class="card-content-inner">
                         <div class="qr-code-container">
                             <img src="{{ route('qr.generate', $qrCode->uuid) }}" alt="QR Code" class="qr-code-image">
-                            <div class="text-sm text-gray-600 mb-3">Scan to view your profile</div>
+                            <div class="text-sm mb-3" style="color: #374151 !important;">Scan to view your profile</div>
                             
                             <div class="quick-actions">
                                 <a href="{{ route('qr.view', $qrCode->uuid) }}" target="_blank" class="action-btn btn-primary">
@@ -1674,7 +1671,7 @@ use Illuminate\Support\Facades\Storage;
                             </div>
                         </div>
 
-                        <div class="space-y-3 text-sm text-gray-600">
+                        <div class="space-y-3 text-sm" style="color: #374151 !important;">
                             <div class="flex justify-between"><span>Code:</span> <span class="font-mono">{{ $qrCode->code }}</span></div>
                             <div class="flex justify-between"><span>Claimed:</span> <span>{{ $qrCode->claimed_at->format('M d, Y') }}</span></div>
                             <div class="flex justify-between"><span>Last Scan:</span> <span>@if($qrCode->last_scanned_at){{ $qrCode->last_scanned_at->diffForHumans() }}@else Never @endif</span></div>

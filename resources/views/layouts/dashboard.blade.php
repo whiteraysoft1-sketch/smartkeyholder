@@ -28,8 +28,8 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/css/liquid-glass.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
+    <body class="font-sans antialiased" style="background: #ffffff !important; color: #1f2937 !important; color-scheme: light !important;">
+        <div class="min-h-screen" style="background: #ffffff !important;">
             <!-- Page Content -->
             <main>
                 @yield('content')
