@@ -698,21 +698,20 @@
                 errorMessage: "",
                 response: (value) => value ? "Perfect! People can now call you directly. 📞" : "That's okay, you can add this later." },
             {
-                question: "Do you have a website or portfolio you'd like to share?",
-                field: "website",
-                type: "url",
-                placeholder: "https://yourwebsite.com",
-                validation: (value) => !value || /^https?:\/\/.+/.test(value),
-                errorMessage: "Please enter a valid website URL (starting with http:// or https://)",
-                response: (value) => value ? "Awesome! Your website will be featured on your profile. 🌐" : "No worries, you can add this anytime." },
-            {
-                question: "Where are you located? (City, Country)",
+                question: "Which district are you from in Uganda? 🇺🇬",
                 field: "location",
-                type: "text",
-                placeholder: "e.g., New York, USA",
+                type: "select",
+                options: [
+                    "Kampala", "Wakiso", "Mukono", "Entebbe", "Jinja", "Mbale", "Gulu", "Lira", "Arua", "Mbarara",
+                    "Masaka", "Fort Portal", "Hoima", "Kasese", "Kabale", "Soroti", "Kitgum", "Moroto", "Nebbi", "Adjumani",
+                    "Apac", "Bugiri", "Busia", "Iganga", "Kamuli", "Kapchorwa", "Katakwi", "Kayunga", "Kiboga", "Kyenjojo",
+                    "Luwero", "Lyantonde", "Masindi", "Mityana", "Mubende", "Nakaseke", "Nakasongola", "Pallisa", "Rakai", "Sembabule",
+                    "Tororo", "Other"
+                ],
+                placeholder: "Select your district",
                 validation: () => true,
                 errorMessage: "",
-                response: (value) => value ? `${value} - what a great place! 📍` : "That's fine, location is optional." },
+                response: (value) => value ? `${value} District - representing your area on the map! 📍` : "That's fine, district is optional." },
             {
                 question: "Finally, tell people a bit about yourself! What makes you unique?",
                 field: "bio",
@@ -774,6 +773,35 @@
                         <div class="input-field-container">
                             <div class="input-wrapper">
                                 <textarea id="currentInput" placeholder="${stepData.placeholder}" class="liquid-input enhanced-input resize-none" rows="4" autocomplete="off"></textarea>
+                                <div class="input-focus-ring"></div>
+                            </div>
+                            <div class="button-spacer"></div>
+                            <div class="button-wrapper">
+                                <button type="button" onclick="processAnswer()" class="liquid-btn enhanced-btn">
+                                    <div class="btn-content">
+                                        <span class="btn-text">Continue</span>
+                                        <div class="btn-icon">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="btn-glow"></div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (stepData.type === 'select') {
+                const options = stepData.options.map(option => `<option value="${option}">${option}</option>`).join('');
+                inputHTML = `
+                    <div class="liquid-glass enhanced animate-slide-up">
+                        <div class="input-field-container">
+                            <div class="input-wrapper">
+                                <select id="currentInput" class="liquid-input enhanced-input" autocomplete="off">
+                                    <option value="">${stepData.placeholder}</option>
+                                    ${options}
+                                </select>
                                 <div class="input-focus-ring"></div>
                             </div>
                             <div class="button-spacer"></div>

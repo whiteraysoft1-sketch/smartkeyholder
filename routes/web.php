@@ -228,6 +228,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::patch('/pricing-plans/{pricingPlan}/toggle', [AdminController::class, 'togglePricingPlan'])->name('pricing-plans.toggle');
     Route::post('/pricing-plans/order', [AdminController::class, 'updatePricingPlansOrder'])->name('pricing-plans.order');
     
+    // Broadcast messaging
+    Route::post('/broadcast-message', [AdminController::class, 'sendBroadcastMessage'])->name('broadcast.send');
+    Route::post('/broadcast-message/clear', [AdminController::class, 'clearBroadcastMessages'])->name('broadcast.clear');
+    
     // Email management routes
     Route::post('/emails/test', [AdminController::class, 'testEmail'])->name('emails.test');
     Route::post('/emails/send-expiry-warnings', [AdminController::class, 'sendExpiryWarnings'])->name('emails.send-expiry-warnings');

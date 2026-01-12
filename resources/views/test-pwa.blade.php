@@ -32,6 +32,15 @@
                     <p id="browser-info" class="text-yellow-700">Loading...</p>
                 </div>
                 
+                <!-- PWA Test Notification -->
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">Test Push Notification</h3>
+                    <p class="text-gray-600 mb-3">Hello from your PWA! This is a test push notification.</p>
+                    <button id="test-notification-btn" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded text-sm">
+                        Test Notification
+                    </button>
+                </div>
+                
                 <div class="flex space-x-4">
                     <a href="{{ route('dashboard.simple') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         Back to Dashboard
@@ -87,6 +96,46 @@
         else if (isSafari) browserText = 'Desktop Safari';
         
         browserInfo.textContent = `${browserText} - PWA Support: ${isChrome || (isIOS && isSafari) ? 'Yes' : 'Limited'}`;
+        
+        // Test Notification Button
+        const testNotificationBtn = document.getElementById('test-notification-btn');
+        testNotificationBtn.addEventListener('click', async function() {
+            if ('Notification' in window) {
+                const permission = await Notification.requestPermission();
+                
+                if (permission === 'granted') {
+                    new Notification('Smart Tag PWA Test', {
+                        body: 'Hello from your PWA! This is a test push notification.',
+                        icon: '/images/pwa-icon-192.png',
+                        badge: '/images/pwa-icon-72.png'
+                    });
+                    
+                    testNotificationBtn.textContent = 'Notification Sent!';
+                    testNotificationBtn.className = 'bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-sm';
+                    
+                    setTimeout(() => {
+                        testNotificationBtn.textContent = 'Test Notification';
+                        testNotificationBtn.className = 'bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded text-sm';
+                    }, 3000);
+                } else {
+                    testNotificationBtn.textContent = 'Permission Denied';
+                    testNotificationBtn.className = 'bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-sm';
+                    
+                    setTimeout(() => {
+                        testNotificationBtn.textContent = 'Test Notification';
+                        testNotificationBtn.className = 'bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded text-sm';
+                    }, 3000);
+                }
+            } else {
+                testNotificationBtn.textContent = 'Not Supported';
+                testNotificationBtn.className = 'bg-gray-500 text-white font-bold py-2 px-4 rounded text-sm';
+                
+                setTimeout(() => {
+                    testNotificationBtn.textContent = 'Test Notification';
+                    testNotificationBtn.className = 'bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded text-sm';
+                }, 3000);
+            }
+        });
     </script>
 </body>
 </html>

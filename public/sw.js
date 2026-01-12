@@ -199,7 +199,7 @@ self.addEventListener('push', event => {
     console.log('[SW] Push notification received');
     
     const options = {
-        body: 'You have a new notification from Smart Tag',
+        body: 'Hello from your PWA! This is a test push notification.',
         icon: '/images/pwa-icon-192.png',
         badge: '/images/pwa-icon-72.png',
         vibrate: [100, 50, 100],
@@ -223,7 +223,7 @@ self.addEventListener('push', event => {
     
     if (event.data) {
         const data = event.data.json();
-        options.body = data.body || options.body;
+        options.body = data.body || 'Hello from your PWA! This is a test push notification.';
         options.title = data.title || 'Smart Tag';
     }
     

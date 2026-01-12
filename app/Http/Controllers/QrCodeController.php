@@ -174,18 +174,46 @@ class QrCodeController extends Controller
     }
 
     /**
-     * Generate QR code image
+     * Generate QR code image for display
      */
     public function generate($uuid)
     {
         $qrCode = QrCode::byUuid($uuid)->first();
 
         if (!$qrCode) {
-            abort(404);
+            abort(404, 'QR Code not found');
+        }
+        
+        if (empty($qrCode->url)) {
+            abort(500, 'QR Code URL is not set.');
         }
 
-        return response(QrCodeGenerator::size(200)->generate($qrCode->url))
-            ->header('Content-Type', 'image/svg+xml');
+        try {
+            // Generate optimized SVG for web display
+            $qrCodeSvg = QrCodeGenerator::format('svg')
+                ->size(300)
+                ->margin(1)
+                ->errorCorrection('M')
+                ->generate($qrCode->url);
+                
+            return response($qrCodeSvg)
+                ->header('Content-Type', 'image/svg+xml')
+                ->header('Cache-Control', 'public, max-age=86400')
+                ->header('Expires', gmdate('D, d M Y H:i:s', time() + 86400) . ' GMT');
+                
+        } catch (\Exception $e) {
+            \Log::error('QR Display Generation Error: ' . $e->getMessage(), [
+                'qr_code_id' => $qrCode->id,
+                'uuid' => $uuid,
+                'url' => $qrCode->url
+            ]);
+            
+            // Return a simple fallback SVG
+            $fallbackSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" fill="#f3f4f6"/><text x="150" y="150" text-anchor="middle" font-family="Arial" font-size="16" fill="#6b7280">QR Code Error</text></svg>';
+            
+            return response($fallbackSvg)
+                ->header('Content-Type', 'image/svg+xml');
+        }
     }
 
     /**
@@ -194,25 +222,142 @@ class QrCodeController extends Controller
     public function download($uuid)
     {
         $qrCode = QrCode::byUuid($uuid)->first();
+        
         if (!$qrCode) {
             abort(404, 'QR Code not found');
         }
-        if (!extension_loaded('gd')) {
-            abort(500, 'GD extension is not enabled on the server. PNG generation requires GD.');
+        
+        // Validate QR code URL
+        if (empty($qrCode->url)) {
+            abort(500, 'QR Code URL is not set.');
         }
-        if (empty($qrCode->url) || !filter_var($qrCode->url, FILTER_VALIDATE_URL)) {
-            abort(500, 'QR Code URL is invalid.');
-        }
+        
         try {
-            $qrCodeImage = QrCodeGenerator::format('png')
-                ->size(300)
+            // First check if Imagick is available for PNG generation
+            if (extension_loaded('imagick') || class_exists('Imagick')) {
+                try {
+                    // Generate high-quality PNG QR code using Imagick
+                    $qrCodeImage = QrCodeGenerator::format('png')
+                        ->size(500)
+                        ->margin(2)
+                        ->errorCorrection('H')
+                        ->generate($qrCode->url);
+                        
+                    $filename = 'qr-code-' . $qrCode->code . '.png';
+                    
+                    return response($qrCodeImage)
+                        ->header('Content-Type', 'image/png')
+                        ->header('Content-Disposition', 'attachment; filename="' . $filename . '"')
+                        ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+                        ->header('Pragma', 'no-cache')
+                        ->header('Expires', '0');
+                        
+                } catch (\Exception $imagickError) {
+                    \Log::warning('Imagick PNG generation failed, falling back to SVG->PNG conversion: ' . $imagickError->getMessage());
+                    // Fall through to SVG conversion method
+                }
+            }
+            
+            // Fallback: Generate SVG and convert to PNG using GD
+            if (extension_loaded('gd')) {
+                $svgContent = QrCodeGenerator::format('svg')
+                    ->size(500)
+                    ->margin(2)
+                    ->errorCorrection('H')
+                    ->generate($qrCode->url);
+                
+                // Convert SVG to PNG using basic method
+                $pngImage = $this->convertSvgToPng($svgContent, 500);
+                
+                if ($pngImage) {
+                    $filename = 'qr-code-' . $qrCode->code . '.png';
+                    
+                    return response($pngImage)
+                        ->header('Content-Type', 'image/png')
+                        ->header('Content-Disposition', 'attachment; filename="' . $filename . '"')
+                        ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+                        ->header('Pragma', 'no-cache')
+                        ->header('Expires', '0');
+                }
+            }
+            
+            // Last resort: Return SVG with PNG headers (browsers will handle it)
+            $svgContent = QrCodeGenerator::format('svg')
+                ->size(500)
+                ->margin(2)
+                ->errorCorrection('H')
                 ->generate($qrCode->url);
+                
+            $filename = 'qr-code-' . $qrCode->code . '.svg';
+            
+            return response($svgContent)
+                ->header('Content-Type', 'image/svg+xml')
+                ->header('Content-Disposition', 'attachment; filename="' . $filename . '"')
+                ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+                ->header('Pragma', 'no-cache')
+                ->header('Expires', '0');
+                
         } catch (\Exception $e) {
-            abort(500, 'Failed to generate QR code PNG: ' . $e->getMessage());
+            \Log::error('QR PNG Generation Error: ' . $e->getMessage(), [
+                'qr_code_id' => $qrCode->id,
+                'uuid' => $uuid,
+                'url' => $qrCode->url
+            ]);
+            
+            abort(500, 'Failed to generate QR code. Please try again later.');
         }
-        return response($qrCodeImage)
-            ->header('Content-Type', 'image/png')
-            ->header('Content-Disposition', 'attachment; filename="qr-code-' . $qrCode->code . '.png"');
+    }
+    
+    /**
+     * Convert SVG to PNG using GD library
+     */
+    private function convertSvgToPng($svgContent, $size)
+    {
+        try {
+            // Create image canvas
+            $image = imagecreatetruecolor($size, $size);
+            
+            // Set white background
+            $white = imagecolorallocate($image, 255, 255, 255);
+            $black = imagecolorallocate($image, 0, 0, 0);
+            imagefill($image, 0, 0, $white);
+            
+            // Simple SVG parsing for QR rectangles
+            if (preg_match_all('/<rect[^>]*x="([^"]*)"[^>]*y="([^"]*)"[^>]*width="([^"]*)"[^>]*height="([^"]*)"[^>]*\/?>/', $svgContent, $matches, PREG_SET_ORDER)) {
+                
+                // Parse viewBox for scaling
+                $viewBoxScale = 1;
+                if (preg_match('/viewBox="[^"]*\s+[^"]*\s+([^"]*)\s+([^"]*)"/', $svgContent, $viewBoxMatches)) {
+                    $viewBoxWidth = floatval($viewBoxMatches[1]);
+                    if ($viewBoxWidth > 0) {
+                        $viewBoxScale = $size / $viewBoxWidth;
+                    }
+                }
+                
+                foreach ($matches as $match) {
+                    $x = floatval($match[1]) * $viewBoxScale;
+                    $y = floatval($match[2]) * $viewBoxScale;
+                    $width = floatval($match[3]) * $viewBoxScale;
+                    $height = floatval($match[4]) * $viewBoxScale;
+                    
+                    imagefilledrectangle($image, $x, $y, $x + $width, $y + $height, $black);
+                }
+            }
+            
+            // Capture PNG output
+            ob_start();
+            imagepng($image, null, 9); // Maximum compression
+            $pngData = ob_get_contents();
+            ob_end_clean();
+            
+            imagedestroy($image);
+            
+            return $pngData;
+            
+        } catch (\Exception $e) {
+            \Log::error('SVG to PNG conversion failed: ' . $e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -223,13 +368,39 @@ class QrCodeController extends Controller
         $qrCode = QrCode::byUuid($uuid)->first();
 
         if (!$qrCode) {
-            abort(404);
+            abort(404, 'QR Code not found');
+        }
+        
+        // Validate QR code URL
+        if (empty($qrCode->url)) {
+            abort(500, 'QR Code URL is not set.');
         }
 
-        $qrCodeSvg = QrCodeGenerator::format('svg')->size(300)->generate($qrCode->url);
+        try {
+            // Generate high-quality SVG QR code (perfect for printing)
+            $qrCodeSvg = QrCodeGenerator::format('svg')
+                ->size(800)
+                ->margin(2)
+                ->errorCorrection('H')
+                ->generate($qrCode->url);
+                
+            $filename = 'qr-code-' . $qrCode->code . '.svg';
 
-        return response($qrCodeSvg)
-            ->header('Content-Type', 'image/svg+xml')
-            ->header('Content-Disposition', 'attachment; filename="qr-code-' . $qrCode->code . '.svg"');
+            return response($qrCodeSvg)
+                ->header('Content-Type', 'image/svg+xml')
+                ->header('Content-Disposition', 'attachment; filename="' . $filename . '"')
+                ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+                ->header('Pragma', 'no-cache')
+                ->header('Expires', '0');
+                
+        } catch (\Exception $e) {
+            \Log::error('QR SVG Generation Error: ' . $e->getMessage(), [
+                'qr_code_id' => $qrCode->id,
+                'uuid' => $uuid,
+                'url' => $qrCode->url
+            ]);
+            
+            abort(500, 'Failed to generate QR code SVG. Please try again later.');
+        }
     }
 }

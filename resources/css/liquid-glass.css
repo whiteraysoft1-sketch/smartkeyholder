@@ -160,6 +160,33 @@ textarea.liquid-input {
     line-height: 1.5;
 }
 
+/* Select dropdown specific styling */
+select.liquid-input {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.25rem;
+    padding-right: 3rem;
+    cursor: pointer;
+}
+
+select.liquid-input option {
+    background: #ffffff;
+    color: #000000;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+}
+
+select.liquid-input option:hover,
+select.liquid-input option:checked,
+select.liquid-input option:focus {
+    background: #3b82f6;
+    color: #ffffff;
+}
+
 /* Label Styling */
 .liquid-label {
     display: block;

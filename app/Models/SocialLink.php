@@ -65,4 +65,17 @@ class SocialLink extends Model
 
         return $colors[$this->platform] ?? 'bg-gray-500 hover:bg-gray-600';
     }
+
+    // Ensure URL has proper protocol
+    public function getFormattedUrlAttribute()
+    {
+        $url = $this->url;
+        
+        // If URL doesn't start with http:// or https://, add https://
+        if (!preg_match('/^https?:\/\//', $url)) {
+            $url = 'https://' . $url;
+        }
+        
+        return $url;
+    }
 }

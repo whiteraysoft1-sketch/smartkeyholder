@@ -35,10 +35,21 @@ class AdminController extends Controller
                 ->count(),
         ];
 
+        // Get district statistics from user profiles
+        $districtStats = \DB::table('user_profiles')
+            ->select('location as district', \DB::raw('count(*) as user_count'))
+            ->whereNotNull('location')
+            ->where('location', '!=', '')
+            ->groupBy('location')
+            ->orderBy('user_count', 'desc')
+            ->get()
+            ->keyBy('district')
+            ->toArray();
+
         $recentUsers = User::latest()->take(10)->get();
         $recentSubscriptions = Subscription::with('user')->latest()->take(10)->get();
 
-        return view('admin.dashboard', compact('stats', 'recentUsers', 'recentSubscriptions'));
+        return view('admin.dashboard', compact('stats', 'recentUsers', 'recentSubscriptions', 'districtStats'));
     }
 
     /**
@@ -1239,5 +1250,66 @@ class AdminController extends Controller
         }
         
         return $value;
+    }
+
+    /**
+     * Send broadcast message to all users
+     */
+    public function sendBroadcastMessage(Request $request)
+    {
+        $request->validate([
+            'message' => 'required|string|max:255',
+        ]);
+
+        try {
+            // Get all users with profiles
+            $usersUpdated = User::whereHas('profile')->count();
+            
+            // Update all user profiles with the broadcast message
+            User::whereHas('profile')->with('profile')->chunk(100, function ($users) use ($request) {
+                foreach ($users as $user) {
+                    if ($user->profile) {
+                        $user->profile->update([
+                            'latest_inapp_message' => $request->message
+                        ]);
+                    }
+                }
+            });
+
+            return back()->with('success', "Broadcast message sent to {$usersUpdated} users successfully!");
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to send broadcast message: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Clear broadcast messages for all users
+     */
+    public function clearBroadcastMessages()
+    {
+        try {
+            $clearedCount = User::whereHas('profile')
+                ->whereHas('profile', function($query) {
+                    $query->whereNotNull('latest_inapp_message');
+                })
+                ->count();
+            
+            // Clear messages from all user profiles
+            User::whereHas('profile')->with('profile')->chunk(100, function ($users) {
+                foreach ($users as $user) {
+                    if ($user->profile && $user->profile->latest_inapp_message) {
+                        $user->profile->update([
+                            'latest_inapp_message' => null
+                        ]);
+                    }
+                }
+            });
+
+            return back()->with('success', "Cleared broadcast messages for {$clearedCount} users!");
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to clear broadcast messages: ' . $e->getMessage());
+        }
     }
 }

@@ -2562,6 +2562,125 @@
                 </div>
             </div>
 
+            <!-- Broadcast Messaging Section -->
+            <div style="margin-top: 24px;">
+                <div class="messaging-card" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; box-shadow: var(--shadow-card);">
+                    <div class="card-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                        <h4 style="color: var(--text-primary); font-size: 18px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 36px; height: 36px; background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white;">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
+                                </svg>
+                            </div>
+                            PWA Broadcast Messages
+                        </h4>
+                        <span style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500;">
+                            Super Admin
+                        </span>
+                    </div>
+
+                    @if(session('success'))
+                    <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 12px; padding: 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 20px; height: 20px; background: #22c55e; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <svg width="12" height="12" fill="none" stroke="white" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                        </div>
+                        <span style="color: #16a34a; font-weight: 500; font-size: 14px;">{{ session('success') }}</span>
+                    </div>
+                    @endif
+
+                    @if(session('error'))
+                    <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 20px; height: 20px; background: #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <svg width="12" height="12" fill="none" stroke="white" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </div>
+                        <span style="color: #dc2626; font-weight: 500; font-size: 14px;">{{ session('error') }}</span>
+                    </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('admin.broadcast.send') }}" style="margin-bottom: 20px;">
+                        @csrf
+                        <div style="margin-bottom: 16px;">
+                            <label style="display: block; margin-bottom: 8px; color: var(--text-primary); font-weight: 500; font-size: 14px;">
+                                Message to Send to All Users
+                            </label>
+                            <div style="position: relative;">
+                                <input 
+                                    type="text" 
+                                    name="message" 
+                                    id="broadcastMessage"
+                                    value="Hello from your PWA! This is a test push notification."
+                                    style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-color); border-radius: 10px; background: var(--bg-secondary); color: var(--text-primary); font-size: 14px; transition: all 0.3s ease;" 
+                                    placeholder="Enter your broadcast message..."
+                                    required
+                                    onkeypress="if(event.key==='Enter'){event.preventDefault();document.getElementById('sendBroadcastBtn').click();}"
+                                />
+                                <div style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 12px;">
+                                    <span id="charCount">0</span>/255
+                                </div>
+                            </div>
+                            @error('message')
+                            <span style="color: #ef4444; font-size: 12px; margin-top: 4px; display: block;">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            <button 
+                                type="submit"
+                                id="sendBroadcastBtn"
+                                style="background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%); color: white; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; font-size: 14px;"
+                                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(139, 92, 246, 0.4)'"
+                                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+                            >
+                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                                </svg>
+                                Send to All Users
+                            </button>
+
+                            <button 
+                                type="button"
+                                onclick="if(confirm('Are you sure you want to clear all broadcast messages?')) { document.getElementById('clearForm').submit(); }"
+                                style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 2px solid rgba(239, 68, 68, 0.3); padding: 12px 20px; border-radius: 10px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; font-size: 14px;"
+                                onmouseover="this.style.background='rgba(239, 68, 68, 0.15)'"
+                                onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'"
+                            >
+                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                                Clear All Messages
+                            </button>
+
+                            <div style="margin-left: auto; color: var(--text-muted); font-size: 13px;">
+                                Will send to <strong>{{ $stats['total_users'] }} users</strong>
+                            </div>
+                        </div>
+                    </form>
+
+                    <form id="clearForm" method="POST" action="{{ route('admin.broadcast.clear') }}" style="display: none;">
+                        @csrf
+                    </form>
+
+                    <div style="background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 12px; padding: 16px;">
+                        <h5 style="color: var(--text-primary); margin: 0 0 8px 0; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            How It Works
+                        </h5>
+                        <ul style="margin: 0; padding-left: 20px; color: var(--text-secondary); font-size: 13px; line-height: 1.6;">
+                            <li>Messages are sent to all users with registered profiles</li>
+                            <li>Messages appear as notification banners in user dashboards</li>
+                            <li>Users can dismiss messages by clicking the close button</li>
+                            <li>Use "Clear All Messages" to remove messages from all users</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <!-- Uganda Map Section -->
             <div class="map-section">
                 <div class="map-card">
@@ -2591,50 +2710,70 @@
                                     draggable="false"
                                 />
                             
-                                <!-- City Markers Overlay -->
+                                <!-- Dynamic District Markers Overlay -->
                                 <div class="map-markers-overlay" id="mapMarkersOverlay">
-                                    <div class="marker kampala" title="Kampala: 156 users">
-                                        <span class="marker-dot pulse"></span>
-                                        <span class="marker-label">Kampala</span>
-                                    </div>
-                                    <div class="marker gulu" title="Gulu: 45 users">
-                                        <span class="marker-dot"></span>
-                                        <span class="marker-label">Gulu</span>
-                                    </div>
-                                    <div class="marker mbarara" title="Mbarara: 67 users">
-                                        <span class="marker-dot"></span>
-                                        <span class="marker-label">Mbarara</span>
-                                    </div>
-                                    <div class="marker jinja" title="Jinja: 52 users">
-                                        <span class="marker-dot"></span>
-                                        <span class="marker-label">Jinja</span>
-                                    </div>
-                                    <div class="marker mbale" title="Mbale: 38 users">
-                                        <span class="marker-dot"></span>
-                                        <span class="marker-label">Mbale</span>
-                                    </div>
+                                    @php
+                                        // Define district positions on the map
+                                        $districtPositions = [
+                                            'Kampala' => ['top' => '62%', 'left' => '52%'],
+                                            'Wakiso' => ['top' => '64%', 'left' => '50%'],
+                                            'Gulu' => ['top' => '25%', 'left' => '48%'],
+                                            'Mbarara' => ['top' => '75%', 'left' => '38%'],
+                                            'Jinja' => ['top' => '60%', 'left' => '58%'],
+                                            'Mbale' => ['top' => '50%', 'left' => '65%'],
+                                            'Arua' => ['top' => '15%', 'left' => '35%'],
+                                            'Lira' => ['top' => '35%', 'left' => '55%'],
+                                            'Masaka' => ['top' => '70%', 'left' => '45%'],
+                                            'Fort Portal' => ['top' => '55%', 'left' => '35%'],
+                                            'Entebbe' => ['top' => '65%', 'left' => '50%'],
+                                            'Hoima' => ['top' => '45%', 'left' => '42%'],
+                                            'Kasese' => ['top' => '60%', 'left' => '28%'],
+                                            'Soroti' => ['top' => '42%', 'left' => '62%'],
+                                            'Other' => ['top' => '80%', 'left' => '60%']
+                                        ];
+                                        $topDistricts = collect($districtStats ?? [])->sortByDesc('user_count')->take(10);
+                                    @endphp
+                                    
+                                    @foreach($topDistricts as $district => $data)
+                                        @if(isset($districtPositions[$district]))
+                                            <div class="marker {{ strtolower(str_replace(' ', '', $district)) }}" 
+                                                 title="{{ $district }}: {{ $data->user_count }} users"
+                                                 style="top: {{ $districtPositions[$district]['top'] }}; left: {{ $districtPositions[$district]['left'] }};">
+                                                <span class="marker-dot {{ $data->user_count >= 10 ? 'pulse' : '' }}"></span>
+                                                <span class="marker-label">{{ $district }}</span>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                    
+                                    @if(count($topDistricts) == 0)
+                                        <!-- Fallback message when no district data -->
+                                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: var(--text-muted);">
+                                            <p style="font-size: 14px;">No district data available yet.</p>
+                                            <p style="font-size: 12px;">Districts will appear as users register.</p>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- User Activity Stats -->
+                        <!-- Dynamic User Activity Stats -->
                         <div class="map-overlay-stats">
-                            <div class="overlay-stat">
-                                <span class="stat-dot high"></span>
-                                <span>Kampala: 156 users</span>
-                            </div>
-                            <div class="overlay-stat">
-                                <span class="stat-dot high"></span>
-                                <span>Wakiso: 89 users</span>
-                            </div>
-                            <div class="overlay-stat">
-                                <span class="stat-dot medium"></span>
-                                <span>Mbarara: 67 users</span>
-                            </div>
-                            <div class="overlay-stat">
-                                <span class="stat-dot medium"></span>
-                                <span>Jinja: 52 users</span>
-                            </div>
+                            @foreach(collect($districtStats ?? [])->sortByDesc('user_count')->take(6) as $district => $data)
+                                @php
+                                    $level = $data->user_count >= 20 ? 'high' : ($data->user_count >= 5 ? 'medium' : 'low');
+                                @endphp
+                                <div class="overlay-stat">
+                                    <span class="stat-dot {{ $level }}"></span>
+                                    <span>{{ $district }}: {{ $data->user_count }} users</span>
+                                </div>
+                            @endforeach
+                            
+                            @if(count($districtStats ?? []) == 0)
+                                <div class="overlay-stat">
+                                    <span class="stat-dot low"></span>
+                                    <span>No district data yet</span>
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <div class="map-legend">
@@ -3167,6 +3306,34 @@
                 }
             }, 100);
         };
+    });
+
+    // Broadcast Message Character Counter
+    document.addEventListener('DOMContentLoaded', function() {
+        const messageInput = document.getElementById('broadcastMessage');
+        const charCount = document.getElementById('charCount');
+        
+        if (messageInput && charCount) {
+            function updateCharCount() {
+                const count = messageInput.value.length;
+                charCount.textContent = count;
+                
+                // Change color based on length
+                if (count > 200) {
+                    charCount.style.color = '#ef4444';
+                } else if (count > 150) {
+                    charCount.style.color = '#f59e0b';
+                } else {
+                    charCount.style.color = 'var(--text-muted)';
+                }
+            }
+            
+            // Update on input
+            messageInput.addEventListener('input', updateCharCount);
+            
+            // Initial count
+            updateCharCount();
+        }
     });
 </script>
 @endsection

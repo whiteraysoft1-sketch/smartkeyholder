@@ -197,10 +197,27 @@ class DashboardController extends Controller
     {
         $request->validate([
             'platform' => 'required|string|max:255',
-            'url' => 'required|url|max:255',
+            'url' => 'required|string|max:255',
         ]);
+        
+        // Clean and validate URL
+        $url = $request->url;
+        
+        // If URL doesn't start with protocol, validate it as a basic URL format
+        if (!preg_match('/^https?:\/\//', $url)) {
+            // Validate that it looks like a valid URL without protocol
+            if (!preg_match('/^[a-zA-Z0-9][a-zA-Z0-9-_]*\.[a-zA-Z]{2,}/', $url)) {
+                return redirect()->back()->withErrors(['url' => 'Please enter a valid URL or website address.']);
+            }
+        } else {
+            // If it has protocol, validate as full URL
+            if (!filter_var($url, FILTER_VALIDATE_URL)) {
+                return redirect()->back()->withErrors(['url' => 'Please enter a valid URL.']);
+            }
+        }
+        
         Auth::user()->socialLinks()->create($request->only(['platform', 'url']));
-        return redirect()->back()->with('success', 'Social link added.');
+        return redirect()->back()->with('success', 'Social link added successfully!');
     }
 
     public function updateSocialLink(Request $request, SocialLink $socialLink)
@@ -234,18 +251,23 @@ class DashboardController extends Controller
     {
         $request->validate([
             'title' => 'nullable|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:1128000', // Allow up to 1128MB
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240', // 10MB limit
         ]);
         
-        $file = $request->file('image');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $path = $file->storeAs('gallery_images', $filename, 'public');
-        
-        Auth::user()->galleryItems()->create([
-            'title' => $request->title ?: 'Gallery Image',
-            'image_path' => $path,
-        ]);
-        return redirect()->back()->with('success', 'Gallery item added.');
+        try {
+            $file = $request->file('image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('gallery_images', $filename, 'public');
+            
+            Auth::user()->galleryItems()->create([
+                'title' => $request->title ?: 'Gallery Image',
+                'image_path' => $path,
+            ]);
+            
+            return redirect()->back()->with('success', 'Photo uploaded successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Upload failed: ' . $e->getMessage());
+        }
     }
 
     public function updateGalleryItem(Request $request, GalleryItem $galleryItem)
