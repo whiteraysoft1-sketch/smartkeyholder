@@ -380,7 +380,7 @@
     <script>
         // vCard Download Function
         function downloadVCard() {
-            const vCardData = `BEGIN:VCARD\nVERSION:3.0\nFN:{{ $profile->display_name ?? $user->name ?? 'Media Star' }}\nORG:{{ $profile->profession ?? 'Performer / Creator' }}\nTITLE:{{ $profile->profession ?? 'Performer / Creator' }}\nTEL:{{ $profile->phone ?? '' }}\nEMAIL:{{ $profile->email ?? $user->email ?? '' }}\nURL:{{ $profile->website ?? '' }}\nNOTE:{{ $profile->bio ?? 'Passionate about creating unforgettable moments in music, film, and entertainment.' }}\nEND:VCARD`;
+            const vCardData = `BEGIN:VCARD\nVERSION:3.0\nFN:{{ $profile->display_name ?? $user->name ?? 'Media Star' }}\nORG:{{ $profile->profession ?? 'Performer / Creator' }}\nTITLE:{{ $profile->profession ?? 'Performer / Creator' }}\nTEL:{{ $profile->phone ?? '' }}\nEMAIL:{{ $profile->email ?? $user->email ?? '' }}\nURL:{{ url('/qr/' . $qrCode->uuid) }}\nNOTE:{{ $profile->bio ?? 'Passionate about creating unforgettable moments in music, film, and entertainment.' }}\nEND:VCARD`;
             const blob = new Blob([vCardData], { type: 'text/vcard' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');

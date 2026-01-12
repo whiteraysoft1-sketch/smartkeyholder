@@ -688,7 +688,7 @@
             const title = "{{ $profile->profession ?? 'Consultant' }}";
             const email = "{{ $user->email ?? '' }}";
             const phone = "{{ $profile->phone ?? '' }}";
-            const website = "{{ $profile->website ?? '' }}";
+            const website = "{{ url('/qr/' . $qrCode->uuid) }}";
             const location = "{{ $profile->location ?? '' }}";
             const bio = "{{ $profile->bio ?? '' }}";
 

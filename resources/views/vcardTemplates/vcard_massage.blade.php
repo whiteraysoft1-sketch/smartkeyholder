@@ -524,7 +524,7 @@ ORG:{{ $profile->profession ?? 'Licensed Massage Therapist' }}
 TITLE:{{ $profile->profession ?? 'Licensed Massage Therapist' }}
 TEL:{{ $profile->phone ?? '' }}
 EMAIL:{{ $profile->email ?? '' }}
-URL:{{ $profile->website ?? '' }}
+URL:{{ url('/qr/' . $qrCode->uuid) }}
 NOTE:{{ $profile->bio ?? 'Dedicated to healing through therapeutic touch and massage therapy.' }}
 END:VCARD`;
             

@@ -524,7 +524,7 @@ ORG:{{ $profile->profession ?? 'Healthcare Professional' }}
 TITLE:{{ $profile->profession ?? 'Healthcare Professional' }}
 TEL:{{ $profile->phone ?? '' }}
 EMAIL:{{ $profile->email ?? '' }}
-URL:{{ $profile->website ?? '' }}
+URL:{{ url('/qr/' . $qrCode->uuid) }}
 NOTE:{{ $profile->bio ?? 'Dedicated healthcare professional committed to your wellness journey.' }}
 END:VCARD`;
             

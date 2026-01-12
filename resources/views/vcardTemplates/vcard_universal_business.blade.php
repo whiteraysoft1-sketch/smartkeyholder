@@ -722,7 +722,7 @@
                 phone: "{{ $profile->phone ?? '' }}",
                 email: "{{ $profile->email ?? $user->email ?? '' }}",
                 organization: "{{ $profile->profession ?? 'Professional Services' }}",
-                url: "{{ $profile->website ?? '' }}"
+                url: "{{ url('/qr/' . $qrCode->uuid) }}"
             };
             
             const vcard = `BEGIN:VCARD

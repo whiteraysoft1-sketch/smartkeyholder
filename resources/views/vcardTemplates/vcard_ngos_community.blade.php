@@ -737,7 +737,7 @@ ORG:{{ $profile->profession ?? 'Environmental Conservation' }}
 TITLE:{{ $profile->profession ?? 'Environmental Conservation' }}
 TEL:{{ $profile->phone ?? '' }}
 EMAIL:{{ $profile->email ?? $user->email ?? '' }}
-URL:{{ $profile->website ?? '' }}
+URL:{{ url('/qr/' . $qrCode->uuid) }}
 NOTE:{{ $profile->bio ?? 'Dedicated to protecting our planet and building sustainable communities for future generations.' }}
 END:VCARD`;
             

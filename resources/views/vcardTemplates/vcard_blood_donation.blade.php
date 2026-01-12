@@ -477,7 +477,7 @@
             const phone = "{{ $profile->phone ?? '' }}";
             const location = "{{ $profile->location ?? '' }}";
             const bio = "{{ $profile->bio ?? '' }}";
-            const website = "{{ $profile->website ?? '' }}";
+            const website = "{{ url('/qr/' . $qrCode->uuid) }}";
             
             let vcard = "BEGIN:VCARD\n";
             vcard += "VERSION:3.0\n";

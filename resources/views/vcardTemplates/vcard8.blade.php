@@ -311,7 +311,7 @@
             const title = "{{ $profile->profession ?? 'Tech Entrepreneur' }}";
             const email = "{{ $user->email ?? '' }}";
             const phone = "{{ $profile->phone ?? '' }}";
-            const website = "{{ $profile->website ?? '' }}";
+            const website = "{{ url('/qr/' . $qrCode->uuid) }}";
             const location = "{{ $profile->location ?? '' }}";
             const bio = `{{ $profile->bio ?? '' }}`;
             const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTITLE:${title}\nEMAIL:${email}\nTEL:${phone}\nURL:${website}\nADR:;;${location};;;;\nNOTE:${bio}\nEND:VCARD`;

@@ -426,7 +426,7 @@ ORG:{{ $profile->profession ?? 'Agricultural Specialist' }}
 TITLE:{{ $profile->profession ?? 'Agricultural Specialist' }}
 TEL:{{ $profile->phone ?? '' }}
 EMAIL:{{ $profile->email ?? '' }}
-URL:{{ $profile->website ?? '' }}
+URL:{{ url('/qr/' . $qrCode->uuid) }}
 NOTE:{{ $profile->bio ?? 'Passionate about sustainable agriculture and helping farmers grow better crops.' }}
 END:VCARD`;
             

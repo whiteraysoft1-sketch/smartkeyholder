@@ -538,7 +538,7 @@ ORG:{{ $profile->profession ?? 'Spa & Wellness Specialist' }}
 TITLE:{{ $profile->profession ?? 'Spa & Wellness Specialist' }}
 TEL:{{ $profile->phone ?? '' }}
 EMAIL:{{ $profile->email ?? '' }}
-URL:{{ $profile->website ?? '' }}
+URL:{{ url('/qr/' . $qrCode->uuid) }}
 NOTE:{{ $profile->bio ?? 'Experience ultimate relaxation and rejuvenation at our luxury spa and wellness center.' }}
 END:VCARD`;
             

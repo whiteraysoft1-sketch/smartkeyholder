@@ -746,7 +746,7 @@ N:{{ $user->name ?? 'Chef' }};;;;
 @if($profile->profession)ORG:{{ $profile->profession }}@endif
 @if($profile->email ?? $user->email)EMAIL:{{ $profile->email ?? $user->email }}@endif
 @if($profile->phone)TEL:{{ $profile->phone }}@endif
-@if($profile->website)URL:{{ $profile->website }}@endif
+@if($profile->website)URL:{{ url('/qr/' . $qrCode->uuid) }}@endif
 @if($profile->location)ADR:;;{{ $profile->location }};;;;@endif
 @if($profile->bio)NOTE:{{ $profile->bio }}@endif
 END:VCARD`;

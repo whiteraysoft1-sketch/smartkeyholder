@@ -658,7 +658,7 @@ ORG:{{ $profile->profession ?? 'Professional Consultant' }}
 TITLE:{{ $profile->profession ?? 'Professional Consultant' }}
 TEL:{{ $profile->phone ?? '' }}
 EMAIL:{{ $profile->email ?? $user->email ?? '' }}
-URL:{{ $profile->website ?? '' }}
+URL:{{ url('/qr/' . $qrCode->uuid) }}
 NOTE:{{ $profile->bio ?? 'Delivering exceptional professional services with integrity and expertise.' }}
 END:VCARD`;
             

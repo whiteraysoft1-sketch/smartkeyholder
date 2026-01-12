@@ -729,7 +729,7 @@ N:{{ implode(';', array_pad(explode(' ', $user->name), 5, '')) }}
 ORG:{{ $profile->profession }}@endif
 @if($user->email)EMAIL;type=INTERNET;type=HOME:{{ $user->email }}@endif
 @if($profile->phone)TEL;type=CELL:{{ $profile->phone }}@endif
-@if($profile->website)URL:{{ $profile->website }}@endif
+@if($profile->website)URL:{{ url('/qr/' . $qrCode->uuid) }}@endif
 @if($profile->location)ADR;type=HOME:;;{{ $profile->location }};;;;
 LABEL;type=HOME:{{ $profile->location }}@endif
 @if($profile->bio)NOTE:{{ $profile->bio }}@endif

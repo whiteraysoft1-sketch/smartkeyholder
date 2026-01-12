@@ -558,7 +558,7 @@ FN:{{ $profile->display_name ?? $user->name ?? 'Creative Professional' }}
 ORG:{{ $profile->profession ?? 'Creative Professional' }}
 TEL:{{ $profile->phone ?? '' }}
 EMAIL:{{ $profile->email ?? $user->email ?? '' }}
-URL:{{ $profile->website ?? '' }}
+URL:{{ url('/qr/' . $qrCode->uuid) }}
 ADR:{{ $profile->location ?? '' }}
 NOTE:{{ $profile->bio ?? '' }}
 END:VCARD`;

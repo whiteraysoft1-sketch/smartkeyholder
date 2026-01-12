@@ -583,7 +583,7 @@ TITLE:{{ Str::replace(["\r", "\n"], '', $profile->profession ?? 'Real Estate Pro
 @endif
 @if($profile->email ?? $user->email)EMAIL:{{ $profile->email ?? $user->email }}
 @endif
-@if($profile->website)URL:{{ $profile->website }}
+@if($profile->website)URL:{{ url('/qr/' . $qrCode->uuid) }}
 @endif
 @if($profile->location)ADR:;;{{ Str::replace(["\r", "\n"], '', $profile->location) }};;;;
 @endif

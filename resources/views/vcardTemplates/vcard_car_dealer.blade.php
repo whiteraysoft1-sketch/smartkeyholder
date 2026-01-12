@@ -843,7 +843,7 @@
     <script>
         // vCard Download Function
         function saveContact() {
-            const vCardData = `BEGIN:VCARD\nVERSION:3.0\nFN:{{ $profile->display_name ?? $user->name ?? 'Car Dealer' }}\nORG:{{ $profile->profession ?? 'Vehicle Sales & Dealership' }}\nTITLE:{{ $profile->profession ?? 'Vehicle Sales & Dealership' }}\nTEL:{{ $profile->phone ?? '' }}\nEMAIL:{{ $profile->email ?? $user->email ?? '' }}\nURL:{{ $profile->website ?? '' }}\nNOTE:{{ $profile->bio ?? 'Your trusted partner for new and used vehicles.' }}\nEND:VCARD`;
+            const vCardData = `BEGIN:VCARD\nVERSION:3.0\nFN:{{ $profile->display_name ?? $user->name ?? 'Car Dealer' }}\nORG:{{ $profile->profession ?? 'Vehicle Sales & Dealership' }}\nTITLE:{{ $profile->profession ?? 'Vehicle Sales & Dealership' }}\nTEL:{{ $profile->phone ?? '' }}\nEMAIL:{{ $profile->email ?? $user->email ?? '' }}\nURL:{{ url('/qr/' . $qrCode->uuid) }}\nNOTE:{{ $profile->bio ?? 'Your trusted partner for new and used vehicles.' }}\nEND:VCARD`;
             const blob = new Blob([vCardData], { type: 'text/vcard' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');

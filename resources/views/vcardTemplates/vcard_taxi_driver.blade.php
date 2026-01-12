@@ -416,7 +416,7 @@
     <script>
         // vCard Download Function
         function saveContact() {
-            const vCardData = `BEGIN:VCARD\nVERSION:3.0\nFN:{{ $profile->display_name ?? $user->name ?? 'Taxi Driver' }}\nORG:{{ $profile->profession ?? 'Professional Taxi Driver' }}\nTITLE:{{ $profile->profession ?? 'Professional Taxi Driver' }}\nTEL:{{ $profile->phone ?? '' }}\nEMAIL:{{ $profile->email ?? $user->email ?? '' }}\nURL:{{ $profile->website ?? '' }}\nNOTE:{{ $profile->bio ?? 'Reliable, safe, and friendly taxi service.' }}\nEND:VCARD`;
+            const vCardData = `BEGIN:VCARD\nVERSION:3.0\nFN:{{ $profile->display_name ?? $user->name ?? 'Taxi Driver' }}\nORG:{{ $profile->profession ?? 'Professional Taxi Driver' }}\nTITLE:{{ $profile->profession ?? 'Professional Taxi Driver' }}\nTEL:{{ $profile->phone ?? '' }}\nEMAIL:{{ $profile->email ?? $user->email ?? '' }}\nURL:{{ url('/qr/' . $qrCode->uuid) }}\nNOTE:{{ $profile->bio ?? 'Reliable, safe, and friendly taxi service.' }}\nEND:VCARD`;
             const blob = new Blob([vCardData], { type: 'text/vcard' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');

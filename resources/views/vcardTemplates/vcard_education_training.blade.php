@@ -569,7 +569,7 @@ ORG:{{ $profile->profession ?? 'Education Specialist' }}
 TITLE:{{ $profile->profession ?? 'Education Specialist' }}
 TEL:{{ $profile->phone ?? '' }}
 EMAIL:{{ $profile->email ?? '' }}
-URL:{{ $profile->website ?? '' }}
+URL:{{ url('/qr/' . $qrCode->uuid) }}
 NOTE:{{ $profile->bio ?? 'Passionate educator committed to empowering minds through innovative learning experiences.' }}
 END:VCARD`;
             
