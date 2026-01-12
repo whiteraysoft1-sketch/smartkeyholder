@@ -43,11 +43,7 @@ class GalleryItem extends Model
         
         // Then try to generate from image_path
         if ($this->image_path) {
-            $path = $this->image_path;
-            if (strpos($path, 'gallery_images/') !== 0) {
-                $path = 'gallery_images/' . ltrim($path, '/');
-            }
-            return $this->getStorageUrl($path);
+            return \App\Helpers\StorageHelper::getGalleryImageUrl($this->image_path);
         }
         
         // Return a default placeholder if nothing is available
@@ -58,11 +54,7 @@ class GalleryItem extends Model
     {
         // If image_url is not set, generate it from image_path
         if (!$value && $this->image_path) {
-            $path = $this->image_path;
-            if (strpos($path, 'gallery_images/') !== 0) {
-                $path = 'gallery_images/' . ltrim($path, '/');
-            }
-            return $this->getStorageUrl($path);
+            return \App\Helpers\StorageHelper::getGalleryImageUrl($this->image_path);
         }
         
         return $value;
@@ -70,16 +62,10 @@ class GalleryItem extends Model
 
     /**
      * Generate storage URL that works in hosted environments
+     * @deprecated Use StorageHelper instead
      */
     private function getStorageUrl($path)
     {
-        // For hosted environments, use direct storage URL
-        if (app()->environment('production') || str_contains(config('app.url'), 'smart-keyholder.click')) {
-            $baseUrl = env('STORAGE_URL', 'https://smart-keyholder.click/storage');
-            return $baseUrl . '/' . ltrim($path, '/');
-        }
-        
-        // For local development, use standard Laravel storage
-        return Storage::disk('public')->url($path);
+        return \App\Helpers\StorageHelper::getImageUrl($path);
     }
 }

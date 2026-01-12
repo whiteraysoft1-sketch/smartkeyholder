@@ -66,28 +66,18 @@ class StoreProduct extends Model
     public function getImageUrlAttribute()
     {
         if ($this->image) {
-            $path = $this->image;
-            if (strpos($path, 'store_products/') !== 0) {
-                $path = 'store_products/' . ltrim($path, '/');
-            }
-            return $this->getStorageUrl($path);
+            return \App\Helpers\StorageHelper::getStoreProductImageUrl($this->image);
         }
         return asset('images/default-product.png');
     }
 
     /**
      * Generate storage URL that works in hosted environments
+     * @deprecated Use StorageHelper instead
      */
     private function getStorageUrl($path)
     {
-        // For hosted environments, use direct storage URL
-        if (app()->environment('production') || str_contains(config('app.url'), 'smart-keyholder.click')) {
-            $baseUrl = env('STORAGE_URL', 'https://smart-keyholder.click/storage');
-            return $baseUrl . '/' . ltrim($path, '/');
-        }
-        
-        // For local development, use standard Laravel storage
-        return Storage::disk('public')->url($path);
+        return \App\Helpers\StorageHelper::getImageUrl($path);
     }
 
     public function getFormattedPriceAttribute()

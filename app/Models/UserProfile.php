@@ -99,11 +99,7 @@ class UserProfile extends Model
     public function getProfileImageUrlAttribute()
     {
         if ($this->profile_image) {
-            $path = $this->profile_image;
-            if (strpos($path, 'profile_images/') !== 0) {
-                $path = 'profile_images/' . ltrim($path, '/');
-            }
-            return $this->getStorageUrl($path);
+            return \App\Helpers\StorageHelper::getProfileImageUrl($this->profile_image);
         }
         return null;
     }
@@ -111,28 +107,18 @@ class UserProfile extends Model
     public function getFullProfileImageUrlAttribute()
     {
         if ($this->profile_image) {
-            $path = $this->profile_image;
-            if (strpos($path, 'profile_images/') !== 0) {
-                $path = 'profile_images/' . ltrim($path, '/');
-            }
-            return $this->getStorageUrl($path);
+            return \App\Helpers\StorageHelper::getProfileImageUrl($this->profile_image);
         }
         return asset('images/default-avatar.png');
     }
 
     /**
      * Generate storage URL that works in hosted environments
+     * @deprecated Use StorageHelper instead
      */
     private function getStorageUrl($path)
     {
-        // For hosted environments, use direct storage URL
-        if (app()->environment('production') || str_contains(config('app.url'), 'smart-keyholder.click')) {
-            $baseUrl = env('STORAGE_URL', 'https://smart-keyholder.click/storage');
-            return $baseUrl . '/' . ltrim($path, '/');
-        }
-        
-        // For local development, use standard Laravel storage
-        return Storage::disk('public')->url($path);
+        return \App\Helpers\StorageHelper::getImageUrl($path);
     }
 
     public function hasProfileImage()
@@ -143,11 +129,7 @@ class UserProfile extends Model
     public function getBackgroundImageUrlAttribute()
     {
         if ($this->background_image) {
-            $path = $this->background_image;
-            if (strpos($path, 'background_images/') !== 0) {
-                $path = 'background_images/' . ltrim($path, '/');
-            }
-            return $this->getStorageUrl($path);
+            return \App\Helpers\StorageHelper::getBackgroundImageUrl($this->background_image);
         }
         return null;
     }
@@ -155,11 +137,7 @@ class UserProfile extends Model
     public function getFullBackgroundImageUrlAttribute()
     {
         if ($this->background_image) {
-            $path = $this->background_image;
-            if (strpos($path, 'background_images/') !== 0) {
-                $path = 'background_images/' . ltrim($path, '/');
-            }
-            return $this->getStorageUrl($path);
+            return \App\Helpers\StorageHelper::getBackgroundImageUrl($this->background_image);
         }
         return null;
     }
