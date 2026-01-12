@@ -49,9 +49,14 @@ class StorageHelper
             return rtrim($storageUrl, '/');
         }
 
-        // Fallback construction
+        // Check if we're on Hostinger with file server URL
         $appUrl = rtrim(config('app.url'), '/');
-        
+        if (str_contains($appUrl, 'smart-keyholder.click')) {
+            // Try to detect Hostinger file server structure
+            // This is a fallback if STORAGE_URL is not set
+            return 'https://srv1238-files.hstgr.io/11b20f5480f75c32/files/public_html/storage/app/public';
+        }
+
         // For hosted environments, remove /public from app URL and add /storage
         if (str_contains($appUrl, '/public')) {
             $baseUrl = str_replace('/public', '', $appUrl);
