@@ -1765,6 +1765,23 @@ use Illuminate\Support\Facades\Storage;
                             </div>
 
                             <div>
+                                <label class="liquid-label">Background Image</label>
+                                @if($profile && $profile->background_image)
+                                    <div class="mb-3">
+                                        <div class="relative inline-block">
+                                            <img src="{{ $profile->background_image_url }}" alt="Current background" class="w-32 h-20 rounded-lg object-cover border-2 border-gray-200">
+                                            <button type="button" onclick="document.getElementById('remove-background-form').submit()" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-colors" title="Remove background image">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-1">Current background image</p>
+                                    </div>
+                                @endif
+                                <input type="file" name="background_image" accept="image/jpeg,image/png,image/jpg,image/gif" class="liquid-input">
+                                <p class="text-xs text-gray-500 mt-1">Upload a background image for your vCard profile</p>
+                            </div>
+
+                            <div>
                                 <label class="liquid-label">Name</label>
                                 <input type="text" name="name" value="{{ auth()->user()->name }}" class="liquid-input" required>
                             </div>
