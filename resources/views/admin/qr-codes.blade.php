@@ -876,6 +876,17 @@ Available</span>
                                     <i class="fas fa-user-edit"></i>
                                     Reassign
                                 </button>
+
+                                <!-- Delete Button -->
+                                <form method="POST" action="{{ route('admin.qr-codes.delete', $qrCode) }}" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger" 
+                                            onclick="return confirm('Are you sure you want to delete this QR code? This action cannot be undone!')">
+                                        <i class="fas fa-trash"></i>
+                                        Delete
+                                    </button>
+                                </form>
                             </div>
                         </td>
                     </tr>

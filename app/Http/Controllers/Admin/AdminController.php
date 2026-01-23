@@ -383,6 +383,24 @@ class AdminController extends Controller
     }
 
     /**
+     * Delete QR code
+     */
+    public function deleteQrCode(QrCode $qrCode)
+    {
+        try {
+            // Store QR code info before deletion
+            $qrCodeInfo = $qrCode->code;
+            
+            // Delete the QR code
+            $qrCode->delete();
+            
+            return back()->with('success', "QR Code '{$qrCodeInfo}' deleted successfully!");
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to delete QR code: ' . $e->getMessage());
+        }
+    }
+
+    /**
      * Manage subscriptions
      */
     public function subscriptions()

@@ -203,6 +203,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/qr-codes/{qrCode}/deactivate', [AdminController::class, 'deactivateQrCode'])->name('qr-codes.deactivate');
     Route::post('/qr-codes/{qrCode}/activate', [AdminController::class, 'activateQrCode'])->name('qr-codes.activate');
     Route::post('/qr-codes/{qrCode}/reassign', [AdminController::class, 'reassignQrCode'])->name('qr-codes.reassign');
+    Route::delete('/qr-codes/{qrCode}', [AdminController::class, 'deleteQrCode'])->name('qr-codes.delete');
     
     // User management
     Route::get('/users', [AdminController::class, 'users'])->name('users');
