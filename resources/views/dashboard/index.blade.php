@@ -1426,14 +1426,18 @@ use Illuminate\Support\Facades\Storage;
         <nav class="dashboard-header">
             <div class="dashboard-content">
                 <div class="flex items-center justify-between py-4">
-                    <!-- Left Side - Logo Only -->
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
-                            <i class="fas fa-qrcode text-white text-lg"></i>
-                        </div>
-                        <div class="hidden sm:block">
-                            <div class="text-lg font-bold text-gray-900">Smart Tag</div>
-                            <div class="text-xs text-gray-500">Digital Business Card</div>
+                    <!-- Left Side - User Profile -->
+                    <div class="flex items-center space-x-4">
+                        @if($profile && $profile->profile_image)
+                            <img src="{{ $profile->profile_image_url }}" alt="Profile" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover shadow-xl border-3 border-white ring-2 ring-blue-100">
+                        @else
+                            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-xl ring-2 ring-blue-100">
+                                <i class="fas fa-user text-white text-2xl sm:text-3xl"></i>
+                            </div>
+                        @endif
+                        <div class="block">
+                            <div class="text-base sm:text-lg font-bold text-gray-900 truncate max-w-[140px] sm:max-w-none">{{ auth()->user()->name }}</div>
+                            <div class="text-sm sm:text-base text-gray-500 truncate max-w-[140px] sm:max-w-none">{{ $profile->profession ?? 'Digital Business Card' }}</div>
                         </div>
                     </div>
 
@@ -1802,6 +1806,11 @@ use Illuminate\Support\Facades\Storage;
                             </div>
                             
                             <div>
+                                <label class="liquid-label">Professional Title / Position</label>
+                                <input type="text" name="profession" value="{{ $profile->profession ?? '' }}" class="liquid-input" placeholder="e.g., Software Engineer, Marketing Manager">
+                            </div>
+                            
+                            <div>
                                 <label class="liquid-label">District</label>
                                 <select name="location" class="liquid-input">
                                     <option value="">Select your district</option>
@@ -2043,16 +2052,16 @@ use Illuminate\Support\Facades\Storage;
                         <form id="gallery-upload-form" action="{{ route('dashboard.gallery.add') }}" method="POST" enctype="multipart/form-data" class="space-y-4 mb-6">
                             @csrf
                             <div>
-                                <label class="liquid-label">Upload Photo</label>
-                                <input type="file" name="image" id="gallery-image" accept="image/jpeg,image/png,image/jpg,image/gif" class="liquid-input" required>
-                                <div class="text-xs text-gray-500 mt-1">Max file size: 10MB. Formats: JPG, PNG, GIF</div>
+                                <label class="liquid-label">Upload Photos (Multiple Selection)</label>
+                                <input type="file" name="images[]" id="gallery-images" accept="image/jpeg,image/png,image/jpg,image/gif" class="liquid-input" multiple required onchange="previewGalleryImages(this)">
+                                <div class="text-xs text-gray-500 mt-1">Max file size per image: 10MB. Formats: JPG, PNG, GIF. You can select multiple images.</div>
                             </div>
-                            <div>
-                                <label class="liquid-label">Photo Title (Optional)</label>
-                                <input type="text" name="title" placeholder="e.g., My Best Work" class="liquid-input">
-                            </div>
+                            
+                            <!-- Image Preview with Title Editing -->
+                            <div id="images-preview-container" class="hidden space-y-3"></div>
+                            
                             <button type="submit" class="liquid-btn w-full" id="upload-btn">
-                                <i class="fas fa-upload"></i> <span id="btn-text">Upload Photo</span>
+                                <i class="fas fa-upload"></i> <span id="btn-text">Upload Photos</span>
                             </button>
                         </form>
 
@@ -2060,10 +2069,13 @@ use Illuminate\Support\Facades\Storage;
                         @if($galleryItems->count() > 0)
                             <div class="gallery-grid">
                                 @foreach($galleryItems as $item)
-                                    <div class="gallery-item group">
+                                    <div class="gallery-item group relative">
                                         <img src="{{ $item->full_image_url }}" alt="{{ $item->title }}" class="w-full h-full object-cover">
-                                        <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                            <form action="{{ route('dashboard.gallery.delete', $item) }}" method="POST" onsubmit="return confirm('Delete this photo?');">
+                                        <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                            <button type="button" onclick="editGalleryTitle({{ $item->id }}, '{{ addslashes($item->title) }}')" class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-blue-600">
+                                                <i class="fas fa-edit text-sm"></i>
+                                            </button>
+                                            <form action="{{ route('dashboard.gallery.delete', $item) }}" method="POST" onsubmit="return confirm('Delete this photo?');" class="inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600">
@@ -2086,6 +2098,27 @@ use Illuminate\Support\Facades\Storage;
                             </div>
                         @endif
                     </div>
+                </div>
+            </div>
+
+            <!-- Edit Gallery Title Modal -->
+            <div id="edit-gallery-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50" onclick="closeEditGalleryModal(event)">
+                <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4" onclick="event.stopPropagation()">
+                    <h3 class="text-lg font-bold mb-4">Edit Photo Title</h3>
+                    <form id="edit-gallery-form" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="mb-4">
+                            <label class="liquid-label">Photo Title</label>
+                            <input type="text" name="title" id="edit-gallery-title" class="liquid-input" required>
+                        </div>
+                        <div class="flex gap-3">
+                            <button type="button" onclick="closeEditGalleryModal()" class="flex-1 px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">Cancel</button>
+                            <button type="submit" class="flex-1 liquid-btn">
+                                <i class="fas fa-save"></i> Save
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -2316,6 +2349,86 @@ use Illuminate\Support\Facades\Storage;
                         });
                     }
                 });
+            });
+
+            // Gallery Multiple Images Preview with Title Editing
+            function previewGalleryImages(input) {
+                const container = document.getElementById('images-preview-container');
+                const files = input.files;
+                
+                if (files.length === 0) {
+                    container.innerHTML = '';
+                    container.classList.add('hidden');
+                    return;
+                }
+                
+                container.innerHTML = '';
+                container.classList.remove('hidden');
+                
+                Array.from(files).forEach((file, index) => {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        const previewItem = document.createElement('div');
+                        previewItem.className = 'flex items-start gap-3 p-3 bg-gray-50 rounded-lg';
+                        previewItem.innerHTML = `
+                            <img src="${e.target.result}" alt="Preview" class="w-20 h-20 object-cover rounded-lg">
+                            <div class="flex-1">
+                                <label class="text-xs text-gray-600 font-medium">Title for image ${index + 1}</label>
+                                <input type="text" name="titles[]" placeholder="e.g., My Best Work" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" value="${file.name.replace(/\.[^/.]+$/, '')}">
+                            </div>
+                            <button type="button" onclick="removePreviewImage(this, ${index})" class="text-red-500 hover:text-red-700">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        `;
+                        container.appendChild(previewItem);
+                    };
+                    
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            function removePreviewImage(btn, index) {
+                const input = document.getElementById('gallery-images');
+                const dt = new DataTransfer();
+                const files = input.files;
+                
+                for (let i = 0; i < files.length; i++) {
+                    if (i !== index) {
+                        dt.items.add(files[i]);
+                    }
+                }
+                
+                input.files = dt.files;
+                previewGalleryImages(input);
+            }
+
+            // Edit Gallery Title Functions
+            function editGalleryTitle(itemId, currentTitle) {
+                const modal = document.getElementById('edit-gallery-modal');
+                const form = document.getElementById('edit-gallery-form');
+                const titleInput = document.getElementById('edit-gallery-title');
+                
+                form.action = `/dashboard/gallery/${itemId}`;
+                titleInput.value = currentTitle;
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                titleInput.focus();
+            }
+
+            function closeEditGalleryModal(event) {
+                if (!event || event.target.id === 'edit-gallery-modal') {
+                    const modal = document.getElementById('edit-gallery-modal');
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }
+            }
+
+            // Close modal on Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeEditGalleryModal();
+                }
             });
         </script>
     </div>

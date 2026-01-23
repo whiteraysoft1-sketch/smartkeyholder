@@ -250,21 +250,33 @@ class DashboardController extends Controller
     public function addGalleryItem(Request $request)
     {
         $request->validate([
-            'title' => 'nullable|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240', // 10MB limit
+            'images' => 'required|array',
+            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240', // 10MB limit per image
+            'titles' => 'nullable|array',
+            'titles.*' => 'nullable|string|max:255',
         ]);
         
         try {
-            $file = $request->file('image');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('gallery_images', $filename, 'public');
+            $images = $request->file('images');
+            $titles = $request->input('titles', []);
+            $uploadedCount = 0;
             
-            Auth::user()->galleryItems()->create([
-                'title' => $request->title ?: 'Gallery Image',
-                'image_path' => $path,
-            ]);
+            foreach ($images as $index => $file) {
+                $filename = time() . '_' . $index . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs('gallery_images', $filename, 'public');
+                
+                $title = $titles[$index] ?? 'Gallery Image';
+                
+                Auth::user()->galleryItems()->create([
+                    'title' => $title,
+                    'image_path' => $path,
+                ]);
+                
+                $uploadedCount++;
+            }
             
-            return redirect()->back()->with('success', 'Photo uploaded successfully!');
+            $message = $uploadedCount > 1 ? "{$uploadedCount} photos uploaded successfully!" : "Photo uploaded successfully!";
+            return redirect()->back()->with('success', $message);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Upload failed: ' . $e->getMessage());
         }
@@ -773,6 +785,7 @@ class DashboardController extends Controller
             ['file' => 'vcard_church', 'name' => 'Church & Ministry'],
             ['file' => 'vcard_blood_donation', 'name' => 'Blood Donation Center'],
             ['file' => 'vcard_cloth_store', 'name' => 'Cloth & Fashion Store'],
+            ['file' => 'vcard_tours_travel', 'name' => 'Tours & Travel'],
         ];
         return view('dashboard.vcard-templates', compact('user', 'profile', 'templates'));
     }
@@ -812,6 +825,7 @@ class DashboardController extends Controller
             'vcard_church',
             'vcard_blood_donation',
             'vcard_cloth_store',
+            'vcard_tours_travel',
         ];
         if (!in_array($template, $availableTemplates)) {
             abort(404, 'Template not found');
@@ -823,7 +837,7 @@ class DashboardController extends Controller
     public function selectVcardTemplate(Request $request)
     {
         $request->validate([
-            'template' => 'required|string|in:vcard_professional,vcard_retail,vcard_skilled_trades,vcard_health_wellness,vcard_education_training,vcard_transport_logistics,vcard_food_hospitality,vcard_corporate_industrial,vcard_car_dealer,vcard_agriculture,vcard_media_entertainment,vcard_ngos_community,vcard_massage,vcard_spa,vcard_taxi_driver,vcard_modern_business,vcard_creative_portfolio,vcard_printing_design_branding,vcard_real_estate,vcard_phone_store,vcard_universal_business,vcard_church,vcard_blood_donation,vcard_cloth_store',
+            'template' => 'required|string|in:vcard_professional,vcard_retail,vcard_skilled_trades,vcard_health_wellness,vcard_education_training,vcard_transport_logistics,vcard_food_hospitality,vcard_corporate_industrial,vcard_car_dealer,vcard_agriculture,vcard_media_entertainment,vcard_ngos_community,vcard_massage,vcard_spa,vcard_taxi_driver,vcard_modern_business,vcard_creative_portfolio,vcard_printing_design_branding,vcard_real_estate,vcard_phone_store,vcard_universal_business,vcard_church,vcard_blood_donation,vcard_cloth_store,vcard_tours_travel',
         ]);
 
         $user = Auth::user();
