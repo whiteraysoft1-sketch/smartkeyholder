@@ -79,7 +79,16 @@ jobs:
             
             # Now sync files to deployment directory (excluding .env)
             echo "🔄 Syncing files to production (excluding .env)..."
-            rsync -av --delete --exclude='.env' --exclude='.git' --exclude='storage/app/public/*' --exclude='storage/logs/*' --exclude='storage/framework/sessions/*' --exclude='storage/framework/cache/*' --exclude='storage/framework/views/*' $TEMP_DIR/ $DEPLOY_PATH/
+            rsync -av --delete \
+              --exclude='.env' \
+              --exclude='.git' \
+              --exclude='storage/app/public/' \
+              --exclude='storage/logs/' \
+              --exclude='storage/framework/sessions/' \
+              --exclude='storage/framework/cache/' \
+              --exclude='storage/framework/views/' \
+              --exclude='public/storage' \
+              $TEMP_DIR/ $DEPLOY_PATH/
             
             # Clean up temp directory
             rm -rf $TEMP_DIR
