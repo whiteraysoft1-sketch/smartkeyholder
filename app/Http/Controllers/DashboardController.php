@@ -774,6 +774,7 @@ class DashboardController extends Controller
         
         // Available templates
         $templates = [
+            ['file' => 'vcard_vvip', 'name' => 'VVIP Luxury Gold & Black'],
             ['file' => 'vcard_professional', 'name' => 'Professional Services'],
             ['file' => 'vcard_retail', 'name' => 'Retail & Wholesale'],
             ['file' => 'vcard_skilled_trades', 'name' => 'Skilled Trades & Services'],
@@ -813,6 +814,7 @@ class DashboardController extends Controller
 
         // Validate template exists
         $availableTemplates = [
+            'vcard_vvip',
             'vcard_professional',
             'vcard_retail',
             'vcard_skilled_trades',
@@ -849,7 +851,7 @@ class DashboardController extends Controller
     public function selectVcardTemplate(Request $request)
     {
         $request->validate([
-            'template' => 'required|string|in:vcard_professional,vcard_retail,vcard_skilled_trades,vcard_health_wellness,vcard_education_training,vcard_transport_logistics,vcard_food_hospitality,vcard_corporate_industrial,vcard_car_dealer,vcard_agriculture,vcard_media_entertainment,vcard_ngos_community,vcard_massage,vcard_spa,vcard_taxi_driver,vcard_modern_business,vcard_creative_portfolio,vcard_printing_design_branding,vcard_real_estate,vcard_phone_store,vcard_universal_business,vcard_church,vcard_blood_donation,vcard_cloth_store,vcard_tours_travel',
+            'template' => 'required|string|in:vcard_vvip,vcard_professional,vcard_retail,vcard_skilled_trades,vcard_health_wellness,vcard_education_training,vcard_transport_logistics,vcard_food_hospitality,vcard_corporate_industrial,vcard_car_dealer,vcard_agriculture,vcard_media_entertainment,vcard_ngos_community,vcard_massage,vcard_spa,vcard_taxi_driver,vcard_modern_business,vcard_creative_portfolio,vcard_printing_design_branding,vcard_real_estate,vcard_phone_store,vcard_universal_business,vcard_church,vcard_blood_donation,vcard_cloth_store,vcard_tours_travel',
         ]);
 
         $user = Auth::user();
