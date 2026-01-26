@@ -296,6 +296,70 @@
                 </div>
             </div>
 
+            <!-- Business Information -->
+            @if($profile->business_name || $profile->business_phone || $profile->business_email || $profile->business_address)
+                <div class="liquid-glass p-5 animate-slide-in-left" style="animation-delay: 0.1s">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 corporate-gradient rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-building text-white"></i>
+                        </div>
+                        <h2 class="text-lg font-bold text-white">Business Information</h2>
+                    </div>
+
+                    <div class="space-y-3">
+                        @if($profile->business_name)
+                            <div class="flex items-center p-3 liquid-glass-dark rounded-xl">
+                                <div class="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center mr-3">
+                                    <i class="fas fa-briefcase text-white text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="text-white font-medium">Company Name</p>
+                                    <p class="text-blue-200 text-sm">{{ $profile->business_name }}</p>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if($profile->business_phone)
+                            <a href="tel:{{ $profile->business_phone }}"
+                               class="flex items-center p-3 liquid-glass-dark rounded-xl hover:scale-105 transition-all duration-300 group">
+                                <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center mr-3 group-hover:bg-green-400">
+                                    <i class="fas fa-phone-office text-white text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="text-white font-medium">Business Phone</p>
+                                    <p class="text-blue-200 text-sm">{{ $profile->business_phone }}</p>
+                                </div>
+                            </a>
+                        @endif
+
+                        @if($profile->business_email)
+                            <a href="mailto:{{ $profile->business_email }}"
+                               class="flex items-center p-3 liquid-glass-dark rounded-xl hover:scale-105 transition-all duration-300 group">
+                                <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center mr-3 group-hover:bg-blue-400">
+                                    <i class="fas fa-envelope-open-text text-white text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="text-white font-medium">Business Email</p>
+                                    <p class="text-blue-200 text-sm">{{ $profile->business_email }}</p>
+                                </div>
+                            </a>
+                        @endif
+
+                        @if($profile->business_address)
+                            <div class="flex items-start p-3 liquid-glass-dark rounded-xl">
+                                <div class="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                                    <i class="fas fa-map-marker-alt text-white text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="text-white font-medium">Business Address</p>
+                                    <p class="text-blue-200 text-sm leading-relaxed">{{ $profile->business_address }}</p>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @endif
+
             <!-- Social Media Links -->
             @if($socialLinks->count() > 0)
                 <div class="liquid-glass p-5 animate-slide-in-right">
@@ -505,19 +569,33 @@
 
         // vCard Download Function
         function downloadVCard() {
-            // Create a more detailed vCard format
+            // Create a comprehensive vCard format with business information
             const vcard = `BEGIN:VCARD
 VERSION:3.0
 FN:{{ $profile->display_name ?: $user->name }}
 N:{{ implode(';', array_pad(explode(' ', $user->name), 5, '')) }}
+@if($profile->business_name)ORG:{{ $profile->business_name }}
+@endif
 @if($profile->profession)TITLE:{{ $profile->profession }}
-ORG:{{ $profile->profession }}@endif
-@if($user->email)EMAIL;type=INTERNET;type=HOME:{{ $user->email }}@endif
-@if($profile->phone)TEL;type=CELL:{{ $profile->phone }}@endif
-@if($profile->website)URL:{{ url('/qr/' . $qrCode->uuid) }}@endif
-@if($profile->location)ADR;type=HOME:;;{{ $profile->location }};;;;
-LABEL;type=HOME:{{ $profile->location }}@endif
-@if($profile->bio)NOTE:{{ $profile->bio }}@endif
+@endif
+@if($profile->phone)TEL;TYPE=CELL:{{ $profile->phone }}
+@endif
+@if($profile->business_phone)TEL;TYPE=WORK:{{ $profile->business_phone }}
+@endif
+@if($user->email)EMAIL;TYPE=PERSONAL:{{ $user->email }}
+@endif
+@if($profile->business_email)EMAIL;TYPE=WORK:{{ $profile->business_email }}
+@endif
+URL:{{ url('/qr/' . $qrCode->uuid) }}
+@if($profile->business_address)ADR;TYPE=WORK:;;{{ str_replace(["\r\n", "\n", "\r"], ';', $profile->business_address) }};;;;
+@endif
+@if($profile->location)ADR;TYPE=HOME:;;{{ $profile->location }};;;;
+@endif
+@if($profile->bio)NOTE:{{ $profile->bio }}
+@endif
+@foreach($socialLinks as $link)
+URL:{{ $link->url }}
+@endforeach
 REV:{{ now()->format('Y-m-d\THis\Z') }}
 END:VCARD`;
 

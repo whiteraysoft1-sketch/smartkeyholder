@@ -519,6 +519,64 @@
             </div>
             @endif
 
+            <!-- Business Information -->
+            @if($profile->business_name || $profile->business_phone || $profile->business_email || $profile->business_address)
+            <div class="bio-section" style="margin-top: 30px;">
+                <h3 style="color: #667eea; font-size: 18px; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center;">
+                    <i class="fas fa-building" style="margin-right: 10px;"></i>
+                    Business Information
+                </h3>
+            </div>
+            
+            @if($profile->business_name)
+            <div class="contact-item">
+                <div class="contact-icon">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+                <div class="contact-text">
+                    <div class="contact-label">Business Name</div>
+                    <div class="contact-value">{{ $profile->business_name }}</div>
+                </div>
+            </div>
+            @endif
+
+            @if($profile->business_phone)
+            <a href="tel:{{ $profile->business_phone }}" class="contact-item">
+                <div class="contact-icon">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <div class="contact-text">
+                    <div class="contact-label">Business Phone</div>
+                    <div class="contact-value">{{ $profile->business_phone }}</div>
+                </div>
+            </a>
+            @endif
+
+            @if($profile->business_email)
+            <a href="mailto:{{ $profile->business_email }}" class="contact-item">
+                <div class="contact-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="contact-text">
+                    <div class="contact-label">Business Email</div>
+                    <div class="contact-value">{{ $profile->business_email }}</div>
+                </div>
+            </a>
+            @endif
+
+            @if($profile->business_address)
+            <div class="contact-item">
+                <div class="contact-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div class="contact-text">
+                    <div class="contact-label">Business Address</div>
+                    <div class="contact-value">{{ $profile->business_address }}</div>
+                </div>
+            </div>
+            @endif
+            @endif
+
             <!-- Social Links -->
             @if($socialLinks->count() > 0)
             <div class="social-section">

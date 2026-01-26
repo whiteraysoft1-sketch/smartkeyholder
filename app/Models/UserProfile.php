@@ -23,6 +23,12 @@ class UserProfile extends Model
         'profession',
         'is_public',
 
+        // Business Information
+        'business_name',
+        'business_phone',
+        'business_email',
+        'business_address',
+
         'currency',
         'currency_symbol',
         'selected_template',

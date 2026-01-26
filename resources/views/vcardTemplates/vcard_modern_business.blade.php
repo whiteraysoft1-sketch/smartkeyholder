@@ -238,6 +238,71 @@
                 </div>
             </div>
             
+            <!-- Business Information -->
+            @if($profile->business_name || $profile->business_phone || $profile->business_email || $profile->business_address)
+            <div class="px-6 py-4">
+                <h3 class="font-semibold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-building text-blue-500 mr-2"></i>
+                    Business Information
+                </h3>
+                <div class="space-y-3">
+                    @if($profile->business_name)
+                    <div class="contact-card rounded-lg p-3 flex items-center fade-in">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white mr-3">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-medium text-gray-800">Business Name</div>
+                            <div class="text-sm text-gray-600">{{ $profile->business_name }}</div>
+                        </div>
+                    </div>
+                    @endif
+                    
+                    @if($profile->business_phone)
+                    <div class="contact-card rounded-lg p-3 flex items-center fade-in">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white mr-3">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-medium text-gray-800">Business Phone</div>
+                            <div class="text-sm text-gray-600">{{ $profile->business_phone }}</div>
+                        </div>
+                        <a href="tel:{{ $profile->business_phone }}" class="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-600 transition-colors">
+                            Call
+                        </a>
+                    </div>
+                    @endif
+                    
+                    @if($profile->business_email)
+                    <div class="contact-card rounded-lg p-3 flex items-center fade-in">
+                        <div class="w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center text-white mr-3">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-medium text-gray-800">Business Email</div>
+                            <div class="text-sm text-gray-600">{{ $profile->business_email }}</div>
+                        </div>
+                        <a href="mailto:{{ $profile->business_email }}" class="bg-indigo-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-indigo-600 transition-colors">
+                            Email
+                        </a>
+                    </div>
+                    @endif
+                    
+                    @if($profile->business_address)
+                    <div class="contact-card rounded-lg p-3 flex items-center fade-in">
+                        <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center text-white mr-3">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-medium text-gray-800">Business Address</div>
+                            <div class="text-sm text-gray-600">{{ $profile->business_address }}</div>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+            </div>
+            @endif
+            
             <!-- Social Media Links -->
             @if($socialLinks->count() > 0)
             <div class="px-6 py-4">
@@ -455,12 +520,29 @@
             const vCardData = `BEGIN:VCARD
 VERSION:3.0
 FN:{{ $profile->display_name ?? $user->name ?? 'Business Professional' }}
-ORG:{{ $profile->profession ?? 'Business Professional' }}
-TEL:{{ $profile->phone ?? '' }}
-EMAIL:{{ $profile->email ?? $user->email ?? '' }}
+N:{{ implode(';', array_pad(explode(' ', $user->name), 5, '')) }}
+@if($profile->business_name)ORG:{{ $profile->business_name }}
+@endif
+@if($profile->profession)TITLE:{{ $profile->profession }}
+@endif
+@if($profile->phone)TEL;TYPE=CELL:{{ $profile->phone }}
+@endif
+@if($profile->business_phone)TEL;TYPE=WORK:{{ $profile->business_phone }}
+@endif
+@if($user->email)EMAIL;TYPE=PERSONAL:{{ $user->email }}
+@endif
+@if($profile->business_email)EMAIL;TYPE=WORK:{{ $profile->business_email }}
+@endif
 URL:{{ url('/qr/' . $qrCode->uuid) }}
-ADR:{{ $profile->location ?? '' }}
-NOTE:{{ $profile->bio ?? '' }}
+@if($profile->business_address)ADR;TYPE=WORK:;;{{ str_replace(["\r\n", "\n", "\r"], ';', $profile->business_address) }};;;;
+@endif
+@if($profile->location)ADR;TYPE=HOME:;;{{ $profile->location }};;;;
+@endif
+@if($profile->bio)NOTE:{{ $profile->bio }}
+@endif
+@foreach($socialLinks as $link)
+URL:{{ $link->url }}
+@endforeach
 END:VCARD`;
             
             const blob = new Blob([vCardData], { type: 'text/vcard' });

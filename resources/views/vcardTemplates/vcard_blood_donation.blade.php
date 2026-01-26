@@ -339,6 +339,44 @@
                 </div>
             </div>
 
+            <!-- Business Information -->
+            @if($profile->business_name || $profile->business_phone || $profile->business_email || $profile->business_address)
+                <div class="liquid-glass p-5 animate-slide-in-left">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 blood-gradient rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-building text-white"></i>
+                        </div>
+                        <h2 class="text-lg font-bold text-white">Business Information</h2>
+                    </div>
+                    <div class="space-y-3">
+                        @if($profile->business_name)
+                        <div class="flex items-center space-x-3 bg-white/10 p-3 rounded-lg">
+                            <i class="fas fa-briefcase text-red-300"></i>
+                            <span class="text-white">{{ $profile->business_name }}</span>
+                        </div>
+                        @endif
+                        @if($profile->business_phone)
+                        <a href="tel:{{ $profile->business_phone }}" class="flex items-center space-x-3 bg-white/10 p-3 rounded-lg hover:bg-white/20 transition">
+                            <i class="fas fa-phone text-green-300"></i>
+                            <span class="text-white">{{ $profile->business_phone }}</span>
+                        </a>
+                        @endif
+                        @if($profile->business_email)
+                        <a href="mailto:{{ $profile->business_email }}" class="flex items-center space-x-3 bg-white/10 p-3 rounded-lg hover:bg-white/20 transition">
+                            <i class="fas fa-envelope text-blue-300"></i>
+                            <span class="text-white">{{ $profile->business_email }}</span>
+                        </a>
+                        @endif
+                        @if($profile->business_address)
+                        <div class="flex items-center space-x-3 bg-white/10 p-3 rounded-lg">
+                            <i class="fas fa-map-marker-alt text-yellow-300"></i>
+                            <span class="text-white">{{ $profile->business_address }}</span>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            @endif
+
             <!-- Social Media Links -->
             @if($socialLinks->count() > 0)
                 <div class="liquid-glass p-5 animate-slide-in-right">

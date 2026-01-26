@@ -370,6 +370,71 @@
             </div>
             @endif
             
+            <!-- Business Information -->
+            @if($profile->business_name || $profile->business_phone || $profile->business_email || $profile->business_address)
+            <div class="px-6 py-4">
+                <h3 class="font-semibold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-building text-purple-600 mr-2"></i>
+                    Business Information
+                </h3>
+                <div class="space-y-3">
+                    @if($profile->business_name)
+                    <div class="contact-item rounded-lg p-3 flex items-center fade-in">
+                        <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center text-white mr-3">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-medium text-gray-800">Business Name</div>
+                            <div class="text-sm text-gray-600">{{ $profile->business_name }}</div>
+                        </div>
+                    </div>
+                    @endif
+                    
+                    @if($profile->business_phone)
+                    <div class="contact-item rounded-lg p-3 flex items-center fade-in">
+                        <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center text-white mr-3">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-medium text-gray-800">Business Phone</div>
+                            <div class="text-sm text-gray-600">{{ $profile->business_phone }}</div>
+                        </div>
+                        <a href="tel:{{ $profile->business_phone }}" class="bg-purple-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-purple-600 transition-colors">
+                            Call
+                        </a>
+                    </div>
+                    @endif
+                    
+                    @if($profile->business_email)
+                    <div class="contact-item rounded-lg p-3 flex items-center fade-in">
+                        <div class="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center text-white mr-3">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-medium text-gray-800">Business Email</div>
+                            <div class="text-sm text-gray-600">{{ $profile->business_email }}</div>
+                        </div>
+                        <a href="mailto:{{ $profile->business_email }}" class="bg-pink-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-pink-600 transition-colors">
+                            Email
+                        </a>
+                    </div>
+                    @endif
+                    
+                    @if($profile->business_address)
+                    <div class="contact-item rounded-lg p-3 flex items-center fade-in">
+                        <div class="w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center text-white mr-3">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-medium text-gray-800">Business Address</div>
+                            <div class="text-sm text-gray-600">{{ $profile->business_address }}</div>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+            </div>
+            @endif
+            
             <!-- Services Section -->
             <div class="px-6 py-4">
                 <h3 class="font-semibold text-gray-800 mb-4 flex items-center">

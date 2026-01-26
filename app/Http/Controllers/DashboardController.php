@@ -118,6 +118,10 @@ class DashboardController extends Controller
             'bio' => 'nullable|string|max:1000',
             'contact' => 'nullable|string|max:255',
             'currency' => 'nullable|string|max:8',
+            'business_name' => 'nullable|string|max:255',
+            'business_phone' => 'nullable|string|max:32',
+            'business_email' => 'nullable|email|max:255',
+            'business_address' => 'nullable|string|max:500',
             'pwa_enabled' => 'nullable|boolean',
             'pwa_app_name' => 'nullable|string|max:255',
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1128000', // Allow up to 1128MB
@@ -144,6 +148,12 @@ class DashboardController extends Controller
         if ($request->filled('currency')) {
             $profile->currency = $request->currency;
         }
+        
+        // Update business information fields
+        if ($request->filled('business_name')) $profile->business_name = $request->business_name;
+        if ($request->filled('business_phone')) $profile->business_phone = $request->business_phone;
+        if ($request->filled('business_email')) $profile->business_email = $request->business_email;
+        if ($request->filled('business_address')) $profile->business_address = $request->business_address;
         
         // Handle PWA settings
         $profile->pwa_enabled = $request->boolean('pwa_enabled');
@@ -198,6 +208,7 @@ class DashboardController extends Controller
         $request->validate([
             'platform' => 'required|string|max:255',
             'url' => 'required|string|max:255',
+            'display_name' => 'nullable|string|max:50',
         ]);
         
         // Clean and validate URL
@@ -216,7 +227,7 @@ class DashboardController extends Controller
             }
         }
         
-        Auth::user()->socialLinks()->create($request->only(['platform', 'url']));
+        Auth::user()->socialLinks()->create($request->only(['platform', 'url', 'display_name']));
         return redirect()->back()->with('success', 'Social link added successfully!');
     }
 
@@ -230,8 +241,9 @@ class DashboardController extends Controller
         $request->validate([
             'platform' => 'required|string|max:255',
             'url' => 'required|url|max:255',
+            'display_name' => 'nullable|string|max:50',
         ]);
-        $socialLink->update($request->only(['platform', 'url']));
+        $socialLink->update($request->only(['platform', 'url', 'display_name']));
         return redirect()->back()->with('success', 'Social link updated.');
     }
 

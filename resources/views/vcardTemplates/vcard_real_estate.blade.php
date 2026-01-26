@@ -480,6 +480,71 @@
                 </div>
             </div>
             
+            <!-- Business Information -->
+            @if($profile->business_name || $profile->business_phone || $profile->business_email || $profile->business_address)
+            <div class="px-6 py-4">
+                <h3 class="font-semibold text-white mb-4 flex items-center animate-on-scroll">
+                    <i class="fas fa-building text-white/70 mr-2"></i>
+                    Business Information
+                </h3>
+                <div class="space-y-3">
+                    @if($profile->business_name)
+                    <div class="property-card rounded-lg p-3 flex items-center animate-on-scroll">
+                        <div class="w-10 h-10 real-estate-primary rounded-full flex items-center justify-center text-white mr-3">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-medium text-white">Business Name</div>
+                            <div class="text-sm text-white/80">{{ $profile->business_name }}</div>
+                        </div>
+                    </div>
+                    @endif
+                    
+                    @if($profile->business_phone)
+                    <div class="property-card rounded-lg p-3 flex items-center animate-on-scroll">
+                        <div class="w-10 h-10 real-estate-primary rounded-full flex items-center justify-center text-white mr-3">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-medium text-white">Business Phone</div>
+                            <div class="text-sm text-white/80">{{ $profile->business_phone }}</div>
+                        </div>
+                        <a href="tel:{{ $profile->business_phone }}" class="real-estate-primary text-white px-3 py-1 rounded-lg text-sm hover:opacity-90 transition-all">
+                            Call
+                        </a>
+                    </div>
+                    @endif
+                    
+                    @if($profile->business_email)
+                    <div class="property-card rounded-lg p-3 flex items-center animate-on-scroll">
+                        <div class="w-10 h-10 real-estate-secondary rounded-full flex items-center justify-center text-white mr-3">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-medium text-white">Business Email</div>
+                            <div class="text-sm text-white/80">{{ $profile->business_email }}</div>
+                        </div>
+                        <a href="mailto:{{ $profile->business_email }}" class="real-estate-secondary text-white px-3 py-1 rounded-lg text-sm hover:opacity-90 transition-all">
+                            Email
+                        </a>
+                    </div>
+                    @endif
+                    
+                    @if($profile->business_address)
+                    <div class="property-card rounded-lg p-3 flex items-center animate-on-scroll">
+                        <div class="w-10 h-10 real-estate-luxury rounded-full flex items-center justify-center text-white mr-3">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="font-medium text-white">Business Address</div>
+                            <div class="text-sm text-white/80">{{ $profile->business_address }}</div>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+            </div>
+            @endif
+            
             <!-- Social Links -->
             @if($socialLinks && $socialLinks->count() > 0)
             <div class="px-6 py-4">

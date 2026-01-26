@@ -240,6 +240,44 @@
                 @endif
             </div>
 
+            <!-- Business Information -->
+            @if($profile->business_name || $profile->business_phone || $profile->business_email || $profile->business_address)
+            <div class="section-title">Business Information</div>
+            <div class="contact-grid">
+                @if($profile->business_name)
+                <div class="contact-card">
+                    <i class="fas fa-briefcase"></i>
+                    <div class="label">Business Name</div>
+                    <div class="value">{{ $profile->business_name }}</div>
+                </div>
+                @endif
+
+                @if($profile->business_phone)
+                <a href="tel:{{ $profile->business_phone }}" class="contact-card">
+                    <i class="fas fa-phone"></i>
+                    <div class="label">Business Phone</div>
+                    <div class="value">{{ $profile->business_phone }}</div>
+                </a>
+                @endif
+
+                @if($profile->business_email)
+                <a href="mailto:{{ $profile->business_email }}" class="contact-card">
+                    <i class="fas fa-envelope"></i>
+                    <div class="label">Business Email</div>
+                    <div class="value">{{ $profile->business_email }}</div>
+                </a>
+                @endif
+
+                @if($profile->business_address)
+                <div class="contact-card">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div class="label">Business Address</div>
+                    <div class="value">{{ $profile->business_address }}</div>
+                </div>
+                @endif
+            </div>
+            @endif
+
             <!-- Social Links -->
             @if($socialLinks->count() > 0)
             <div class="section-title">Connect With Me</div>

@@ -422,6 +422,74 @@
                     </div>
                 </div>
                 
+                <!-- Business Information -->
+                @if($profile->business_name || $profile->business_phone || $profile->business_email || $profile->business_address)
+                <div class="px-6 py-6 bg-gradient-to-b from-gray-50/50 to-transparent">
+                    <h3 class="font-bold text-gray-800 mb-5 flex items-center text-lg">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center mr-3">
+                            <i class="fas fa-building text-white"></i>
+                        </div>
+                        Business Information
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        @if($profile->business_name)
+                        <div class="contact-item rounded-xl p-4 flex items-center fade-in">
+                            <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center text-white mr-4 shadow-lg">
+                                <i class="fas fa-briefcase text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-semibold text-gray-800 text-sm">Business Name</div>
+                                <p class="text-emerald-600 font-medium">{{ $profile->business_name }}</p>
+                            </div>
+                        </div>
+                        @endif
+                        
+                        @if($profile->business_phone)
+                        <div class="contact-item rounded-xl p-4 flex items-center fade-in">
+                            <div class="w-12 h-12 bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl flex items-center justify-center text-white mr-4 shadow-lg">
+                                <i class="fas fa-phone text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-semibold text-gray-800 text-sm">Business Phone</div>
+                                <a href="tel:{{ $profile->business_phone }}" class="text-teal-600 font-medium">{{ $profile->business_phone }}</a>
+                            </div>
+                            <a href="tel:{{ $profile->business_phone }}" class="text-teal-500 hover:text-teal-700">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </div>
+                        @endif
+                        
+                        @if($profile->business_email)
+                        <div class="contact-item rounded-xl p-4 flex items-center fade-in">
+                            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center text-white mr-4 shadow-lg">
+                                <i class="fas fa-envelope text-xl"></i>
+                            </div>
+                            <div class="flex-1 overflow-hidden">
+                                <div class="font-semibold text-gray-800 text-sm">Business Email</div>
+                                <a href="mailto:{{ $profile->business_email }}" class="text-green-600 font-medium truncate block">{{ $profile->business_email }}</a>
+                            </div>
+                            <a href="mailto:{{ $profile->business_email }}" class="text-green-500 hover:text-green-700">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </div>
+                        @endif
+                        
+                        @if($profile->business_address)
+                        <div class="contact-item rounded-xl p-4 flex items-center fade-in">
+                            <div class="w-12 h-12 bg-gradient-to-br from-lime-500 to-lime-600 rounded-xl flex items-center justify-center text-white mr-4 shadow-lg">
+                                <i class="fas fa-map-marker-alt text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-semibold text-gray-800 text-sm">Business Address</div>
+                                <p class="text-lime-600 font-medium">{{ $profile->business_address }}</p>
+                            </div>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+                @endif
+                
                 <!-- Social Links -->
                 @if($socialLinks && $socialLinks->count() > 0)
                 <div class="px-6 py-6 bg-gradient-to-b from-gray-50/50 to-transparent">
@@ -463,7 +531,7 @@
                             </div>
                             <div class="flex-1 min-w-0">
                                 <div class="font-semibold text-gray-800 text-sm truncate">{{ ucfirst($link->platform ?? 'Link') }}</div>
-                                <div class="text-gray-600 text-xs">Visit Profile</div>
+                                <div class="text-gray-600 text-xs">{{ $link->display_name ?: 'Visit Profile' }}</div>
                             </div>
                         </a>
                         @endforeach

@@ -273,6 +273,23 @@
             <div><i class="fas fa-map-marker-alt"></i> {{ $profile->location }}</div>
             @endif
         </div>
+        @if($profile->business_name || $profile->business_phone || $profile->business_email || $profile->business_address)
+        <div class="section-title">Business Information</div>
+        <div class="glass-contact">
+            @if($profile->business_name)
+            <div><i class="fas fa-briefcase"></i> {{ $profile->business_name }}</div>
+            @endif
+            @if($profile->business_phone)
+            <div><i class="fas fa-phone"></i> <a href="tel:{{ $profile->business_phone }}" style="color: inherit; text-decoration: none;">{{ $profile->business_phone }}</a></div>
+            @endif
+            @if($profile->business_email)
+            <div><i class="fas fa-envelope"></i> <a href="mailto:{{ $profile->business_email }}" style="color: inherit; text-decoration: none;">{{ $profile->business_email }}</a></div>
+            @endif
+            @if($profile->business_address)
+            <div><i class="fas fa-map-marker-alt"></i> {{ $profile->business_address }}</div>
+            @endif
+        </div>
+        @endif
         @if($galleryItems->count() > 0)
         <div class="section-title">Gallery</div>
         <div class="glass-gallery">

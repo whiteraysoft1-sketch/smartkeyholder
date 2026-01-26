@@ -1941,6 +1941,74 @@ use Illuminate\Support\Facades\Storage;
                 </div>
             </div>
 
+            <!-- Business Information Card -->
+            <div class="collapsible-card">
+                <div class="card-header" onclick="toggleCard('business-card')" style="padding-bottom: 3rem; min-height: 80px;">
+                    <div class="card-title">
+                        <div class="card-icon" style="width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: #007AFF; color: white; font-size: 20px; box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div>
+                            <div style="font-size: 16px; font-weight: 600; color: #1f2937;">Business Information</div>
+                        </div>
+                    </div>
+                    <div style="position: absolute; bottom: 16px; right: 60px;">
+                        @if($profile && ($profile->business_name || $profile->business_phone || $profile->business_email || $profile->business_address))
+                            <div class="card-status" style="background: rgba(0, 122, 255, 0.15); color: #007AFF; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; backdrop-filter: blur(10px); border: 1px solid rgba(0, 122, 255, 0.2); box-shadow: 0 2px 8px rgba(0, 122, 255, 0.1);">Configured</div>
+                        @else
+                            <div class="card-status" style="background: rgba(156, 163, 175, 0.15); color: #6b7280; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; backdrop-filter: blur(10px); border: 1px solid rgba(156, 163, 175, 0.2); box-shadow: 0 2px 8px rgba(156, 163, 175, 0.1);">Not set</div>
+                        @endif
+                    </div>
+                    <div class="expand-icon" id="business-card-icon" style="position: absolute; bottom: 16px; right: 16px; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+                        <i class="fas fa-chevron-down" style="color: #6b7280;"></i>
+                    </div>
+                </div>
+                <div class="card-content" id="business-card-content">
+                    <div class="card-content-inner">
+                        <form action="{{ route('dashboard.profile.update') }}" method="POST" class="space-y-4">
+                            @csrf
+                            
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                                <div class="flex items-start gap-2">
+                                    <i class="fas fa-info-circle text-blue-500 mt-0.5"></i>
+                                    <div class="text-xs text-blue-700">
+                                        <strong>Optional:</strong> Add your business/company details to display on your vCard. This is separate from your personal profile.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="liquid-label">Business / Company Name</label>
+                                <input type="text" name="business_name" value="{{ $profile->business_name ?? '' }}" class="liquid-input" placeholder="e.g., ABC Corporation, My Shop">
+                                <p class="text-xs text-gray-500 mt-1">Your company or business name</p>
+                            </div>
+
+                            <div>
+                                <label class="liquid-label">Business Phone</label>
+                                <input type="text" name="business_phone" value="{{ $profile->business_phone ?? '' }}" class="liquid-input" placeholder="+256 700 000000">
+                                <p class="text-xs text-gray-500 mt-1">Main business contact number</p>
+                            </div>
+
+                            <div>
+                                <label class="liquid-label">Business Email</label>
+                                <input type="email" name="business_email" value="{{ $profile->business_email ?? '' }}" class="liquid-input" placeholder="info@business.com">
+                                <p class="text-xs text-gray-500 mt-1">Official business email address</p>
+                            </div>
+
+                            <div>
+                                <label class="liquid-label">Business Address / Location</label>
+                                <textarea name="business_address" rows="3" class="liquid-input" placeholder="Street address, Building, City, Country">{{ $profile->business_address ?? '' }}</textarea>
+                                <p class="text-xs text-gray-500 mt-1">Physical location of your business</p>
+                            </div>
+
+                            <button type="submit" class="liquid-btn w-full">
+                                <i class="fas fa-save"></i> Save Business Information
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             <!-- Social Links Card -->
             <div class="collapsible-card">
                 <div class="card-header" onclick="toggleCard('social-card')" style="padding-bottom: 3rem; min-height: 80px;">
@@ -1981,6 +2049,11 @@ use Illuminate\Support\Facades\Storage;
                                 <label class="liquid-label">URL</label>
                                 <input type="url" name="url" placeholder="https://..." class="liquid-input" required>
                             </div>
+                            <div>
+                                <label class="liquid-label">Display Name <span class="text-gray-400 text-xs">(Optional)</span></label>
+                                <input type="text" name="display_name" placeholder="e.g., Facebook - My Business" class="liquid-input" maxlength="50">
+                                <p class="text-xs text-gray-500 mt-1">Customize how this link appears on your card (leave empty for default)</p>
+                            </div>
                             <button type="submit" class="liquid-btn w-full">
                                 <i class="fas fa-plus"></i> Add Link
                             </button>
@@ -1989,32 +2062,80 @@ use Illuminate\Support\Facades\Storage;
                         @if($socialLinks->count() > 0)
                             <div class="space-y-3">
                                 @foreach($socialLinks as $link)
-                                    <div class="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-3">
-                                        <div class="flex items-center space-x-3">
-                                            <i class="{{ $link->platform_icon }} text-lg" style="color: 
-                                                @if($link->platform === 'facebook') #1877f2
-                                                @elseif($link->platform === 'twitter') #1da1f2
-                                                @elseif($link->platform === 'instagram') #e4405f
-                                                @elseif($link->platform === 'linkedin') #0a66c2
-                                                @elseif($link->platform === 'youtube') #ff0000
-                                                @elseif($link->platform === 'tiktok') #000000
-                                                @elseif($link->platform === 'whatsapp') #25d366
-                                                @else #3b82f6 @endif"></i>
-                                            <div>
-                                                <div class="font-semibold text-sm">{{ ucfirst($link->platform) }}</div>
-                                                <a href="{{ $link->formatted_url }}" target="_blank" rel="noopener noreferrer" class="text-xs text-blue-600 hover:underline inline-flex items-center gap-1">
-                                                    <span>View link</span>
-                                                    <i class="fas fa-external-link-alt" style="font-size: 10px;"></i>
-                                                </a>
+                                    <div class="bg-gray-50 rounded-lg px-3 py-3" id="social-link-{{ $link->id }}">
+                                        <!-- View Mode -->
+                                        <div class="flex items-center justify-between" id="view-mode-{{ $link->id }}">
+                                            <div class="flex items-center space-x-3">
+                                                <i class="{{ $link->platform_icon }} text-lg" style="color: 
+                                                    @if($link->platform === 'facebook') #1877f2
+                                                    @elseif($link->platform === 'twitter') #1da1f2
+                                                    @elseif($link->platform === 'instagram') #e4405f
+                                                    @elseif($link->platform === 'linkedin') #0a66c2
+                                                    @elseif($link->platform === 'youtube') #ff0000
+                                                    @elseif($link->platform === 'tiktok') #000000
+                                                    @elseif($link->platform === 'whatsapp') #25d366
+                                                    @else #3b82f6 @endif"></i>
+                                                <div>
+                                                    <div class="font-semibold text-sm">{{ ucfirst($link->platform) }}</div>
+                                                    @if($link->display_name)
+                                                        <div class="text-xs text-gray-600 mt-0.5">Display as: "{{ $link->display_name }}"</div>
+                                                    @endif
+                                                    <a href="{{ $link->formatted_url }}" target="_blank" rel="noopener noreferrer" class="text-xs text-blue-600 hover:underline inline-flex items-center gap-1">
+                                                        <span>View link</span>
+                                                        <i class="fas fa-external-link-alt" style="font-size: 10px;"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <button type="button" onclick="toggleEditMode({{ $link->id }})" class="text-blue-500 p-2 rounded-lg hover:bg-blue-50 transition-colors" title="Edit">
+                                                    <i class="fas fa-edit text-sm"></i>
+                                                </button>
+                                                <form action="{{ route('dashboard.social-links.delete', $link) }}" method="POST" class="inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="text-red-500 p-2 rounded-lg hover:bg-red-50 transition-colors" onclick="return confirm('Delete this link?')" title="Delete">
+                                                        <i class="fas fa-trash text-sm"></i>
+                                                    </button>
+                                                </form>
                                             </div>
                                         </div>
-                                        <form action="{{ route('dashboard.social-links.delete', $link) }}" method="POST" class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-500 p-2 rounded-lg hover:bg-red-50 transition-colors" onclick="return confirm('Delete this link?')">
-                                                <i class="fas fa-trash text-sm"></i>
-                                            </button>
-                                        </form>
+                                        
+                                        <!-- Edit Mode -->
+                                        <div class="hidden" id="edit-mode-{{ $link->id }}">
+                                            <form action="{{ route('dashboard.social-links.update', $link) }}" method="POST" class="space-y-3">
+                                                @csrf
+                                                @method('PUT')
+                                                <div>
+                                                    <label class="liquid-label text-xs">Platform</label>
+                                                    <select name="platform" class="liquid-input text-sm" required>
+                                                        <option value="facebook" {{ $link->platform === 'facebook' ? 'selected' : '' }}>Facebook</option>
+                                                        <option value="twitter" {{ $link->platform === 'twitter' ? 'selected' : '' }}>Twitter</option>
+                                                        <option value="instagram" {{ $link->platform === 'instagram' ? 'selected' : '' }}>Instagram</option>
+                                                        <option value="linkedin" {{ $link->platform === 'linkedin' ? 'selected' : '' }}>LinkedIn</option>
+                                                        <option value="youtube" {{ $link->platform === 'youtube' ? 'selected' : '' }}>YouTube</option>
+                                                        <option value="tiktok" {{ $link->platform === 'tiktok' ? 'selected' : '' }}>TikTok</option>
+                                                        <option value="whatsapp" {{ $link->platform === 'whatsapp' ? 'selected' : '' }}>WhatsApp</option>
+                                                        <option value="website" {{ $link->platform === 'website' ? 'selected' : '' }}>Website</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label class="liquid-label text-xs">URL</label>
+                                                    <input type="url" name="url" value="{{ $link->url }}" class="liquid-input text-sm" required>
+                                                </div>
+                                                <div>
+                                                    <label class="liquid-label text-xs">Display Name <span class="text-gray-400 text-xs">(Optional)</span></label>
+                                                    <input type="text" name="display_name" value="{{ $link->display_name }}" placeholder="e.g., Facebook - My Business" class="liquid-input text-sm" maxlength="50">
+                                                </div>
+                                                <div class="flex gap-2">
+                                                    <button type="submit" class="liquid-btn flex-1 text-sm py-2">
+                                                        <i class="fas fa-save"></i> Save
+                                                    </button>
+                                                    <button type="button" onclick="toggleEditMode({{ $link->id }})" class="px-4 py-2 text-sm bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors">
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 @endforeach
                             </div>
@@ -2243,6 +2364,17 @@ use Illuminate\Support\Facades\Storage;
                 setTimeout(() => {
                     ripple.remove();
                 }, 600);
+            }
+
+            // Toggle social link edit mode
+            function toggleEditMode(linkId) {
+                const viewMode = document.getElementById('view-mode-' + linkId);
+                const editMode = document.getElementById('edit-mode-' + linkId);
+                
+                if (viewMode && editMode) {
+                    viewMode.classList.toggle('hidden');
+                    editMode.classList.toggle('hidden');
+                }
             }
 
             // Gallery upload functionality
