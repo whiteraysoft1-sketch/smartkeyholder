@@ -794,6 +794,7 @@
             const vcard = `BEGIN:VCARD
 VERSION:3.0
 FN:${contact.name}
+N:{{ implode(';', array_pad(explode(' ', $user->name), 5, '')) }}
 @if($profile->business_name)ORG:{{ $profile->business_name }}
 @endif
 @if($profile->profession)TITLE:{{ $profile->profession }}
@@ -802,8 +803,8 @@ FN:${contact.name}
 @endif
 @if($profile->business_phone)TEL;TYPE=WORK:{{ $profile->business_phone }}
 @endif
-EMAIL;TYPE=PERSONAL:${contact.email}
-@if($profile->business_email)EMAIL;TYPE=WORK:{{ $profile->business_email }}
+EMAIL;TYPE=INTERNET,PREF:${contact.email}
+@if($profile->business_email)EMAIL;TYPE=INTERNET,WORK:{{ $profile->business_email }}
 @endif
 URL:${contact.url}
 @if($profile->business_address)ADR;TYPE=WORK:;;{{ str_replace(["\r\n", "\n", "\r"], ';', $profile->business_address) }};;;;
@@ -812,9 +813,8 @@ URL:${contact.url}
 @endif
 @if($profile->bio)NOTE:{{ $profile->bio }}
 @endif
-@foreach($socialLinks as $link)
-URL:{{ $link->url }}
-@endforeach
+@if($profile->profile_image)PHOTO;ENCODING=URI;TYPE=JPEG:{{ $profile->profile_image_url }}
+@endif
 END:VCARD`;
             
             const blob = new Blob([vcard], { type: 'text/vcard' });

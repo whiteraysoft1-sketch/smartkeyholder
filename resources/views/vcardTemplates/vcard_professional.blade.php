@@ -728,9 +728,9 @@ N:{{ implode(';', array_pad(explode(' ', $user->name), 5, '')) }}
 @endif
 @if($profile->business_phone)TEL;TYPE=WORK:{{ $profile->business_phone }}
 @endif
-@if($user->email)EMAIL;TYPE=PERSONAL:{{ $user->email }}
+@if($user->email)EMAIL;TYPE=INTERNET,PREF:{{ $user->email }}
 @endif
-@if($profile->business_email)EMAIL;TYPE=WORK:{{ $profile->business_email }}
+@if($profile->business_email)EMAIL;TYPE=INTERNET,WORK:{{ $profile->business_email }}
 @endif
 URL:{{ url('/qr/' . $qrCode->uuid) }}
 @if($profile->business_address)ADR;TYPE=WORK:;;{{ str_replace(["\r\n", "\n", "\r"], ';', $profile->business_address) }};;;;
@@ -739,9 +739,8 @@ URL:{{ url('/qr/' . $qrCode->uuid) }}
 @endif
 @if($profile->bio)NOTE:{{ $profile->bio }}
 @endif
-@foreach($socialLinks as $link)
-URL:{{ $link->url }}
-@endforeach
+@if($profile->profile_image)PHOTO;ENCODING=URI;TYPE=JPEG:{{ $profile->profile_image_url }}
+@endif
 END:VCARD`;
             
             const blob = new Blob([vCardData], { type: 'text/vcard' });
