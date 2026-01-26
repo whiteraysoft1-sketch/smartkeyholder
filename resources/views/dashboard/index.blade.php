@@ -1451,10 +1451,6 @@ use Illuminate\Support\Facades\Storage;
                                 <span>View Card</span>
                             </a>
                             @endif
-                            <button class="quick-action-btn" onclick="window.print()">
-                                <i class="fas fa-print text-sm"></i>
-                                <span>Print QR</span>
-                            </button>
                         </div>
 
                         <!-- Unified Menu Button -->
@@ -1503,10 +1499,6 @@ use Illuminate\Support\Facades\Storage;
                                             <span>View Card</span>
                                         </a>
                                         @endif
-                                        <button class="menu-action-btn" onclick="window.print()">
-                                            <i class="fas fa-print"></i>
-                                            <span>Print QR</span>
-                                        </button>
                                     </div>
                                 </div>
 
