@@ -13,44 +13,97 @@
     @endif
     
     <style>
-        /* VVIP Luxury Gold & Black Theme */
+        /* VVIP Luxury Gold & Diamond Theme */
         :root {
             --gold-primary: #D4AF37;
             --gold-light: #FFD700;
-            --gold-dark: #B8941D;
-            --black-primary: #0A0A0A;
-            --black-light: #1A1A1A;
+            --gold-dark: #AA8B2A;
+            --diamond-light: #E8F4F8;
+            --diamond-glow: #B8E6F5;
+            --black-primary: #000000;
+            --black-glass: rgba(0, 0, 0, 0.4);
         }
         
         body {
-            background: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 50%, #0A0A0A 100%);
+            background: 
+                radial-gradient(ellipse at top, rgba(212, 175, 55, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom, rgba(184, 230, 245, 0.1) 0%, transparent 50%),
+                linear-gradient(180deg, #000000 0%, #0A0A0A 50%, #000000 100%);
             min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
         }
         
-        /* Realistic Gold Gradient */
-        .gold-gradient {
-            background: linear-gradient(135deg, 
-                #B8941D 0%, 
-                #D4AF37 15%, 
-                #FFD700 30%, 
-                #F5E6B3 50%, 
-                #FFD700 70%, 
-                #D4AF37 85%, 
-                #B8941D 100%
-            );
-        }
-        
-        /* Metallic Gold Effect */
-        .metallic-gold {
-            background: linear-gradient(145deg, 
-                #B8941D 0%, 
-                #D4AF37 25%, 
-                #FFD700 50%, 
-                #D4AF37 75%, 
-                #B8941D 100%
-            );
+        /* Diamond Sparkle Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20% 30%, white, transparent),
+                radial-gradient(2px 2px at 60% 70%, rgba(184, 230, 245, 0.8), transparent),
+                radial-gradient(1px 1px at 50% 50%, rgba(212, 175, 55, 0.8), transparent),
+                radial-gradient(1px 1px at 80% 10%, white, transparent),
+                radial-gradient(2px 2px at 90% 60%, rgba(184, 230, 245, 0.6), transparent);
             background-size: 200% 200%;
-            animation: gold-shimmer 3s ease-in-out infinite;
+            animation: sparkle 8s ease-in-out infinite;
+            pointer-events: none;
+            opacity: 0.6;
+            z-index: 0;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.3; background-position: 0% 0%; }
+            50% { opacity: 0.6; background-position: 100% 100%; }
+        }
+        
+        /* Realistic Gold Gradient with Diamond Accents */
+        .gold-gradient {
+            background: 
+                linear-gradient(135deg, 
+                    #AA8B2A 0%, 
+                    #D4AF37 20%, 
+                    #FFD700 40%, 
+                    #FFFACD 50%, 
+                    #FFD700 60%, 
+                    #D4AF37 80%, 
+                    #AA8B2A 100%
+                );
+        }
+        
+        /* Liquid Gold with Glass Effect */
+        .metallic-gold {
+            background: 
+                linear-gradient(145deg, 
+                    rgba(170, 139, 42, 0.9) 0%, 
+                    rgba(212, 175, 55, 0.95) 25%, 
+                    rgba(255, 215, 0, 1) 50%, 
+                    rgba(212, 175, 55, 0.95) 75%, 
+                    rgba(170, 139, 42, 0.9) 100%
+                );
+            background-size: 200% 200%;
+            animation: gold-shimmer 4s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metallic-gold::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.3) 50%,
+                transparent 70%
+            );
+            animation: gold-shine 3s linear infinite;
         }
         
         @keyframes gold-shimmer {
@@ -58,22 +111,66 @@
             50% { background-position: 100% 50%; }
         }
         
-        /* Luxury Card with Gold Border */
+        @keyframes gold-shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        /* Luxury Card with Liquid Glass Effect */
         .vvip-card {
-            background: #0A0A0A;
-            border: 3px solid;
+            background: 
+                linear-gradient(135deg, 
+                    rgba(0, 0, 0, 0.95) 0%, 
+                    rgba(10, 10, 10, 0.98) 50%, 
+                    rgba(0, 0, 0, 0.95) 100%
+                );
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid;
             border-image: linear-gradient(135deg, 
-                #B8941D, #D4AF37, #FFD700, #F5E6B3, #FFD700, #D4AF37, #B8941D
+                #AA8B2A 0%, 
+                #D4AF37 25%, 
+                #FFD700 50%, 
+                #FFFACD 60%,
+                #FFD700 75%, 
+                #D4AF37 90%,
+                #AA8B2A 100%
             ) 1;
             box-shadow: 
-                0 0 40px rgba(212, 175, 55, 0.3),
-                0 20px 60px rgba(0, 0, 0, 0.8),
-                inset 0 0 30px rgba(212, 175, 55, 0.1);
+                0 0 60px rgba(212, 175, 55, 0.4),
+                0 0 100px rgba(184, 230, 245, 0.2),
+                0 30px 90px rgba(0, 0, 0, 0.9),
+                inset 0 1px 1px rgba(255, 255, 255, 0.1),
+                inset 0 -1px 1px rgba(212, 175, 55, 0.1);
             position: relative;
             overflow: hidden;
         }
         
+        /* Animated Gold Border Glow */
         .vvip-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                transparent 30%, 
+                rgba(255, 215, 0, 0.4) 50%, 
+                transparent 70%
+            );
+            z-index: -1;
+            animation: border-glow 4s linear infinite;
+            border-radius: inherit;
+        }
+        
+        @keyframes border-glow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Liquid Glass Shine Effect */
+        .vvip-card::after {
             content: '';
             position: absolute;
             top: -50%;
@@ -82,11 +179,14 @@
             height: 200%;
             background: linear-gradient(45deg, 
                 transparent 30%, 
-                rgba(212, 175, 55, 0.1) 50%, 
+                rgba(255, 255, 255, 0.03) 45%,
+                rgba(184, 230, 245, 0.05) 50%,
+                rgba(255, 255, 255, 0.03) 55%,
                 transparent 70%
             );
             transform: rotate(45deg);
-            animation: luxury-shine 6s linear infinite;
+            animation: luxury-shine 8s linear infinite;
+            pointer-events: none;
         }
         
         @keyframes luxury-shine {
@@ -94,16 +194,26 @@
             100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
         
-        /* Gold Text Effect */
+        /* Gold Text with Diamond Sparkle */
         .gold-text {
-            background: linear-gradient(135deg, #B8941D, #D4AF37, #FFD700, #D4AF37, #B8941D);
+            background: linear-gradient(135deg, 
+                #AA8B2A 0%, 
+                #D4AF37 20%, 
+                #FFD700 40%, 
+                #FFFACD 50%, 
+                #FFD700 60%, 
+                #D4AF37 80%, 
+                #AA8B2A 100%
+            );
             background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: gold-text-shimmer 4s ease-in-out infinite;
-            font-weight: 700;
-            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            animation: gold-text-shimmer 5s ease-in-out infinite;
+            font-weight: 800;
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.6)) 
+                    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
+            position: relative;
         }
         
         @keyframes gold-text-shimmer {
@@ -111,141 +221,392 @@
             50% { background-position: 100% 50%; }
         }
         
-        /* VIP Badge */
+        /* VIP Badge with Liquid Glass */
         .vip-badge {
-            background: linear-gradient(135deg, #B8941D, #D4AF37, #FFD700);
+            background: 
+                linear-gradient(135deg, 
+                    rgba(170, 139, 42, 0.95) 0%, 
+                    rgba(212, 175, 55, 1) 50%, 
+                    rgba(255, 215, 0, 1) 100%
+                );
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             box-shadow: 
-                0 4px 15px rgba(212, 175, 55, 0.4),
-                inset 0 1px 3px rgba(255, 255, 255, 0.3);
-            animation: badge-glow 2s ease-in-out infinite;
+                0 4px 20px rgba(212, 175, 55, 0.6),
+                0 0 30px rgba(255, 215, 0, 0.4),
+                inset 0 1px 3px rgba(255, 255, 255, 0.5),
+                inset 0 -1px 3px rgba(0, 0, 0, 0.3);
+            animation: badge-glow 2.5s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .vip-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.4), 
+                transparent
+            );
+            animation: badge-shine 2s linear infinite;
+        }
+        
+        @keyframes badge-shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
         
         @keyframes badge-glow {
-            0%, 100% { box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4), inset 0 1px 3px rgba(255, 255, 255, 0.3); }
-            50% { box-shadow: 0 4px 25px rgba(212, 175, 55, 0.7), inset 0 1px 3px rgba(255, 255, 255, 0.3); }
+            0%, 100% { 
+                box-shadow: 
+                    0 4px 20px rgba(212, 175, 55, 0.6),
+                    0 0 30px rgba(255, 215, 0, 0.4),
+                    inset 0 1px 3px rgba(255, 255, 255, 0.5);
+            }
+            50% { 
+                box-shadow: 
+                    0 6px 30px rgba(212, 175, 55, 0.9),
+                    0 0 50px rgba(255, 215, 0, 0.7),
+                    inset 0 1px 3px rgba(255, 255, 255, 0.6);
+            }
         }
         
-        /* Profile Image Gold Ring */
+        /* Profile Image Diamond Ring */
         .gold-ring {
-            border: 4px solid;
-            border-image: linear-gradient(135deg, 
-                #B8941D, #D4AF37, #FFD700, #F5E6B3, #FFD700, #D4AF37, #B8941D
-            ) 1;
+            background: 
+                linear-gradient(135deg, 
+                    rgba(170, 139, 42, 0.3), 
+                    rgba(212, 175, 55, 0.5), 
+                    rgba(255, 215, 0, 0.7),
+                    rgba(255, 250, 205, 0.9),
+                    rgba(255, 215, 0, 0.7),
+                    rgba(212, 175, 55, 0.5), 
+                    rgba(170, 139, 42, 0.3)
+                );
+            border: 4px solid transparent;
+            background-clip: padding-box;
+            position: relative;
             box-shadow: 
-                0 0 30px rgba(212, 175, 55, 0.6),
-                inset 0 0 20px rgba(212, 175, 55, 0.2);
-            animation: ring-pulse 3s ease-in-out infinite;
+                0 0 40px rgba(212, 175, 55, 0.8),
+                0 0 60px rgba(184, 230, 245, 0.4),
+                inset 0 0 30px rgba(212, 175, 55, 0.3),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3);
+            animation: ring-pulse 3.5s ease-in-out infinite;
+        }
+        
+        .gold-ring::before {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            background: linear-gradient(135deg, 
+                #AA8B2A, #D4AF37, #FFD700, #FFFACD, #FFD700, #D4AF37, #AA8B2A
+            );
+            border-radius: inherit;
+            z-index: -1;
+            animation: ring-rotate 8s linear infinite;
+        }
+        
+        .gold-ring::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 30%, 
+                rgba(255, 255, 255, 0.3) 0%, 
+                transparent 60%
+            );
+            border-radius: inherit;
+            pointer-events: none;
+        }
+        
+        @keyframes ring-rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         @keyframes ring-pulse {
             0%, 100% { 
-                box-shadow: 0 0 30px rgba(212, 175, 55, 0.6), inset 0 0 20px rgba(212, 175, 55, 0.2);
+                box-shadow: 
+                    0 0 40px rgba(212, 175, 55, 0.8),
+                    0 0 60px rgba(184, 230, 245, 0.4),
+                    inset 0 0 30px rgba(212, 175, 55, 0.3);
             }
             50% { 
-                box-shadow: 0 0 50px rgba(212, 175, 55, 0.9), inset 0 0 30px rgba(212, 175, 55, 0.3);
+                box-shadow: 
+                    0 0 60px rgba(212, 175, 55, 1),
+                    0 0 90px rgba(184, 230, 245, 0.6),
+                    inset 0 0 40px rgba(212, 175, 55, 0.5);
             }
         }
         
-        /* Luxury Buttons */
+        /* Luxury Liquid Glass Buttons */
         .luxury-btn {
-            background: linear-gradient(135deg, #B8941D, #D4AF37, #FFD700);
-            color: #0A0A0A;
-            font-weight: 700;
-            border: 2px solid rgba(212, 175, 55, 0.3);
+            background: 
+                linear-gradient(135deg, 
+                    rgba(170, 139, 42, 1) 0%, 
+                    rgba(212, 175, 55, 1) 50%, 
+                    rgba(255, 215, 0, 1) 100%
+                );
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #000000;
+            font-weight: 800;
+            border: 1px solid rgba(255, 215, 0, 0.5);
             box-shadow: 
-                0 4px 15px rgba(212, 175, 55, 0.3),
-                inset 0 1px 2px rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
+                0 4px 20px rgba(212, 175, 55, 0.4),
+                0 0 30px rgba(255, 215, 0, 0.3),
+                inset 0 1px 3px rgba(255, 255, 255, 0.5),
+                inset 0 -1px 3px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .luxury-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.5), 
+                transparent
+            );
+            transition: left 0.6s;
+        }
+        
+        .luxury-btn:hover::before {
+            left: 100%;
         }
         
         .luxury-btn:hover {
-            background: linear-gradient(135deg, #FFD700, #F5E6B3, #FFD700);
+            background: 
+                linear-gradient(135deg, 
+                    rgba(255, 215, 0, 1) 0%, 
+                    rgba(255, 250, 205, 1) 50%, 
+                    rgba(255, 215, 0, 1) 100%
+                );
             box-shadow: 
-                0 6px 25px rgba(212, 175, 55, 0.5),
-                inset 0 1px 2px rgba(255, 255, 255, 0.4);
-            transform: translateY(-2px);
+                0 6px 30px rgba(212, 175, 55, 0.6),
+                0 0 50px rgba(255, 215, 0, 0.5),
+                inset 0 1px 3px rgba(255, 255, 255, 0.7);
+            transform: translateY(-3px) scale(1.02);
         }
         
-        /* Contact Cards */
+        .luxury-btn:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+        
+        /* Contact Cards with Liquid Glass Effect */
         .contact-card-vip {
-            background: linear-gradient(135deg, #1A1A1A 0%, #0A0A0A 100%);
+            background: 
+                linear-gradient(135deg, 
+                    rgba(10, 10, 10, 0.85) 0%, 
+                    rgba(0, 0, 0, 0.9) 50%,
+                    rgba(10, 10, 10, 0.85) 100%
+                );
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(212, 175, 55, 0.3);
             box-shadow: 
-                0 4px 20px rgba(0, 0, 0, 0.6),
-                inset 0 1px 1px rgba(212, 175, 55, 0.1);
-            transition: all 0.3s ease;
+                0 4px 25px rgba(0, 0, 0, 0.7),
+                0 0 20px rgba(212, 175, 55, 0.15),
+                inset 0 1px 1px rgba(255, 255, 255, 0.05),
+                inset 0 -1px 1px rgba(212, 175, 55, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .contact-card-vip::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent,
+                rgba(212, 175, 55, 0.1),
+                transparent
+            );
+            transition: left 0.6s;
+        }
+        
+        .contact-card-vip:hover::before {
+            left: 100%;
         }
         
         .contact-card-vip:hover {
             border-color: rgba(212, 175, 55, 0.6);
+            background: 
+                linear-gradient(135deg, 
+                    rgba(15, 15, 15, 0.9) 0%, 
+                    rgba(10, 10, 10, 0.95) 50%,
+                    rgba(15, 15, 15, 0.9) 100%
+                );
             box-shadow: 
-                0 6px 30px rgba(212, 175, 55, 0.2),
-                inset 0 1px 1px rgba(212, 175, 55, 0.2);
-            transform: translateY(-3px);
+                0 6px 35px rgba(212, 175, 55, 0.25),
+                0 0 40px rgba(184, 230, 245, 0.15),
+                inset 0 1px 1px rgba(255, 255, 255, 0.08);
+            transform: translateY(-4px) scale(1.01);
         }
         
-        /* Social Icons */
+        /* Social Icons with Liquid Gold Transform */
         .social-icon-vip {
-            background: linear-gradient(135deg, #1A1A1A, #0A0A0A);
+            background: 
+                linear-gradient(135deg, 
+                    rgba(20, 20, 20, 0.9), 
+                    rgba(10, 10, 10, 0.95)
+                );
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border: 2px solid rgba(212, 175, 55, 0.4);
             color: #D4AF37;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.6),
+                inset 0 1px 1px rgba(255, 255, 255, 0.05);
+        }
+        
+        .social-icon-vip::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, 
+                rgba(170, 139, 42, 0) 0%, 
+                rgba(212, 175, 55, 0.2) 50%, 
+                rgba(255, 215, 0, 0) 100%
+            );
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        
+        .social-icon-vip:hover::before {
+            opacity: 1;
         }
         
         .social-icon-vip:hover {
-            background: linear-gradient(135deg, #D4AF37, #FFD700);
-            color: #0A0A0A;
+            background: 
+                linear-gradient(135deg, 
+                    rgba(170, 139, 42, 1), 
+                    rgba(212, 175, 55, 1), 
+                    rgba(255, 215, 0, 1)
+                );
+            color: #000000;
             border-color: #FFD700;
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
-            transform: translateY(-3px) scale(1.05);
+            box-shadow: 
+                0 0 30px rgba(212, 175, 55, 0.7),
+                0 0 50px rgba(255, 215, 0, 0.4),
+                inset 0 1px 2px rgba(255, 255, 255, 0.5);
+            transform: translateY(-4px) scale(1.08);
         }
         
-        /* Gallery Items */
+        .social-icon-vip:active {
+            transform: translateY(-2px) scale(1.05);
+        }
+        
+        /* Gallery Items with Diamond Glow */
         .gallery-vip {
-            background: #1A1A1A;
-            border: 2px solid rgba(212, 175, 55, 0.2);
-            transition: all 0.3s ease;
+            background: 
+                linear-gradient(135deg, 
+                    rgba(20, 20, 20, 0.95), 
+                    rgba(10, 10, 10, 0.98)
+                );
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 2px solid rgba(212, 175, 55, 0.25);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 4px 20px rgba(0, 0, 0, 0.7),
+                inset 0 1px 1px rgba(255, 255, 255, 0.05);
+        }
+        
+        .gallery-vip::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, 
+                rgba(212, 175, 55, 0.15) 0%, 
+                transparent 70%
+            );
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        
+        .gallery-vip:hover::before {
+            opacity: 1;
         }
         
         .gallery-vip:hover {
-            border-color: rgba(212, 175, 55, 0.6);
-            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.3);
-            transform: translateY(-5px);
+            border-color: rgba(212, 175, 55, 0.7);
+            box-shadow: 
+                0 8px 40px rgba(212, 175, 55, 0.4),
+                0 0 60px rgba(184, 230, 245, 0.3),
+                inset 0 1px 2px rgba(255, 255, 255, 0.1);
+            transform: translateY(-6px) scale(1.03);
         }
         
-        /* Decorative Elements */
+        /* Decorative Corner Accents with Glow */
         .corner-accent {
             position: absolute;
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
+            z-index: 10;
         }
         
         .corner-accent-tl {
             top: 0;
             left: 0;
-            border-top: 3px solid #D4AF37;
-            border-left: 3px solid #D4AF37;
+            border-top: 3px solid;
+            border-left: 3px solid;
+            border-image: linear-gradient(135deg, #FFD700, #D4AF37) 1;
+            box-shadow: 
+                0 0 20px rgba(255, 215, 0, 0.6),
+                inset 0 0 10px rgba(255, 215, 0, 0.3);
         }
         
         .corner-accent-tr {
             top: 0;
             right: 0;
-            border-top: 3px solid #D4AF37;
-            border-right: 3px solid #D4AF37;
+            border-top: 3px solid;
+            border-right: 3px solid;
+            border-image: linear-gradient(225deg, #FFD700, #D4AF37) 1;
+            box-shadow: 
+                0 0 20px rgba(255, 215, 0, 0.6),
+                inset 0 0 10px rgba(255, 215, 0, 0.3);
         }
         
         .corner-accent-bl {
             bottom: 0;
             left: 0;
-            border-bottom: 3px solid #D4AF37;
-            border-left: 3px solid #D4AF37;
+            border-bottom: 3px solid;
+            border-left: 3px solid;
+            border-image: linear-gradient(45deg, #FFD700, #D4AF37) 1;
+            box-shadow: 
+                0 0 20px rgba(255, 215, 0, 0.6),
+                inset 0 0 10px rgba(255, 215, 0, 0.3);
         }
         
         .corner-accent-br {
             bottom: 0;
             right: 0;
-            border-bottom: 3px solid #D4AF37;
-            border-right: 3px solid #D4AF37;
+            border-bottom: 3px solid;
+            border-right: 3px solid;
+            border-image: linear-gradient(315deg, #FFD700, #D4AF37) 1;
+            box-shadow: 
+                0 0 20px rgba(255, 215, 0, 0.6),
+                inset 0 0 10px rgba(255, 215, 0, 0.3);
         }
         
         /* Fade In Animation */
@@ -260,16 +621,37 @@
             transform: translateY(0);
         }
         
-        /* Crown Icon */
+        /* Crown Icon with Diamond Sparkle */
         .crown-icon {
-            color: #D4AF37;
-            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.6));
-            animation: crown-float 4s ease-in-out infinite;
+            color: #FFD700;
+            filter: 
+                drop-shadow(0 0 15px rgba(255, 215, 0, 0.9))
+                drop-shadow(0 0 25px rgba(184, 230, 245, 0.5))
+                drop-shadow(0 4px 8px rgba(0, 0, 0, 0.8));
+            animation: crown-float 5s ease-in-out infinite;
+            position: relative;
+        }
+        
+        .crown-icon::before {
+            content: '✦';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            font-size: 12px;
+            color: rgba(184, 230, 245, 0.9);
+            animation: sparkle-twinkle 2s ease-in-out infinite;
+        }
+        
+        @keyframes sparkle-twinkle {
+            0%, 100% { opacity: 0.4; transform: scale(0.8) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
         }
         
         @keyframes crown-float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(5deg); }
+            25% { transform: translateY(-8px) rotate(-3deg); }
+            50% { transform: translateY(-12px) rotate(0deg); }
+            75% { transform: translateY(-8px) rotate(3deg); }
         }
     </style>
 </head>
