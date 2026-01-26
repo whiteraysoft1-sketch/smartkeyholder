@@ -373,8 +373,8 @@ class DashboardController extends Controller
         $profile->store_whatsapp = $request->store_whatsapp;
         $profile->store_address = $request->store_address;
         $profile->store_hours = $request->store_hours;
-        $profile->delivery_fee = $request->delivery_fee;
-        $profile->minimum_order = $request->minimum_order;
+        $profile->delivery_fee = $request->delivery_fee ?? 0;
+        $profile->minimum_order = $request->minimum_order ?? 0;
         $profile->delivery_available = $request->boolean('delivery_available');
         $profile->pickup_available = $request->boolean('pickup_available');
         
