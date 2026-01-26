@@ -2247,7 +2247,7 @@ use Illuminate\Support\Facades\Storage;
                         </div>
                     </div>
                     <div style="position: absolute; bottom: 16px; right: 60px;">
-                        <div class="card-status" style="background: rgba(50, 215, 75, 0.15); color: #059669; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; backdrop-filter: blur(10px); border: 1px solid rgba(50, 215, 75, 0.2); box-shadow: 0 2px 8px rgba(50, 215, 75, 0.1);">{{ $profile->store_enabled ? 'Enabled' : 'Disabled' }}</div>
+                        <div class="card-status" style="background: rgba(50, 215, 75, 0.15); color: #059669; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; backdrop-filter: blur(10px); border: 1px solid rgba(50, 215, 75, 0.2); box-shadow: 0 2px 8px rgba(50, 215, 75, 0.1);">{{ ($profile && $profile->store_enabled) ? 'Enabled' : 'Disabled' }}</div>
                     </div>
                     <div class="expand-icon" id="store-card-icon" style="position: absolute; bottom: 16px; right: 16px; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
                         <i class="fas fa-chevron-down" style="color: #6b7280;"></i>
@@ -2263,7 +2263,7 @@ use Illuminate\Support\Facades\Storage;
                                     <div class="text-xs text-gray-500">Allow customers to buy products</div>
                                 </div>
                                 <label class="toggle-switch">
-                                    <input type="checkbox" name="store_enabled" value="1" {{ $profile->store_enabled ? 'checked' : '' }} onchange="toggleStorePreview(this)">
+                                    <input type="checkbox" name="store_enabled" value="1" {{ ($profile && $profile->store_enabled) ? 'checked' : '' }} onchange="toggleStorePreview(this)">
                                     <span class="toggle-slider"></span>
                                 </label>
                             </div>
@@ -2277,7 +2277,7 @@ use Illuminate\Support\Facades\Storage;
                             </button>
                         </form>
 
-                        @if($profile->store_enabled)
+                        @if($profile && $profile->store_enabled)
                             <div class="space-y-3 mt-4 pt-4 border-t border-gray-200">
                                 <a href="{{ route('dashboard.store') }}" class="liquid-glass-btn btn-success w-full">
                                     <div class="btn-content">
