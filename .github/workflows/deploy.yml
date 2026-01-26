@@ -23,20 +23,8 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-dev --optimize-autoloader
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18"
-
-      - name: Build frontend assets
-        continue-on-error: true
-        run: |
-          npm ci || npm install
-          npm run build || echo "⚠️ Build skipped - using existing assets"
-
       - name: Prepare zip for deployment
         run: |
-          rm -rf node_modules
           zip -r deployment.zip . -x "*.git*" "node_modules/*" ".github/*"
 
       - name: Deploy to Hostinger via SSH
